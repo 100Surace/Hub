@@ -1,14 +1,14 @@
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import Page from 'src/components/Page';
-import React, { useState } from 'react';
 import NewModuleForm from './NewModuleForm';
 import { useSnackbar } from 'notistack';
+import { useDispatch } from 'react-redux';
 import { PATH_APP } from 'src/routes/paths';
-import fakeRequest from 'src/utils/fakeRequest';
 import { HeaderDashboard } from 'src/layouts/Common';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Card, CardContent } from '@material-ui/core';
+import { addNewModule } from 'src/redux/slices/module';
 
 // ----------------------------------------------------------------------
 
@@ -19,36 +19,42 @@ const useStyles = makeStyles((theme) => ({
 // ----------------------------------------------------------------------
 
 function NewPostView() {
+  const dispatch = useDispatch();
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleOpenPreview = () => {
-    setOpen(true);
-  };
-
-  const handleClosePreview = () => {
-    setOpen(false);
-  };
-
   const NewBlogSchema = Yup.object().shape({
-    title: Yup.string().required('Module Name Is Required')
+    moduleName: Yup.string().required('Module Name Is Required')
   });
 
   const formik = useFormik({
     initialValues: {
-      title: ''
+      moduleName: ''
     },
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        await fakeRequest(500);
-        resetForm();
-        handleClosePreview();
-        setSubmitting(false);
-        enqueueSnackbar('Post success', { variant: 'success' });
+        const onSuccess = () => {
+          enqueueSnackbar('Module added', {
+            variant: 'success'
+          });
+        };
+        const onError = () => {
+          enqueueSnackbar('Cannot add mdule', {
+            variant: 'error'
+          });
+        };
+        dispatch(addNewModule(values))
+          .then(() => {
+            onSuccess();
+            resetForm();
+            setSubmitting(false);
+          })
+          .catch(() => {
+            onError();
+            setSubmitting(false);
+          });
       } catch (error) {
-        console.error(error);
         setSubmitting(false);
         setErrors({ afterSubmit: error.code });
       }
@@ -56,21 +62,21 @@ function NewPostView() {
   });
 
   return (
-    <Page title="New Post-Management | Minimal-UI" className={classes.root}>
+    <Page title="New Module-Management" className={classes.root}>
       <Container>
         <HeaderDashboard
-          heading="Create a new post"
+          heading="Create a new module"
           links={[
             { name: 'Dashboard', href: PATH_APP.root },
             { name: 'Management', href: PATH_APP.management.root },
-            { name: 'Blog', href: PATH_APP.management.blog.root },
-            { name: 'New Post' }
+            { name: 'Org', href: PATH_APP.management.org.root },
+            { name: 'New Module' }
           ]}
         />
 
         <Card>
           <CardContent>
-            <NewModuleForm formik={formik} onOpenPreview={handleOpenPreview} />
+            <NewModuleForm formik={formik} />
           </CardContent>
         </Card>
       </Container>

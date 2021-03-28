@@ -22,11 +22,10 @@ const useStyles = makeStyles((theme) => ({
 
 PostDetailsView.propTypes = {
   formik: PropTypes.object.isRequired,
-  onOpenPreview: PropTypes.func,
   className: PropTypes.string
 };
 
-function PostDetailsView({ formik, onOpenPreview, className, ...other }) {
+function PostDetailsView({ formik, className, ...other }) {
   const classes = useStyles();
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
@@ -42,9 +41,9 @@ function PostDetailsView({ formik, onOpenPreview, className, ...other }) {
         <TextField
           fullWidth
           label="Add Module"
-          {...getFieldProps('title')}
-          error={Boolean(touched.title && errors.title)}
-          helperText={touched.title && errors.title}
+          {...getFieldProps('moduleName')}
+          error={Boolean(touched.moduleName && errors.moduleName)}
+          helperText={touched.moduleName && errors.moduleName}
           className={classes.margin}
         />
 
