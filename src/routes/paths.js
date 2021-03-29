@@ -70,7 +70,7 @@ export const PATH_APP = {
       account: path(ROOTS.app, '/management/user/account')
     },
     org: {
-      root: path(ROOTS.app, '/management/org'),
+      root: path(ROOTS.app, '/management/org/module/list'),
       list: path(ROOTS.app, '/management/org/module/list'),
       newPost: path(ROOTS.app, '/management/org/module/new-post')
     },

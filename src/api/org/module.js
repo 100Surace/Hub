@@ -10,4 +10,5 @@ const module = {
   PUT: (id, updateRecord) => axios.put(URL + id, updateRecord),
   DELETE: (id) => axios.delete(URL + id)
 };
+
 export default module;

@@ -4,12 +4,10 @@ import { Icon } from '@iconify/react';
 import Page from 'src/components/Page';
 import ToolbarTable from './ToolbarTable';
 import { PATH_APP } from 'src/routes/paths';
-import LazySize from 'src/components/LazySize';
 import React, { useState, useEffect } from 'react';
 import Scrollbars from 'src/components/Scrollbars';
 import { visuallyHidden } from '@material-ui/utils';
 import { HeaderDashboard } from 'src/layouts/Common';
-import { getProducts } from 'src/redux/slices/product';
 import { useDispatch, useSelector } from 'react-redux';
 import SearchNotFound from 'src/components/SearchNotFound';
 import plusFill from '@iconify-icons/eva/plus-fill';
@@ -34,6 +32,7 @@ import {
   TablePagination
 } from '@material-ui/core';
 import { MFab } from 'src/theme';
+import { getModules } from 'src/redux/slices/module';
 
 // ----------------------------------------------------------------------
 
@@ -84,16 +83,16 @@ const useStyles = makeStyles((theme) => ({
 function ProductListView() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.product);
+  const { modulesList } = useSelector((state) => state.modules);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [orderBy, setOrderBy] = useState('createdAt');
+  const [orderBy, setOrderBy] = useState('moduleName');
 
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getModules());
   }, [dispatch]);
 
   const handleRequestSort = (event, property) => {
@@ -104,7 +103,7 @@ function ProductListView() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = products.map((n) => n.name);
+      const newSelecteds = modulesList.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -143,15 +142,15 @@ function ProductListView() {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - products.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - modulesList.length) : 0;
 
-  const filteredProducts = applySortFilter(
-    products,
+  const filteredModules = applySortFilter(
+    modulesList,
     getComparator(order, orderBy),
     filterName
   );
 
-  const isProductNotFound = filteredProducts.length === 0;
+  const isProductNotFound = filteredModules.length === 0;
 
   return (
     <Page
@@ -165,7 +164,7 @@ function ProductListView() {
           links={[
             { name: 'Dashboard', href: PATH_APP.root },
             { name: 'Management', href: PATH_APP.management.root },
-            { name: 'org', href: PATH_APP.management.eCommerce.root },
+            { name: 'Org', href: PATH_APP.management.org.root },
             { name: 'Module List' }
           ]}
           action={
@@ -210,28 +209,28 @@ function ProductListView() {
                   classes={classes}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={products.length}
+                  rowCount={modulesList.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredProducts
+                  {filteredModules
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
-                      const { id, name, cover } = row;
+                      const { ids, moduleName } = row;
 
-                      const isItemSelected = selected.indexOf(name) !== -1;
+                      const isItemSelected = selected.indexOf(ids) !== -1;
 
                       return (
                         <TableRow
                           hover
-                          key={id}
+                          key={ids}
                           tabIndex={-1}
                           role="checkbox"
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
-                          onClick={(event) => handleClick(event, name)}
+                          onClick={(event) => handleClick(event, ids)}
                           className={classes.row}
                         >
                           <TableCell padding="checkbox">
@@ -245,18 +244,8 @@ function ProductListView() {
                                 alignItems: 'center'
                               }}
                             >
-                              <LazySize
-                                alt={name}
-                                src={cover.thumb}
-                                sx={{
-                                  mx: 2,
-                                  width: 64,
-                                  height: 64,
-                                  borderRadius: 1.5
-                                }}
-                              />
                               <Typography variant="subtitle2" noWrap>
-                                {name}
+                                {moduleName}
                               </Typography>
                             </Box>
                           </TableCell>
@@ -296,7 +285,7 @@ function ProductListView() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={products.length}
+            count={modulesList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

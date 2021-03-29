@@ -31,19 +31,13 @@ const slice = createSlice({
     // GET Modules
     getModulesSuccess(state, action) {
       state.isLoading = false;
-      state.posts = action.payload;
+      state.modulesList = [...action.payload];
     },
 
-    // POST Modules
+    // Add Module
     addModuleSuccess(state, action) {
       state.isLoading = false;
-      state.posts = action.payload;
-    },
-
-    // GET Module INFINITE
-    getPostsInitial(state, action) {
-      state.isLoading = false;
-      state.posts = action.payload;
+      state.modulesList = [...state.modulesList, action.payload];
     },
 
     getMorePosts(state) {
@@ -53,12 +47,6 @@ const slice = createSlice({
 
     noHasMore(state) {
       state.hasMore = false;
-    },
-
-    // GET RECENT Module
-    getRecentPostsSuccess(state, action) {
-      state.isLoading = false;
-      state.recentPosts = action.payload;
     }
   }
 });
@@ -71,12 +59,12 @@ export const { getMorePosts } = slice.actions;
 
 // ----------------------------------------------------------------------
 
-export function getAllPosts() {
+export function getModules() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/blog/posts/all');
-      dispatch(slice.actions.getPostsSuccess(response.data.posts));
+      const response = await module.GET();
+      dispatch(slice.actions.getModulesSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

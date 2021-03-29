@@ -12,6 +12,7 @@ import authJwtReducer from './slices/authJwt';
 import settingsReducer from './slices/settings';
 import calendarReducer from './slices/calendar';
 import notificationsReducer from './slices/notifications';
+import modulesReducer from './slices/module';
 
 // ----------------------------------------------------------------------
 
@@ -47,7 +48,8 @@ const rootReducer = combineReducers({
   calendar: calendarReducer,
   notifications: notificationsReducer,
   product: persistReducer(productPersistConfig, productReducer),
-  authJwt: persistReducer(authPersistConfig, authJwtReducer)
+  authJwt: persistReducer(authPersistConfig, authJwtReducer),
+  modules: modulesReducer
 });
 
 export { rootPersistConfig, rootReducer };
