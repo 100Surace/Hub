@@ -1,4 +1,4 @@
-import { filter } from 'lodash';
+import { filter, matchesProperty } from 'lodash';
 import HeadTable from './HeadTable';
 import { Icon } from '@iconify/react';
 import Page from 'src/components/Page';
@@ -37,7 +37,7 @@ import { getModules } from 'src/redux/slices/module';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Module', alignRight: false },
+  { id: 'moduleName', label: 'Module', alignRight: false },
   { id: '' }
 ];
 function descendingComparator(a, b, orderBy) {
@@ -65,8 +65,10 @@ function applySortFilter(array, comparator, query) {
   });
 
   if (query) {
-    array = filter(array, (_product) => {
-      return _product.name.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+    array = filter(array, (module) => {
+      return (
+        module.moduleName.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      );
     });
     return array;
   }
@@ -103,18 +105,18 @@ function ProductListView() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = modulesList.map((n) => n.name);
+      const newSelecteds = modulesList.map((n) => n.ids);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -151,6 +153,10 @@ function ProductListView() {
   );
 
   const isProductNotFound = filteredModules.length === 0;
+
+  const resetStates = () => {
+    setSelected([]);
+  };
 
   return (
     <Page
@@ -200,6 +206,7 @@ function ProductListView() {
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
+            resetStates={resetStates}
           />
 
           <Scrollbars>

@@ -17,7 +17,7 @@ import {
   InputAdornment,
   OutlinedInput
 } from '@material-ui/core';
-import { deleteModule } from 'src/redux/slices/module';
+import { deleteModule, getModules } from 'src/redux/slices/module';
 
 // ----------------------------------------------------------------------
 
@@ -61,6 +61,7 @@ ToolbarTable.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
+  resetStates: PropTypes.func,
   className: PropTypes.string
 };
 
@@ -69,6 +70,7 @@ function ToolbarTable({
   numSelected,
   filterName,
   onFilterName,
+  resetStates,
   className
 }) {
   const classes = useStyles();
@@ -90,6 +92,8 @@ function ToolbarTable({
     dispatch(deleteModule(selected))
       .then(() => {
         onSuccess();
+        dispatch(getModules());
+        resetStates();
       })
       .catch(() => {
         onError();
