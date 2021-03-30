@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { useSnackbar } from 'notistack';
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify-icons/eva/search-fill';
 import trash2Fill from '@iconify-icons/eva/trash-2-fill';
@@ -15,6 +17,7 @@ import {
   InputAdornment,
   OutlinedInput
 } from '@material-ui/core';
+import { deleteModule } from 'src/redux/slices/module';
 
 // ----------------------------------------------------------------------
 
@@ -54,15 +57,44 @@ const useStyles = makeStyles((theme) => {
 // ----------------------------------------------------------------------
 
 ToolbarTable.propTypes = {
+  selected: PropTypes.array,
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
   className: PropTypes.string
 };
 
-function ToolbarTable({ numSelected, filterName, onFilterName, className }) {
+function ToolbarTable({
+  selected,
+  numSelected,
+  filterName,
+  onFilterName,
+  className
+}) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
+  const deleteSelected = () => {
+    const onSuccess = () => {
+      enqueueSnackbar('Module deleted', {
+        variant: 'success'
+      });
+    };
+    const onError = () => {
+      enqueueSnackbar('Deleting module failed', {
+        variant: 'error'
+      });
+    };
+
+    dispatch(deleteModule(selected))
+      .then(() => {
+        onSuccess();
+      })
+      .catch(() => {
+        onError();
+      });
+  };
   return (
     <Toolbar
       className={clsx(
@@ -95,7 +127,7 @@ function ToolbarTable({ numSelected, filterName, onFilterName, className }) {
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={deleteSelected}>
             <Icon icon={trash2Fill} />
           </IconButton>
         </Tooltip>

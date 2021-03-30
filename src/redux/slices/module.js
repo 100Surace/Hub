@@ -40,6 +40,14 @@ const slice = createSlice({
       state.modulesList = [...state.modulesList, action.payload];
     },
 
+    // Delete modules
+    deleteModuleSuccess(state, action) {
+      state.isLoading = false;
+      state.modulesList = state.modulesList.filter(
+        (m) => m.ids !== action.payload
+      );
+    },
+
     getMorePosts(state) {
       const setIndex = state.index + state.step;
       state.index = setIndex;
@@ -67,6 +75,7 @@ export function getModules() {
       dispatch(slice.actions.getModulesSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
+      return Promise.reject(new Error(error));
     }
   };
 }
@@ -88,23 +97,20 @@ export function addNewModule(data) {
 
 // ----------------------------------------------------------------------
 
-export function getPostsInitial(index, step) {
+export function deleteModule(ids) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/blog/posts', {
-        params: { index, step }
+      ids.forEach(async (id) => {
+        const response = await module.DELETE(id);
+        console.log(response.data);
+        if (response.status === 204) {
+          dispatch(slice.actions.deleteModuleSuccess(id));
+        }
       });
-      const results = response.data.results.length;
-      const maxLength = response.data.maxLength;
-
-      dispatch(slice.actions.getPostsInitial(response.data.results));
-
-      if (results >= maxLength) {
-        dispatch(slice.actions.noHasMore());
-      }
     } catch (error) {
       dispatch(slice.actions.hasError(error));
+      return Promise.reject(new Error(error));
     }
   };
 }

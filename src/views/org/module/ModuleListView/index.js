@@ -196,6 +196,7 @@ function ProductListView() {
         </Hidden>
         <Card className={classes.card}>
           <ToolbarTable
+            selected={selected}
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
