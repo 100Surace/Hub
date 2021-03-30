@@ -1,4 +1,4 @@
-import { filter, matchesProperty } from 'lodash';
+import { filter } from 'lodash';
 import HeadTable from './HeadTable';
 import { Icon } from '@iconify/react';
 import Page from 'src/components/Page';

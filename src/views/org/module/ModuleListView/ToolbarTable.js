@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { Icon } from '@iconify/react';
+import edit2Fill from '@iconify-icons/eva/edit-2-fill';
 import searchFill from '@iconify-icons/eva/search-fill';
 import trash2Fill from '@iconify-icons/eva/trash-2-fill';
 import roundFilterList from '@iconify-icons/ic/round-filter-list';
@@ -77,6 +78,8 @@ function ToolbarTable({
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
+  const editSelected = () => {};
+
   const deleteSelected = () => {
     const onSuccess = () => {
       enqueueSnackbar('Module deleted', {
@@ -130,11 +133,26 @@ function ToolbarTable({
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton onClick={deleteSelected}>
-            <Icon icon={trash2Fill} />
-          </IconButton>
-        </Tooltip>
+        numSelected === 1 ? (
+          <div>
+            <Tooltip title="Edit">
+              <IconButton onClick={editSelected}>
+                <Icon icon={edit2Fill} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Delete">
+              <IconButton onClick={deleteSelected}>
+                <Icon icon={trash2Fill} />
+              </IconButton>
+            </Tooltip>
+          </div>
+        ) : (
+          <Tooltip title="Delete">
+            <IconButton onClick={deleteSelected}>
+              <Icon icon={trash2Fill} />
+            </IconButton>
+          </Tooltip>
+        )
       ) : (
         <Tooltip title="Filter list">
           <IconButton>
