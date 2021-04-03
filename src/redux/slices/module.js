@@ -1,4 +1,3 @@
-import axios from 'src/utils/axios';
 import { createSlice } from '@reduxjs/toolkit';
 import module from 'src/api/org/module';
 
@@ -48,13 +47,12 @@ const slice = createSlice({
       );
     },
 
-    getMorePosts(state) {
-      const setIndex = state.index + state.step;
-      state.index = setIndex;
-    },
-
-    noHasMore(state) {
-      state.hasMore = false;
+    // Delete modules
+    updateModuleSuccess(state, action) {
+      state.isLoading = false;
+      state.modulesList = state.modulesList.map((m) => {
+        return m.ids === action.payload.id ? action.payload : m;
+      });
     }
   }
 });
@@ -117,35 +115,28 @@ export function deleteModule(ids) {
 
 // ----------------------------------------------------------------------
 
-export function getPost(title) {
-  return async (dispatch) => {
-    dispatch(slice.actions.startLoading());
+export function getModuleById(id) {
+  return async () => {
     try {
-      const response = await axios.get('/api/blog/post', {
-        params: { title }
-      });
-      dispatch(slice.actions.getPostSuccess(response.data.post));
+      const { data } = await module.GETBYID(id);
+      return data;
     } catch (error) {
-      console.error(error);
-      dispatch(slice.actions.hasError());
+      return Promise.reject(new Error(error));
     }
   };
 }
 
 // ----------------------------------------------------------------------
 
-export function getRecentPosts(title) {
+export function updateModule(id, data) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/blog/posts/recent', {
-        params: { title }
-      });
-
-      dispatch(slice.actions.getRecentPostsSuccess(response.data.recentPosts));
+      const response = await module.PUT(id, data);
+      dispatch(slice.actions.updateModuleSuccess(response.data));
     } catch (error) {
-      console.error(error);
-      dispatch(slice.actions.hasError());
+      dispatch(slice.actions.hasError(error));
+      return Promise.reject(new Error(error));
     }
   };
 }

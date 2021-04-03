@@ -8,6 +8,8 @@ import edit2Fill from '@iconify-icons/eva/edit-2-fill';
 import searchFill from '@iconify-icons/eva/search-fill';
 import trash2Fill from '@iconify-icons/eva/trash-2-fill';
 import roundFilterList from '@iconify-icons/ic/round-filter-list';
+import { PATH_APP } from 'src/routes/paths';
+import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Box,
@@ -136,7 +138,11 @@ function ToolbarTable({
         numSelected === 1 ? (
           <div>
             <Tooltip title="Edit">
-              <IconButton onClick={editSelected}>
+              <IconButton
+                onClick={editSelected}
+                component={RouterLink}
+                to={PATH_APP.management.org.newPost + '?edit_id=' + selected[0]}
+              >
                 <Icon icon={edit2Fill} />
               </IconButton>
             </Tooltip>

@@ -22,10 +22,11 @@ const useStyles = makeStyles((theme) => ({
 
 PostDetailsView.propTypes = {
   formik: PropTypes.object.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
+  editModule: PropTypes.object
 };
 
-function PostDetailsView({ formik, className, ...other }) {
+function PostDetailsView({ formik, className, editModule, ...other }) {
   const classes = useStyles();
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
@@ -53,7 +54,7 @@ function PostDetailsView({ formik, className, ...other }) {
             variant="contained"
             pending={isSubmitting}
           >
-            Add Module
+            {editModule.ids ? 'Save Module' : 'Add Module'}
           </LoadingButton>
         </Box>
       </Form>

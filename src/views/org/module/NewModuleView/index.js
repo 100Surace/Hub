@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import Page from 'src/components/Page';
 import NewModuleForm from './NewModuleForm';
@@ -8,7 +9,12 @@ import { PATH_APP } from 'src/routes/paths';
 import { HeaderDashboard } from 'src/layouts/Common';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Card, CardContent } from '@material-ui/core';
-import { addNewModule } from 'src/redux/slices/module';
+import { useLocation, useHistory } from 'react-router-dom';
+import {
+  addNewModule,
+  getModuleById,
+  updateModule
+} from 'src/redux/slices/module';
 
 // ----------------------------------------------------------------------
 
@@ -20,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
 
 function NewPostView() {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const [editModule, setEditModule] = useState({});
+  const location = useLocation();
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -34,32 +43,58 @@ function NewPostView() {
     validationSchema: NewBlogSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        const onSuccess = () => {
-          enqueueSnackbar('Module added', {
+        const onSuccess = (msg) => {
+          enqueueSnackbar(msg, {
             variant: 'success'
           });
         };
-        const onError = () => {
-          enqueueSnackbar('Cannot add mdule', {
+        const onError = (msg) => {
+          enqueueSnackbar(msg, {
             variant: 'error'
           });
         };
-        dispatch(addNewModule(values))
-          .then(() => {
-            onSuccess();
-            resetForm();
-            setSubmitting(false);
-          })
-          .catch(() => {
-            onError();
-            setSubmitting(false);
-          });
+        if (editModule.ids) {
+          const data = { ids: editModule.ids, ...values };
+          dispatch(updateModule(data.ids, data))
+            .then(() => {
+              onSuccess('Module updated');
+              resetForm();
+              setSubmitting(false);
+              history.push(PATH_APP.management.org.list);
+            })
+            .catch(() => {
+              onError('Cannot update module');
+              setSubmitting(false);
+            });
+        } else {
+          dispatch(addNewModule(values))
+            .then(() => {
+              onSuccess('Module added');
+              resetForm();
+              setSubmitting(false);
+            })
+            .catch(() => {
+              onError('Cannot add module');
+              setSubmitting(false);
+            });
+        }
       } catch (error) {
         setSubmitting(false);
         setErrors({ afterSubmit: error.code });
       }
     }
   });
+
+  const edit_id = location.search.split('=')[1];
+
+  useEffect(() => {
+    if (edit_id) {
+      dispatch(getModuleById(edit_id)).then((res) => {
+        formik.values.moduleName = res.moduleName;
+        setEditModule(res);
+      });
+    }
+  }, [edit_id, dispatch]);
 
   return (
     <Page title="New Module-Management" className={classes.root}>
@@ -76,7 +111,7 @@ function NewPostView() {
 
         <Card>
           <CardContent>
-            <NewModuleForm formik={formik} />
+            <NewModuleForm formik={formik} editModule={editModule} />
           </CardContent>
         </Card>
       </Container>
