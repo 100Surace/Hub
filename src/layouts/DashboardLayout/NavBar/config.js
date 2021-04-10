@@ -114,7 +114,7 @@ const navConfig = [
         ]
       },
 
-      // MANAGEMENT : ORG /
+      // MANAGEMENT : ORG
       // ----------------------------------------------------------------------
       {
         title: 'Org',
@@ -124,7 +124,7 @@ const navConfig = [
           {
             title: 'Module',
             icon: ICONS.cart,
-            href: PATH_APP.management.org.module.root,
+            href: PATH_APP.management.org.module.list,
             items: [
               {
                 title: 'list',
@@ -132,14 +132,14 @@ const navConfig = [
               },
               {
                 title: 'Add Modue',
-                href: PATH_APP.management.org.module.newPost
+                href: PATH_APP.management.org.module.new
               }
             ]
           },
           {
             title: 'ModuleCategory',
             icon: ICONS.cart,
-            href: PATH_APP.management.org.moduleCategory.root,
+            href: PATH_APP.management.org.moduleCategory.list,
             items: [
               {
                 title: 'list',
@@ -147,12 +147,13 @@ const navConfig = [
               },
               {
                 title: 'Add ModueCategory',
-                href: PATH_APP.management.org.moduleCategory.newPost
+                href: PATH_APP.management.org.moduleCategory.new
               }
             ]
           }
         ]
       },
+
       // MANAGEMENT : BLOG
       // ----------------------------------------------------------------------
       {

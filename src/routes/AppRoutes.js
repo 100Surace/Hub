@@ -85,7 +85,7 @@ const AppRoutes = {
       component: lazy(() => import('src/views/blog/NewPostView'))
     },
 
-    // MANAGEMENT : Org/module
+    // MANAGEMENT : Org
     // ----------------------------------------------------------------------
     {
       exact: true,
@@ -94,11 +94,9 @@ const AppRoutes = {
     },
     {
       exact: true,
-      path: PATH_APP.management.org.module.newPost,
+      path: PATH_APP.management.org.module.new,
       component: lazy(() => import('src/views/org/module/NewModuleView'))
     },
-    // MANAGEMENT : Org/module
-    // ----------------------------------------------------------------------
     {
       exact: true,
       path: PATH_APP.management.org.moduleCategory.list,
@@ -108,7 +106,7 @@ const AppRoutes = {
     },
     {
       exact: true,
-      path: PATH_APP.management.org.moduleCategory.newPost,
+      path: PATH_APP.management.org.moduleCategory.new,
       component: lazy(() =>
         import('src/views/org/moduleCategory/NewModuleCategoryView')
       )

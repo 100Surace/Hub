@@ -71,14 +71,12 @@ export const PATH_APP = {
     },
     org: {
       module: {
-        root: path(ROOTS.app, '/management/org/module/list'),
         list: path(ROOTS.app, '/management/org/module/list'),
-        newPost: path(ROOTS.app, '/management/org/module/new-post')
+        new: path(ROOTS.app, '/management/org/module/new')
       },
       moduleCategory: {
-        root: path(ROOTS.app, '/management/org/moduleCategory/list'),
-        list: path(ROOTS.app, '/management/org/moduleCategory/list'),
-        newPost: path(ROOTS.app, '/management/org/moduleCategory/new-post')
+        list: path(ROOTS.app, '/management/org/module-category/list'),
+        new: path(ROOTS.app, '/management/org/module-category/new')
       }
     },
     eCommerce: {

@@ -13,6 +13,7 @@ import settingsReducer from './slices/settings';
 import calendarReducer from './slices/calendar';
 import notificationsReducer from './slices/notifications';
 import modulesReducer from './slices/module';
+import moduleCategoryReducer from './slices/moduleCategory';
 
 // ----------------------------------------------------------------------
 
@@ -49,7 +50,8 @@ const rootReducer = combineReducers({
   notifications: notificationsReducer,
   product: persistReducer(productPersistConfig, productReducer),
   authJwt: persistReducer(authPersistConfig, authJwtReducer),
-  modules: modulesReducer
+  modules: modulesReducer,
+  moduleCategory: moduleCategoryReducer
 });
 
 export { rootPersistConfig, rootReducer };

@@ -22,7 +22,9 @@ const useStyles = makeStyles((theme) => ({
 PostDetailsView.propTypes = {
   formik: PropTypes.object.isRequired,
   onOpenPreview: PropTypes.func,
-  className: PropTypes.string
+  className: PropTypes.string,
+  moduleCategoryList: PropTypes.object,
+  modulesList: PropTypes.object
 };
 
 function PostDetailsView({
@@ -30,10 +32,13 @@ function PostDetailsView({
   formik,
   onOpenPreview,
   className,
+  moduleCategoryList,
+  modulesList,
   ...other
 }) {
   const classes = useStyles();
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+  console.log(modulesList);
 
   return (
     <FormikProvider value={formik}>
@@ -52,6 +57,11 @@ function PostDetailsView({
             <TextField {...params} margin="normal" label="Combo box" />
           )}
         />
+        <select>
+          {modulesList.forEach((c) => {
+            return <option key={c.ids}>{c.moduleName}</option>;
+          })}
+        </select>
         <TextField
           fullWidth
           label="Add ModuleCategory"
