@@ -93,10 +93,6 @@ function ProductListView() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [orderBy, setOrderBy] = useState('moduleName');
 
-  useEffect(() => {
-    dispatch(getModules());
-  }, [dispatch]);
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -157,6 +153,10 @@ function ProductListView() {
   const resetStates = () => {
     setSelected([]);
   };
+
+  useEffect(() => {
+    dispatch(getModules());
+  }, [dispatch]);
 
   return (
     <Page

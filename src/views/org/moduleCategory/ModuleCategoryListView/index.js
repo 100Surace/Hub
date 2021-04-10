@@ -4,12 +4,10 @@ import { Icon } from '@iconify/react';
 import Page from 'src/components/Page';
 import ToolbarTable from './ToolbarTable';
 import { PATH_APP } from 'src/routes/paths';
-import LazySize from 'src/components/LazySize';
 import React, { useState, useEffect } from 'react';
 import Scrollbars from 'src/components/Scrollbars';
 import { visuallyHidden } from '@material-ui/utils';
 import { HeaderDashboard } from 'src/layouts/Common';
-import { getProducts } from 'src/redux/slices/product';
 import { useDispatch, useSelector } from 'react-redux';
 import SearchNotFound from 'src/components/SearchNotFound';
 import plusFill from '@iconify-icons/eva/plus-fill';
@@ -34,11 +32,13 @@ import {
   TablePagination
 } from '@material-ui/core';
 import { MFab } from 'src/theme';
+import { getModuleCategories } from 'src/redux/slices/moduleCategory';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'ModuleCategory', alignRight: false },
+  { id: 'moduleCategoryName', label: 'Module Category', alignRight: false },
+  { id: 'moduleName', label: 'Module', alignLeft: true },
   { id: '' }
 ];
 function descendingComparator(a, b, orderBy) {
@@ -66,8 +66,10 @@ function applySortFilter(array, comparator, query) {
   });
 
   if (query) {
-    array = filter(array, (_product) => {
-      return _product.name.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+    array = filter(array, (c) => {
+      return (
+        c.moduleCategoryName.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      );
     });
     return array;
   }
@@ -84,17 +86,13 @@ const useStyles = makeStyles((theme) => ({
 function ProductListView() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.product);
+  const { moduleCategoryList } = useSelector((state) => state.moduleCategory);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [orderBy, setOrderBy] = useState('createdAt');
-
-  useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
+  const [orderBy, setOrderBy] = useState('moduleCategoryName');
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -104,18 +102,18 @@ function ProductListView() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = products.map((n) => n.name);
+      const newSelecteds = moduleCategoryList.map((n) => n.ids);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -143,15 +141,25 @@ function ProductListView() {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - products.length) : 0;
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - moduleCategoryList.length)
+      : 0;
 
   const filteredProducts = applySortFilter(
-    products,
+    moduleCategoryList,
     getComparator(order, orderBy),
     filterName
   );
 
   const isProductNotFound = filteredProducts.length === 0;
+
+  const resetStates = () => {
+    setSelected([]);
+  };
+
+  useEffect(() => {
+    dispatch(getModuleCategories());
+  }, [dispatch]);
 
   return (
     <Page
@@ -161,22 +169,22 @@ function ProductListView() {
     >
       <Container>
         <HeaderDashboard
-          heading="ModuleCategory List"
+          heading="Module Category List"
           links={[
             { name: 'Dashboard', href: PATH_APP.root },
             { name: 'Management', href: PATH_APP.management.root },
             { name: 'org', href: PATH_APP.management.eCommerce.root },
-            { name: 'ModuleCategory List' }
+            { name: 'Module Category' }
           ]}
           action={
             <Hidden smDown>
               <Button
                 variant="contained"
                 component={RouterLink}
-                to={PATH_APP.management.org.newPost}
+                to={PATH_APP.management.org.moduleCategory.new}
                 startIcon={<Icon icon={plusFill} />}
               >
-                Add ModuleCategory
+                Add Module Category
               </Button>
             </Hidden>
           }
@@ -210,7 +218,7 @@ function ProductListView() {
                   classes={classes}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={products.length}
+                  rowCount={moduleCategoryList.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -219,19 +227,19 @@ function ProductListView() {
                   {filteredProducts
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
-                      const { id, name, cover } = row;
+                      const { ids, moduleCategoryName, moduleName } = row;
 
-                      const isItemSelected = selected.indexOf(name) !== -1;
+                      const isItemSelected = selected.indexOf(ids) !== -1;
 
                       return (
                         <TableRow
                           hover
-                          key={id}
+                          key={ids}
                           tabIndex={-1}
                           role="checkbox"
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
-                          onClick={(event) => handleClick(event, name)}
+                          onClick={(event) => handleClick(event, ids)}
                           className={classes.row}
                         >
                           <TableCell padding="checkbox">
@@ -242,21 +250,24 @@ function ProductListView() {
                               sx={{
                                 py: 2,
                                 display: 'flex',
-                                alignItems: 'center'
+                                alignItems: 'left'
                               }}
                             >
-                              <LazySize
-                                alt={name}
-                                src={cover.thumb}
-                                sx={{
-                                  mx: 2,
-                                  width: 64,
-                                  height: 64,
-                                  borderRadius: 1.5
-                                }}
-                              />
                               <Typography variant="subtitle2" noWrap>
-                                {name}
+                                {moduleCategoryName}
+                              </Typography>
+                            </Box>
+                          </TableCell>
+                          <TableCell component="th" scope="row" padding="none">
+                            <Box
+                              sx={{
+                                py: 2,
+                                display: 'flex',
+                                alignItems: 'left'
+                              }}
+                            >
+                              <Typography variant="subtitle2" noWrap>
+                                {moduleName}
                               </Typography>
                             </Box>
                           </TableCell>
@@ -296,7 +307,7 @@ function ProductListView() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={products.length}
+            count={moduleCategoryList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
