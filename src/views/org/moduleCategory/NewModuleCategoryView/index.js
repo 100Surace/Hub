@@ -37,13 +37,13 @@ function NewPostView() {
   const { enqueueSnackbar } = useSnackbar();
 
   const ModuleCategoryForm = Yup.object().shape({
-    moduleId: Yup.string().required('Module Name Is Required'),
+    moduleId: Yup.number().required('Module Name Is Required'),
     moduleCategoryName: Yup.string().required('ModuleCategory Name Is Required')
   });
 
   const formik = useFormik({
     initialValues: {
-      moduleId: '',
+      moduleId: 0,
       moduleCategoryName: ''
     },
     validationSchema: ModuleCategoryForm,
@@ -66,7 +66,7 @@ function NewPostView() {
               onSuccess('Module category updated');
               resetForm();
               setSubmitting(false);
-              history.push(PATH_APP.management.org.list);
+              history.push(PATH_APP.management.org.moduleCategory.list);
             })
             .catch(() => {
               onError('Cannot update module category');
@@ -98,7 +98,8 @@ function NewPostView() {
     dispatch(getModules());
     if (edit_id) {
       dispatch(getModuleCategoryById(edit_id)).then((res) => {
-        formik.values.moduleName = res.moduleName;
+        formik.values.moduleCategoryName = res.moduleCategoryName;
+        formik.values.moduleId = edit_id;
         setEditModule(res);
       });
     }

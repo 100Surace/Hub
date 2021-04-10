@@ -80,8 +80,6 @@ function ToolbarTable({
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  const editSelected = () => {};
-
   const deleteSelected = () => {
     const onSuccess = () => {
       enqueueSnackbar('Module deleted', {
@@ -139,9 +137,10 @@ function ToolbarTable({
           <div>
             <Tooltip title="Edit">
               <IconButton
-                onClick={editSelected}
                 component={RouterLink}
-                to={PATH_APP.management.org.newPost + '?edit_id=' + selected[0]}
+                to={
+                  PATH_APP.management.org.module.new + '?edit_id=' + selected[0]
+                }
               >
                 <Icon icon={edit2Fill} />
               </IconButton>

@@ -31,7 +31,8 @@ PostDetailsView.propTypes = {
   onOpenPreview: PropTypes.func,
   className: PropTypes.string,
   moduleCategoryList: PropTypes.array,
-  modulesList: PropTypes.array
+  modulesList: PropTypes.array,
+  editModule: PropTypes.object
 };
 
 function PostDetailsView({
@@ -41,6 +42,7 @@ function PostDetailsView({
   className,
   moduleCategoryList,
   modulesList,
+  editModule,
   ...other
 }) {
   const classes = useStyles();
@@ -101,7 +103,7 @@ function PostDetailsView({
             variant="contained"
             pending={isSubmitting}
           >
-            Add ModuleCategory
+            {editModule.ids ? 'Save Module Category' : 'Add Module Category'}
           </LoadingButton>
         </Box>
       </Form>

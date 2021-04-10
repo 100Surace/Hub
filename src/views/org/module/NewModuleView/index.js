@@ -60,7 +60,7 @@ function NewPostView() {
               onSuccess('Module updated');
               resetForm();
               setSubmitting(false);
-              history.push(PATH_APP.management.org.list);
+              history.push(PATH_APP.management.org.module.list);
             })
             .catch(() => {
               onError('Cannot update module');

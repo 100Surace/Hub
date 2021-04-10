@@ -1,10 +1,15 @@
 import clsx from 'clsx';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { useSnackbar } from 'notistack';
 import { Icon } from '@iconify/react';
+import edit2Fill from '@iconify-icons/eva/edit-2-fill';
 import searchFill from '@iconify-icons/eva/search-fill';
 import trash2Fill from '@iconify-icons/eva/trash-2-fill';
 import roundFilterList from '@iconify-icons/ic/round-filter-list';
+import { PATH_APP } from 'src/routes/paths';
+import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Box,
@@ -15,6 +20,10 @@ import {
   InputAdornment,
   OutlinedInput
 } from '@material-ui/core';
+import {
+  deleteModuleCategory,
+  getModuleCategories
+} from 'src/redux/slices/moduleCategory';
 
 // ----------------------------------------------------------------------
 
@@ -54,15 +63,48 @@ const useStyles = makeStyles((theme) => {
 // ----------------------------------------------------------------------
 
 ToolbarTable.propTypes = {
+  selected: PropTypes.array,
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
+  resetStates: PropTypes.func,
   className: PropTypes.string
 };
 
-function ToolbarTable({ numSelected, filterName, onFilterName, className }) {
+function ToolbarTable({
+  selected,
+  numSelected,
+  filterName,
+  onFilterName,
+  resetStates,
+  className
+}) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
+  const deleteSelected = () => {
+    const onSuccess = () => {
+      enqueueSnackbar('Module deleted', {
+        variant: 'success'
+      });
+    };
+    const onError = () => {
+      enqueueSnackbar('Deleting module failed', {
+        variant: 'error'
+      });
+    };
+
+    dispatch(deleteModuleCategory(selected))
+      .then(() => {
+        onSuccess();
+        dispatch(getModuleCategories());
+        resetStates();
+      })
+      .catch(() => {
+        onError();
+      });
+  };
   return (
     <Toolbar
       className={clsx(
@@ -94,11 +136,33 @@ function ToolbarTable({ numSelected, filterName, onFilterName, className }) {
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Icon icon={trash2Fill} />
-          </IconButton>
-        </Tooltip>
+        numSelected === 1 ? (
+          <div>
+            <Tooltip title="Edit">
+              <IconButton
+                component={RouterLink}
+                to={
+                  PATH_APP.management.org.moduleCategory.new +
+                  '?edit_id=' +
+                  selected[0]
+                }
+              >
+                <Icon icon={edit2Fill} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Delete">
+              <IconButton onClick={deleteSelected}>
+                <Icon icon={trash2Fill} />
+              </IconButton>
+            </Tooltip>
+          </div>
+        ) : (
+          <Tooltip title="Delete">
+            <IconButton onClick={deleteSelected}>
+              <Icon icon={trash2Fill} />
+            </IconButton>
+          </Tooltip>
+        )
       ) : (
         <Tooltip title="Filter list">
           <IconButton>
