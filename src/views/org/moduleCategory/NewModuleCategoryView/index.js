@@ -6,11 +6,16 @@ import React, { useState, useEffect } from 'react';
 import NewPostForm from './NewPostForm';
 import { useSnackbar } from 'notistack';
 import { PATH_APP } from 'src/routes/paths';
-import fakeRequest from 'src/utils/fakeRequest';
 import { HeaderDashboard } from 'src/layouts/Common';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Card, CardContent } from '@material-ui/core';
-import { getModuleCategories } from 'src/redux/slices/moduleCategory';
+import { useLocation, useHistory } from 'react-router-dom';
+import {
+  getModuleCategories,
+  updateModuleCategory,
+  addNewModuleCategory,
+  getModuleCategoryById
+} from 'src/redux/slices/moduleCategory';
 import { getModules } from 'src/redux/slices/module';
 
 // ----------------------------------------------------------------------
@@ -24,47 +29,80 @@ const useStyles = makeStyles((theme) => ({
 function NewPostView() {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
+  const [editModule, setEditModule] = useState({});
+  const location = useLocation();
   const { moduleCategoryList } = useSelector((state) => state.moduleCategory);
   const { modulesList } = useSelector((state) => state.modules);
-  const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleOpenPreview = () => {
-    setOpen(true);
-  };
-
-  const handleClosePreview = () => {
-    setOpen(false);
-  };
-
-  const NewBlogSchema = Yup.object().shape({
-    title: Yup.string().required('ModuleCategory Name Is Required')
+  const ModuleCategoryForm = Yup.object().shape({
+    moduleId: Yup.string().required('Module Name Is Required'),
+    moduleCategoryName: Yup.string().required('ModuleCategory Name Is Required')
   });
 
   const formik = useFormik({
     initialValues: {
-      title: ''
+      moduleId: '',
+      moduleCategoryName: ''
     },
-    validationSchema: NewBlogSchema,
+    validationSchema: ModuleCategoryForm,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        await fakeRequest(500);
-        resetForm();
-        handleClosePreview();
-        setSubmitting(false);
-        enqueueSnackbar('Post success', { variant: 'success' });
+        const onSuccess = (msg) => {
+          enqueueSnackbar(msg, {
+            variant: 'success'
+          });
+        };
+        const onError = (msg) => {
+          enqueueSnackbar(msg, {
+            variant: 'error'
+          });
+        };
+        if (editModule.ids) {
+          const data = { ids: editModule.ids, ...values };
+          dispatch(updateModuleCategory(data.ids, data))
+            .then(() => {
+              onSuccess('Module category updated');
+              resetForm();
+              setSubmitting(false);
+              history.push(PATH_APP.management.org.list);
+            })
+            .catch(() => {
+              onError('Cannot update module category');
+              setSubmitting(false);
+            });
+        } else {
+          dispatch(addNewModuleCategory(values))
+            .then(() => {
+              onSuccess('Module category added');
+              resetForm();
+              setSubmitting(false);
+            })
+            .catch(() => {
+              onError('Cannot add module category');
+              setSubmitting(false);
+            });
+        }
       } catch (error) {
-        console.error(error);
         setSubmitting(false);
         setErrors({ afterSubmit: error.code });
       }
     }
   });
 
+  const edit_id = location.search.split('=')[1];
+
   useEffect(() => {
     dispatch(getModuleCategories());
     dispatch(getModules());
-  }, [dispatch]);
+    if (edit_id) {
+      dispatch(getModuleCategoryById(edit_id)).then((res) => {
+        formik.values.moduleName = res.moduleName;
+        setEditModule(res);
+      });
+    }
+  }, [edit_id, dispatch]);
 
   return (
     <Page title="New Post-Management | Minimal-UI" className={classes.root}>
@@ -83,9 +121,9 @@ function NewPostView() {
           <CardContent>
             <NewPostForm
               formik={formik}
-              onOpenPreview={handleOpenPreview}
               modulesList={modulesList}
               moduleCategoryList={moduleCategoryList}
+              editModule={editModule}
             />
           </CardContent>
         </Card>

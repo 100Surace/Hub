@@ -4,7 +4,14 @@ import PropTypes from 'prop-types';
 import { Form, FormikProvider } from 'formik';
 import { LoadingButton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, TextField, Autocomplete } from '@material-ui/core';
+import {
+  Box,
+  TextField,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel
+} from '@material-ui/core';
 
 // ----------------------------------------------------------------------
 
@@ -23,8 +30,8 @@ PostDetailsView.propTypes = {
   formik: PropTypes.object.isRequired,
   onOpenPreview: PropTypes.func,
   className: PropTypes.string,
-  moduleCategoryList: PropTypes.object,
-  modulesList: PropTypes.object
+  moduleCategoryList: PropTypes.array,
+  modulesList: PropTypes.array
 };
 
 function PostDetailsView({
@@ -37,8 +44,14 @@ function PostDetailsView({
   ...other
 }) {
   const classes = useStyles();
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
-  console.log(modulesList);
+  const {
+    errors,
+    values,
+    touched,
+    handleSubmit,
+    isSubmitting,
+    getFieldProps
+  } = formik;
 
   return (
     <FormikProvider value={formik}>
@@ -49,25 +62,36 @@ function PostDetailsView({
         className={clsx(classes.root, className)}
         {...other}
       >
-        <Autocomplete
+        <FormControl
           fullWidth
-          options={options}
-          getOptionLabel={(option) => option.title}
-          renderInput={(params) => (
-            <TextField {...params} margin="normal" label="Combo box" />
-          )}
-        />
-        <select>
-          {modulesList.forEach((c) => {
-            return <option key={c.ids}>{c.moduleName}</option>;
-          })}
-        </select>
+          variant="outlined"
+          className={classes.formControl}
+        >
+          <InputLabel>Module</InputLabel>
+          <Select
+            fullWidth
+            label="Module"
+            value={values.moduleId}
+            {...getFieldProps('moduleId')}
+            error={Boolean(touched.moduleId && errors.moduleId)}
+            helperText={touched.moduleId && errors.moduleId}
+            className={classes.margin}
+          >
+            {modulesList.map((m) => (
+              <MenuItem key={m.ids} value={m.ids}>
+                {m.moduleName}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <TextField
           fullWidth
-          label="Add ModuleCategory"
-          {...getFieldProps('title')}
-          error={Boolean(touched.title && errors.title)}
-          helperText={touched.title && errors.title}
+          label="Module Category"
+          {...getFieldProps('moduleCategoryName')}
+          error={Boolean(
+            touched.moduleCategoryName && errors.moduleCategoryName
+          )}
+          helperText={touched.moduleCategoryName && errors.moduleCategoryName}
           className={classes.margin}
         />
 
