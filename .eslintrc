@@ -4,24 +4,13 @@
     "es6": true,
     "browser": true
   },
-  "extends": [
-    "react-app",
-    "prettier"
-  ],
-  "plugins": [
-    "react",
-    "prettier"
-  ],
+  "extends": ["react-app", "prettier"],
+  "plugins": ["react", "prettier"],
   "settings": {
     "import/resolver": {
       "node": {
-        "paths": [
-          "src"
-        ],
-        "extensions": [
-          ".js",
-          ".jsx"
-        ]
+        "paths": ["src"],
+        "extensions": [".js", ".jsx"]
       }
     }
   },
@@ -29,7 +18,10 @@
     "comma-dangle": "off",
     "no-console": "off",
     "prettier/prettier": [
-      "error"
+      "error",
+      {
+        "endOfLine": "auto"
+      }
     ]
   }
 }

@@ -114,7 +114,7 @@ const navConfig = [
         ]
       },
 
-      // MANAGEMENT : ORG
+      // MANAGEMENT : ORG /
       // ----------------------------------------------------------------------
       {
         title: 'Org',
@@ -122,16 +122,37 @@ const navConfig = [
         href: PATH_APP.management.org.root,
         items: [
           {
-            title: 'list',
-            href: PATH_APP.management.org.list
+            title: 'Module',
+            icon: ICONS.cart,
+            href: PATH_APP.management.org.module.root,
+            items: [
+              {
+                title: 'list',
+                href: PATH_APP.management.org.module.list
+              },
+              {
+                title: 'Add Modue',
+                href: PATH_APP.management.org.module.newPost
+              }
+            ]
           },
           {
-            title: 'Add Modue',
-            href: PATH_APP.management.org.newPost
+            title: 'ModuleCategory',
+            icon: ICONS.cart,
+            href: PATH_APP.management.org.moduleCategory.root,
+            items: [
+              {
+                title: 'list',
+                href: PATH_APP.management.org.moduleCategory.list
+              },
+              {
+                title: 'Add ModueCategory',
+                href: PATH_APP.management.org.moduleCategory.newPost
+              }
+            ]
           }
         ]
       },
-
       // MANAGEMENT : BLOG
       // ----------------------------------------------------------------------
       {

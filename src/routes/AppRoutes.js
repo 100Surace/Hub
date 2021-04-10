@@ -85,17 +85,33 @@ const AppRoutes = {
       component: lazy(() => import('src/views/blog/NewPostView'))
     },
 
-    // MANAGEMENT : Org
+    // MANAGEMENT : Org/module
     // ----------------------------------------------------------------------
     {
       exact: true,
-      path: PATH_APP.management.org.list,
+      path: PATH_APP.management.org.module.list,
       component: lazy(() => import('src/views/org/module/ModuleListView'))
     },
     {
       exact: true,
-      path: PATH_APP.management.org.newPost,
+      path: PATH_APP.management.org.module.newPost,
       component: lazy(() => import('src/views/org/module/NewModuleView'))
+    },
+    // MANAGEMENT : Org/module
+    // ----------------------------------------------------------------------
+    {
+      exact: true,
+      path: PATH_APP.management.org.moduleCategory.list,
+      component: lazy(() =>
+        import('src/views/org/moduleCategory/ModuleCategoryListView')
+      )
+    },
+    {
+      exact: true,
+      path: PATH_APP.management.org.moduleCategory.newPost,
+      component: lazy(() =>
+        import('src/views/org/moduleCategory/NewModuleCategoryView')
+      )
     },
 
     // MANAGEMENT : USER

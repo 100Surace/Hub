@@ -70,9 +70,16 @@ export const PATH_APP = {
       account: path(ROOTS.app, '/management/user/account')
     },
     org: {
-      root: path(ROOTS.app, '/management/org/module/list'),
-      list: path(ROOTS.app, '/management/org/module/list'),
-      newPost: path(ROOTS.app, '/management/org/module/new-post')
+      module: {
+        root: path(ROOTS.app, '/management/org/module/list'),
+        list: path(ROOTS.app, '/management/org/module/list'),
+        newPost: path(ROOTS.app, '/management/org/module/new-post')
+      },
+      moduleCategory: {
+        root: path(ROOTS.app, '/management/org/moduleCategory/list'),
+        list: path(ROOTS.app, '/management/org/moduleCategory/list'),
+        newPost: path(ROOTS.app, '/management/org/moduleCategory/new-post')
+      }
     },
     eCommerce: {
       root: path(ROOTS.app, '/management/e-commerce'),
