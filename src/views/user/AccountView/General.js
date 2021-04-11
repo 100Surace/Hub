@@ -110,7 +110,7 @@ function General({ className }) {
                       <Switch {...getFieldProps('isPublic')} color="primary" />
                     }
                     labelPlacement="start"
-                    label="Public Profile"
+                    label="Organization Profile"
                   />
                 </Box>
               </Card>
@@ -140,30 +140,14 @@ function General({ className }) {
 
                     <Grid item xs={12} sm={6}>
                       <TextField
-                        fullWidth
-                        label="Phone Number"
-                        {...getFieldProps('phoneNumber')}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        fullWidth
-                        label="Address"
-                        {...getFieldProps('address')}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                      <TextField
                         select
                         fullWidth
-                        label="Country"
-                        placeholder="Country"
-                        {...getFieldProps('country')}
+                        label="Module"
+                        placeholder="Module"
+                        {...getFieldProps('module')}
                         SelectProps={{ native: true }}
-                        error={Boolean(touched.country && errors.country)}
-                        helperText={touched.country && errors.country}
+                        error={Boolean(touched.module && errors.module)}
+                        helperText={touched.module && errors.module}
                         className={classes.margin}
                       >
                         <option value="" />
@@ -177,36 +161,114 @@ function General({ className }) {
 
                     <Grid item xs={12} sm={6}>
                       <TextField
+                        select
                         fullWidth
-                        label="State/Region"
-                        {...getFieldProps('state')}
-                      />
+                        label="Module Category"
+                        placeholder="Module Category"
+                        {...getFieldProps('moduleCategory')}
+                        SelectProps={{ native: true }}
+                        error={Boolean(
+                          touched.moduleCategory && errors.moduleCategory
+                        )}
+                        helperText={
+                          touched.moduleCategory && errors.moduleCategory
+                        }
+                        className={classes.margin}
+                      >
+                        <option value="" />
+                        {countries.map((option) => (
+                          <option key={option.code} value={option.label}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </TextField>
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
                       <TextField
+                        select
                         fullWidth
-                        label="City"
-                        {...getFieldProps('city')}
-                      />
+                        label="Service Type"
+                        placeholder="Service Type"
+                        {...getFieldProps('serviceType')}
+                        SelectProps={{ native: true }}
+                        error={Boolean(
+                          touched.serviceType && errors.serviceType
+                        )}
+                        helperText={touched.serviceType && errors.serviceType}
+                        className={classes.margin}
+                      >
+                        <option value="" />
+                        {countries.map((option) => (
+                          <option key={option.code} value={option.label}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </TextField>
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
                       <TextField
+                        select
                         fullWidth
-                        label="Zip/Code"
-                        {...getFieldProps('zipCode')}
+                        label="Organization Type"
+                        placeholder="Organization Type"
+                        {...getFieldProps('organizationType')}
+                        SelectProps={{ native: true }}
+                        error={Boolean(
+                          touched.organizationType && errors.organizationType
+                        )}
+                        helperText={
+                          touched.organizationType && errors.organizationType
+                        }
+                        className={classes.margin}
+                      >
+                        <option value="" />
+                        {countries.map((option) => (
+                          <option key={option.code} value={option.label}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </TextField>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <TextField fullWidth label="Organization Name" />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <TextField fullWidth label="Second Email" />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        select
+                        fullWidth
+                        label="Phone Number"
+                        {...getFieldProps('phoneNumber')}
                       />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <TextField fullWidth label="Second Phone" />
                     </Grid>
 
                     <Grid item xs={12}>
                       <TextField
-                        {...getFieldProps('about')}
                         fullWidth
                         multiline
                         minRows={4}
-                        maxRows={4}
-                        label="About"
+                        maxRows={2}
+                        label="Short Description"
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        multiline
+                        minRows={4}
+                        maxRows={20}
+                        label="Long Description"
                       />
                     </Grid>
                   </Grid>

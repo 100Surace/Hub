@@ -178,7 +178,7 @@ function ProductListView() {
               <Button
                 variant="contained"
                 component={RouterLink}
-                to={PATH_APP.management.org.newPost}
+                to={PATH_APP.management.org.module.new}
                 startIcon={<Icon icon={plusFill} />}
               >
                 Add Module

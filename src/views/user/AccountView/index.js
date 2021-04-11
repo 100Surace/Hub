@@ -1,4 +1,5 @@
 import General from './General';
+import UploadView from './UploadView';
 import Billing from './Billing';
 import { Icon } from '@iconify/react';
 import Page from 'src/components/Page';
@@ -73,6 +74,11 @@ function AccountView() {
       value: 'general',
       icon: <Icon icon={roundAccountBox} width={20} height={20} />,
       component: <General />
+    },
+    {
+      value: 'orgImage',
+      icon: <Icon icon={roundAccountBox} width={20} height={20} />,
+      component: <UploadView />
     },
     {
       value: 'billing',
