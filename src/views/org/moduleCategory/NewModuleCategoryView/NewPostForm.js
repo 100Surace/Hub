@@ -76,7 +76,6 @@ function PostDetailsView({
             value={values.moduleId}
             {...getFieldProps('moduleId')}
             error={Boolean(touched.moduleId && errors.moduleId)}
-            helperText={touched.moduleId && errors.moduleId}
             className={classes.margin}
           >
             {modulesList.map((m) => (
@@ -93,7 +92,6 @@ function PostDetailsView({
           error={Boolean(
             touched.moduleCategoryName && errors.moduleCategoryName
           )}
-          helperText={touched.moduleCategoryName && errors.moduleCategoryName}
           className={classes.margin}
         />
 

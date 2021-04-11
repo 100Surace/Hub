@@ -99,7 +99,7 @@ function NewPostView() {
     if (edit_id) {
       dispatch(getModuleCategoryById(edit_id)).then((res) => {
         formik.values.moduleCategoryName = res.moduleCategoryName;
-        formik.values.moduleId = edit_id;
+        formik.values.moduleId = res.moduleId;
         setEditModule(res);
       });
     }
