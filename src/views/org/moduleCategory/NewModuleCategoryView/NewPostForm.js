@@ -10,7 +10,8 @@ import {
   FormControl,
   Select,
   MenuItem,
-  InputLabel
+  InputLabel,
+  Autocomplete
 } from '@material-ui/core';
 
 // ----------------------------------------------------------------------
@@ -52,7 +53,8 @@ function PostDetailsView({
     touched,
     handleSubmit,
     isSubmitting,
-    getFieldProps
+    getFieldProps,
+    setFieldValue
   } = formik;
 
   return (
@@ -64,7 +66,21 @@ function PostDetailsView({
         className={clsx(classes.root, className)}
         {...other}
       >
-        <FormControl
+        <Autocomplete
+          fullWidth
+          options={modulesList}
+          getOptionLabel={(m) => m.moduleName}
+          onChange={(e, value) => setFieldValue('moduleId', value.ids)}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              margin="normal"
+              label="Module"
+              error={Boolean(touched.moduleId && errors.moduleId)}
+            />
+          )}
+        />
+        {/* <FormControl
           fullWidth
           variant="outlined"
           className={classes.formControl}
@@ -84,7 +100,7 @@ function PostDetailsView({
               </MenuItem>
             ))}
           </Select>
-        </FormControl>
+        </FormControl> */}
         <TextField
           fullWidth
           label="Module Category"
