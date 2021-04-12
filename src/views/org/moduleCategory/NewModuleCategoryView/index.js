@@ -31,6 +31,7 @@ function NewPostView() {
   const dispatch = useDispatch();
   const history = useHistory();
   const [editModule, setEditModule] = useState({});
+  const [moduleValue, setModuleValue] = useState(null);
   const location = useLocation();
   const { moduleCategoryList } = useSelector((state) => state.moduleCategory);
   const { modulesList } = useSelector((state) => state.modules);
@@ -38,7 +39,9 @@ function NewPostView() {
 
   const ModuleCategoryForm = Yup.object().shape({
     moduleId: Yup.number().required('Module Name Is Required'),
-    moduleCategoryName: Yup.string().required('ModuleCategory Name Is Required')
+    moduleCategoryName: Yup.string()
+      .required('ModuleCategory Name Is Required')
+      .min(2)
   });
 
   const formik = useFormik({
@@ -78,6 +81,7 @@ function NewPostView() {
               onSuccess('Module category added');
               resetForm();
               setSubmitting(false);
+              setModuleValue(null);
             })
             .catch(() => {
               onError('Cannot add module category');
@@ -125,6 +129,8 @@ function NewPostView() {
               modulesList={modulesList}
               moduleCategoryList={moduleCategoryList}
               editModule={editModule}
+              moduleValue={moduleValue}
+              setModuleValue={setModuleValue}
             />
           </CardContent>
         </Card>

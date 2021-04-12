@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, FormikProvider } from 'formik';
 import { LoadingButton } from '@material-ui/lab';
@@ -33,7 +33,9 @@ PostDetailsView.propTypes = {
   className: PropTypes.string,
   moduleCategoryList: PropTypes.array,
   modulesList: PropTypes.array,
-  editModule: PropTypes.object
+  editModule: PropTypes.object,
+  moduleValue: PropTypes.object,
+  setModuleValue: PropTypes.func
 };
 
 function PostDetailsView({
@@ -44,6 +46,8 @@ function PostDetailsView({
   moduleCategoryList,
   modulesList,
   editModule,
+  moduleValue,
+  setModuleValue,
   ...other
 }) {
   const classes = useStyles();
@@ -56,6 +60,11 @@ function PostDetailsView({
     getFieldProps,
     setFieldValue
   } = formik;
+
+  const hanldeModuleChange = (e, value) => {
+    setModuleValue(value);
+    setFieldValue('moduleId', value.ids);
+  };
 
   return (
     <FormikProvider value={formik}>
@@ -70,7 +79,8 @@ function PostDetailsView({
           fullWidth
           options={modulesList}
           getOptionLabel={(m) => m.moduleName}
-          onChange={(e, value) => setFieldValue('moduleId', value.ids)}
+          onChange={hanldeModuleChange}
+          value={moduleValue}
           renderInput={(params) => (
             <TextField
               {...params}
