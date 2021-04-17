@@ -1,18 +1,10 @@
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Form, FormikProvider } from 'formik';
 import { LoadingButton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Box,
-  TextField,
-  FormControl,
-  Select,
-  MenuItem,
-  InputLabel,
-  Autocomplete
-} from '@material-ui/core';
+import { Box, TextField, Autocomplete } from '@material-ui/core';
 
 // ----------------------------------------------------------------------
 
@@ -34,8 +26,8 @@ PostDetailsView.propTypes = {
   moduleCategoryList: PropTypes.array,
   modulesList: PropTypes.array,
   editModule: PropTypes.object,
-  moduleValue: PropTypes.object,
-  setModuleValue: PropTypes.func
+  module: PropTypes.object,
+  setModule: PropTypes.func
 };
 
 function PostDetailsView({
@@ -46,25 +38,32 @@ function PostDetailsView({
   moduleCategoryList,
   modulesList,
   editModule,
-  moduleValue,
-  setModuleValue,
+  module,
+  setModule,
   ...other
 }) {
   const classes = useStyles();
   const {
     errors,
-    values,
     touched,
     handleSubmit,
     isSubmitting,
     getFieldProps,
-    setFieldValue
+    setFieldValue,
+    values
   } = formik;
 
   const hanldeModuleChange = (e, value) => {
-    setModuleValue(value);
-    setFieldValue('moduleId', value.ids);
+    setModule(value);
+    if (value) setFieldValue('moduleId', value.ids);
+    else setFieldValue('moduleId', 0);
   };
+
+  useEffect(() => {
+    if (values.moduleId)
+      setModule(modulesList.filter((m) => m.ids === values.moduleId)[0]);
+    // eslint-disable-next-line
+  });
 
   return (
     <FormikProvider value={formik}>
@@ -80,7 +79,7 @@ function PostDetailsView({
           options={modulesList}
           getOptionLabel={(m) => m.moduleName}
           onChange={hanldeModuleChange}
-          value={moduleValue}
+          value={module}
           renderInput={(params) => (
             <TextField
               {...params}

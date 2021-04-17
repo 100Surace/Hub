@@ -2,15 +2,7 @@ import React, { useState } from 'react';
 import Page from 'src/components/Page';
 import { UploadMultiFile } from 'src/components/Upload';
 import { makeStyles } from '@material-ui/core/styles';
-import CarouselThumbnail from 'src/views/uikit/extra-components/CarouselView/CarouselThumbnail';
-import CAROUSELS from 'src/components/Carousel';
-import {
-  Card,
-  Container,
-  CardHeader,
-  CardContent,
-  Grid
-} from '@material-ui/core';
+import { Card, Container, CardHeader, CardContent } from '@material-ui/core';
 
 // ----------------------------------------------------------------------
 

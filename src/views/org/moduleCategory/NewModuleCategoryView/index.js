@@ -31,17 +31,20 @@ function NewPostView() {
   const dispatch = useDispatch();
   const history = useHistory();
   const [editModule, setEditModule] = useState({});
-  const [moduleValue, setModuleValue] = useState(null);
+  const [module, setModule] = useState({
+    ids: 0,
+    moduleName: 'Select Module Name'
+  });
   const location = useLocation();
   const { moduleCategoryList } = useSelector((state) => state.moduleCategory);
   const { modulesList } = useSelector((state) => state.modules);
   const { enqueueSnackbar } = useSnackbar();
 
   const ModuleCategoryForm = Yup.object().shape({
-    moduleId: Yup.number().required('Module Name Is Required'),
+    moduleId: Yup.number().positive().required('Module name is required'),
     moduleCategoryName: Yup.string()
-      .required('ModuleCategory Name Is Required')
-      .min(2)
+      .required('This field is required')
+      .min(2, 'This filed must have atleast 2 characters.')
   });
 
   const formik = useFormik({
@@ -81,7 +84,7 @@ function NewPostView() {
               onSuccess('Module category added');
               resetForm();
               setSubmitting(false);
-              setModuleValue(null);
+              setModule({ ids: 0, moduleName: 'Select Module Name' });
             })
             .catch(() => {
               onError('Cannot add module category');
@@ -107,6 +110,7 @@ function NewPostView() {
         setEditModule(res);
       });
     }
+    // eslint-disable-next-line
   }, [edit_id, dispatch]);
 
   return (
@@ -129,8 +133,8 @@ function NewPostView() {
               modulesList={modulesList}
               moduleCategoryList={moduleCategoryList}
               editModule={editModule}
-              moduleValue={moduleValue}
-              setModuleValue={setModuleValue}
+              setModule={setModule}
+              module={module}
             />
           </CardContent>
         </Card>

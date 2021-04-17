@@ -94,6 +94,7 @@ function NewPostView() {
         setEditModule(res);
       });
     }
+    // eslint-disable-next-line
   }, [edit_id, dispatch]);
 
   return (

@@ -39,23 +39,29 @@ function General({ className }) {
   const { user, updateProfile } = useAuth();
 
   const UpdateUserSchema = Yup.object().shape({
-    displayName: Yup.string().required('Name is required')
+    moduleCategoryId: Yup.string().required('Module name is required'),
+    serviceType: Yup.string().required('Service type is required'),
+    organizationType: Yup.string().required('Organization Type is required'),
+    orgName: Yup.string().required('Organizaton name is required'),
+    status: Yup.string().required('Status is required')
   });
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      displayName: user.displayName,
-      email: user.email,
-      photoURL: user.photoURL,
-      phoneNumber: user.phoneNumber,
-      country: user.country,
-      address: user.address,
-      state: user.state,
-      city: user.city,
-      zipCode: user.zipCode,
-      about: user.about,
-      isPublic: user.isPublic
+      moduleCategoryId: '',
+      moduleCategory: '',
+      serviceType: '',
+      organizationType: '',
+      orgName: '',
+      secondEmail: '',
+      secondPhone: '',
+      shortDesc: '',
+      longDesc: '',
+      logo: '',
+      bannerImg: '',
+      orgImg: '',
+      status: ''
     },
 
     validationSchema: UpdateUserSchema,
