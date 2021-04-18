@@ -170,7 +170,7 @@ function ProductListView() {
           links={[
             { name: 'Dashboard', href: PATH_APP.root },
             { name: 'Management', href: PATH_APP.management.root },
-            { name: 'Org' },
+            { name: 'Org', href: PATH_APP.management.root },
             { name: 'Module List' }
           ]}
           action={

@@ -1,7 +1,8 @@
 import clsx from 'clsx';
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import { countries } from './countries';
 import { useSnackbar } from 'notistack';
 import useAuth from 'src/hooks/useAuth';
@@ -37,6 +38,7 @@ function General({ className }) {
   const isMountedRef = useIsMountedRef();
   const { enqueueSnackbar } = useSnackbar();
   const { user, updateProfile } = useAuth();
+  const { organizationsList: ORG } = useSelector((state) => state.organization);
 
   const UpdateUserSchema = Yup.object().shape({
     moduleCategoryId: Yup.string().required('Module name is required'),
@@ -53,11 +55,11 @@ function General({ className }) {
       moduleCategory: '',
       serviceType: '',
       organizationType: '',
-      orgName: '',
-      secondEmail: '',
-      secondPhone: '',
-      shortDesc: '',
-      longDesc: '',
+      orgName: ORG.orgName,
+      secondEmail: ORG.secondEmail,
+      secondPhone: ORG.secondPhone,
+      shortDesc: ORG.shortDesc,
+      longDesc: ORG.longDesc,
       logo: '',
       bannerImg: '',
       orgImg: '',
@@ -128,10 +130,10 @@ function General({ className }) {
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
                       <TextField
-                        disabled={user.email === 'demo@minimals.cc'} // You can remove this
                         fullWidth
                         label="Name"
-                        {...getFieldProps('displayName')}
+                        {...getFieldProps('orgName')}
+                        error={Boolean(touched.orgName && errors.orgName)}
                       />
                     </Grid>
 
@@ -140,7 +142,7 @@ function General({ className }) {
                         fullWidth
                         disabled
                         label="Email Address"
-                        {...getFieldProps('email')}
+                        {...getFieldProps('secondEmail')}
                       />
                     </Grid>
 
@@ -243,7 +245,11 @@ function General({ className }) {
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label="Second Email" />
+                      <TextField
+                        fullWidth
+                        label="Second Email"
+                        {...getFieldProps('secondEmail')}
+                      />
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
@@ -256,7 +262,11 @@ function General({ className }) {
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                      <TextField fullWidth label="Second Phone" />
+                      <TextField
+                        fullWidth
+                        label="Second Phone"
+                        {...getFieldProps('secondPhone')}
+                      />
                     </Grid>
 
                     <Grid item xs={12}>
@@ -266,6 +276,7 @@ function General({ className }) {
                         minRows={4}
                         maxRows={2}
                         label="Short Description"
+                        {...getFieldProps('shortDesc')}
                       />
                     </Grid>
                     <Grid item xs={12}>
@@ -275,6 +286,7 @@ function General({ className }) {
                         minRows={4}
                         maxRows={20}
                         label="Long Description"
+                        {...getFieldProps('longDesc')}
                       />
                     </Grid>
                   </Grid>

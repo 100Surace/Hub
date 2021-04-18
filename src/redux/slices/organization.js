@@ -6,7 +6,7 @@ import organization from 'src/api/org/organization';
 const initialState = {
   isLoading: false,
   error: false,
-  organizationsList: [],
+  organizationsList: {},
   hasMore: true,
   index: 0,
   step: 11
@@ -28,9 +28,9 @@ const slice = createSlice({
     },
 
     // GET organizations
-    getorganizationsSuccess(state, action) {
+    getOrgProfileSuccess(state, action) {
       state.isLoading = false;
-      state.organizationsList = [...action.payload];
+      state.organizationsList = action.payload;
     },
 
     // Add organization
@@ -65,12 +65,13 @@ export const { getMorePosts } = slice.actions;
 
 // ----------------------------------------------------------------------
 
-export function getOrganizations() {
+export function getOrgProfile() {
+  const MY_ID = 11;
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await organization.GET();
-      dispatch(slice.actions.getOrganizationsSuccess(response.data));
+      const response = await organization.GETBYID(MY_ID);
+      dispatch(slice.actions.getOrgProfileSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
       return Promise.reject(new Error(error));

@@ -4,7 +4,6 @@ import baseURL from 'src/api/baseUrl';
 const ENDPOINT = '/api/orgs/';
 const URL = baseURL + ENDPOINT;
 const organization = {
-  GET: () => axios.get(URL),
   GETBYID: (id) => axios.get(URL + id),
   POST: (newRecord) => axios.post(URL, newRecord),
   PUT: (id, updateRecord) => axios.put(URL + id, updateRecord),

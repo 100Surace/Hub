@@ -23,6 +23,7 @@ import {
   getAddressBook,
   getNotifications
 } from 'src/redux/slices/user';
+import { getOrgProfile } from 'src/redux/slices/organization';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Tab, Box, Tabs } from '@material-ui/core';
 
@@ -50,6 +51,7 @@ function AccountView() {
   } = useSelector((state) => state.user);
 
   useEffect(() => {
+    dispatch(getOrgProfile());
     dispatch(getCards());
     dispatch(getAddressBook());
     dispatch(getInvoices());
