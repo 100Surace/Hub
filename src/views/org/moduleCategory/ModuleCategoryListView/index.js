@@ -159,7 +159,7 @@ function ProductListView() {
 
   useEffect(() => {
     dispatch(getModuleCategories());
-  }, [dispatch]);
+  }, [moduleCategoryList, dispatch]);
 
   return (
     <Page
@@ -173,8 +173,8 @@ function ProductListView() {
           links={[
             { name: 'Dashboard', href: PATH_APP.root },
             { name: 'Management', href: PATH_APP.management.root },
-            { name: 'org', href: PATH_APP.management.eCommerce.root },
-            { name: 'Module Category' }
+            { name: 'Org' },
+            { name: 'Module Category List' }
           ]}
           action={
             <Hidden smDown>
@@ -198,7 +198,10 @@ function ProductListView() {
               position: 'fixed'
             }}
           >
-            <MFab component={RouterLink} to={PATH_APP.management.org.newPost}>
+            <MFab
+              component={RouterLink}
+              to={PATH_APP.management.org.moduleCategory.new}
+            >
               <Icon icon={roundPostAdd} width={24} height={24} />
             </MFab>
           </Box>

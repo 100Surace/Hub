@@ -101,7 +101,6 @@ export function deleteModule(ids) {
     try {
       ids.forEach(async (id) => {
         const response = await module.DELETE(id);
-        console.log(response.data);
         if (response.status === 204) {
           dispatch(slice.actions.deleteModuleSuccess(id));
         }

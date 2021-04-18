@@ -156,7 +156,7 @@ function ProductListView() {
 
   useEffect(() => {
     dispatch(getModules());
-  }, [dispatch]);
+  }, [modulesList, dispatch]);
 
   return (
     <Page
@@ -170,7 +170,7 @@ function ProductListView() {
           links={[
             { name: 'Dashboard', href: PATH_APP.root },
             { name: 'Management', href: PATH_APP.management.root },
-            { name: 'Org', href: PATH_APP.management.org.root },
+            { name: 'Org' },
             { name: 'Module List' }
           ]}
           action={
@@ -195,7 +195,10 @@ function ProductListView() {
               position: 'fixed'
             }}
           >
-            <MFab component={RouterLink} to={PATH_APP.management.org.newPost}>
+            <MFab
+              component={RouterLink}
+              to={PATH_APP.management.org.module.new}
+            >
               <Icon icon={roundPostAdd} width={24} height={24} />
             </MFab>
           </Box>
