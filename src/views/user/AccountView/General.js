@@ -88,7 +88,11 @@ function General({ className, OrgFormik }) {
                   />
                   <FormControlLabel
                     control={
-                      <Switch {...getFieldProps('isPublic')} color="primary" />
+                      <Switch
+                        {...getFieldProps('status')}
+                        color="primary"
+                        checked={values.status}
+                      />
                     }
                     labelPlacement="start"
                     label="Organization Profile"

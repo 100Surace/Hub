@@ -2,14 +2,15 @@ import { createSlice } from '@reduxjs/toolkit';
 import organization from 'src/api/org/organization';
 
 // ----------------------------------------------------------------------
-
+const ORG_ID = 11;
 const initialState = {
   isLoading: false,
   error: false,
   organizationsList: {},
   hasMore: true,
   index: 0,
-  step: 11
+  step: 11,
+  ORG_ID: ORG_ID
 };
 
 const slice = createSlice({
@@ -33,10 +34,10 @@ const slice = createSlice({
       state.organizationsList = action.payload;
     },
 
-    // Add organization
-    addorganizationSuccess(state, action) {
+    // Update organization
+    updateOrgProfileSuccess(state, action) {
       state.isLoading = false;
-      state.organizationsList = [...state.organizationsList, action.payload];
+      state.organizationsList = action.payload;
     },
 
     // Delete organizations
@@ -45,14 +46,6 @@ const slice = createSlice({
       state.organizationsList = state.organizationsList.filter(
         (m) => m.ids !== action.payload
       );
-    },
-
-    // Delete organizations
-    updateorganizationSuccess(state, action) {
-      state.isLoading = false;
-      state.organizationsList = state.organizationsList.map((m) => {
-        return m.ids === action.payload.id ? action.payload : m;
-      });
     }
   }
 });
@@ -66,11 +59,10 @@ export const { getMorePosts } = slice.actions;
 // ----------------------------------------------------------------------
 
 export function getOrgProfile() {
-  const MY_ID = 11;
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await organization.GETBYID(MY_ID);
+      const response = await organization.GETBYID(initialState.ORG_ID);
       dispatch(slice.actions.getOrgProfileSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -81,12 +73,14 @@ export function getOrgProfile() {
 
 // ----------------------------------------------------------------------
 
-export function addNewOrganization(data) {
+export function updateOrgProfile(fromData) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
+    const ID = initialState.ORG_ID;
+    const data = { ids: ID, ...fromData };
     try {
-      const response = await organization.POST(data);
-      dispatch(slice.actions.addOrganizationSuccess(response.data));
+      const response = await organization.PUT(ID, data);
+      dispatch(slice.actions.updateOrgProfileSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
       return Promise.reject(new Error(error));

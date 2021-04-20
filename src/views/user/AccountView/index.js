@@ -29,7 +29,7 @@ import {
   getAddressBook,
   getNotifications
 } from 'src/redux/slices/user';
-import { getOrgProfile } from 'src/redux/slices/organization';
+import { getOrgProfile, updateOrgProfile } from 'src/redux/slices/organization';
 import { makeStyles } from '@material-ui/core/styles';
 import { getModules } from 'src/redux/slices/module';
 import { getModuleCategories } from 'src/redux/slices/moduleCategory';
@@ -71,9 +71,9 @@ function AccountView() {
   const OrgFormik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      moduleCategoryId: '',
-      serviceType: '',
-      organizationType: '',
+      moduleCategoryId: 0,
+      serviceType: 0,
+      organizationType: 0,
       orgName: '',
       secondEmail: '',
       secondPhone: '',
@@ -82,13 +82,19 @@ function AccountView() {
       logo: '',
       bannerImg: '',
       orgImg: '',
-      status: ''
+      status: false
     },
 
     validationSchema: OrgProfileSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
-        enqueueSnackbar('Update success', { variant: 'success' });
+        dispatch(updateOrgProfile(values))
+          .then(() => {
+            enqueueSnackbar('Successfully updated', { variant: 'success' });
+          })
+          .catch(() => {
+            enqueueSnackbar('Failed to update', { variant: 'error' });
+          });
         if (isMountedRef.current) {
           setSubmitting(false);
         }
