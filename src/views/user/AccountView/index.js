@@ -1,6 +1,11 @@
+import * as Yup from 'yup';
+import { useSnackbar } from 'notistack';
+import { useFormik } from 'formik';
+import useIsMountedRef from 'src/hooks/useIsMountedRef';
 import General from './General';
 import UploadView from './UploadView';
 import Billing from './Billing';
+import useAuth from 'src/hooks/useAuth';
 import { Icon } from '@iconify/react';
 import Page from 'src/components/Page';
 import SocialLinks from './SocialLinks';
@@ -16,6 +21,7 @@ import roundVpnKey from '@iconify-icons/ic/round-vpn-key';
 import roundReceipt from '@iconify-icons/ic/round-receipt';
 import { HeaderDashboard } from 'src/layouts/Common';
 import roundAccountBox from '@iconify-icons/ic/round-account-box';
+import { Container, Tab, Box, Tabs } from '@material-ui/core';
 import {
   getCards,
   getProfile,
@@ -25,7 +31,8 @@ import {
 } from 'src/redux/slices/user';
 import { getOrgProfile } from 'src/redux/slices/organization';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Tab, Box, Tabs } from '@material-ui/core';
+import { getModules } from 'src/redux/slices/module';
+import { getModuleCategories } from 'src/redux/slices/moduleCategory';
 
 // ----------------------------------------------------------------------
 
@@ -49,9 +56,55 @@ function AccountView() {
     addressBook,
     notifications
   } = useSelector((state) => state.user);
+  const isMountedRef = useIsMountedRef();
+  const { enqueueSnackbar } = useSnackbar();
+  const { user, updateProfile } = useAuth();
+
+  // formik forms
+  const OrgProfileSchema = Yup.object().shape({
+    moduleCategoryId: Yup.string().required('Module name is required'),
+    serviceType: Yup.string().required('Service type is required'),
+    organizationType: Yup.string().required('Organization Type is required'),
+    orgName: Yup.string().required('Organizaton name is required'),
+    status: Yup.string().required('Status is required')
+  });
+  const OrgFormik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      moduleCategoryId: '',
+      serviceType: '',
+      organizationType: '',
+      orgName: '',
+      secondEmail: '',
+      secondPhone: '',
+      shortDesc: '',
+      longDesc: '',
+      logo: '',
+      bannerImg: '',
+      orgImg: '',
+      status: ''
+    },
+
+    validationSchema: OrgProfileSchema,
+    onSubmit: async (values, { setErrors, setSubmitting }) => {
+      try {
+        enqueueSnackbar('Update success', { variant: 'success' });
+        if (isMountedRef.current) {
+          setSubmitting(false);
+        }
+      } catch (error) {
+        if (isMountedRef.current) {
+          setErrors({ afterSubmit: error.code });
+          setSubmitting(false);
+        }
+      }
+    }
+  });
 
   useEffect(() => {
     dispatch(getOrgProfile());
+    dispatch(getModules());
+    dispatch(getModuleCategories());
     dispatch(getCards());
     dispatch(getAddressBook());
     dispatch(getInvoices());
@@ -75,7 +128,7 @@ function AccountView() {
     {
       value: 'general',
       icon: <Icon icon={roundAccountBox} width={20} height={20} />,
-      component: <General />
+      component: <General OrgFormik={OrgFormik} />
     },
     {
       value: 'orgImage',

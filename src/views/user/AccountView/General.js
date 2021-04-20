@@ -1,14 +1,10 @@
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
-import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { countries } from './countries';
-import { useSnackbar } from 'notistack';
-import useAuth from 'src/hooks/useAuth';
 import { UploadAvatar } from 'src/components/Upload';
-import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import { Form, FormikProvider, useFormik } from 'formik';
+import { Form, FormikProvider } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Box,
@@ -30,58 +26,26 @@ const useStyles = makeStyles((theme) => ({
 // ----------------------------------------------------------------------
 
 General.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  OrgFormik: PropTypes.object
 };
 
-function General({ className }) {
+function General({ className, OrgFormik }) {
   const classes = useStyles();
-  const isMountedRef = useIsMountedRef();
-  const { enqueueSnackbar } = useSnackbar();
-  const { user, updateProfile } = useAuth();
+  const serviceTypes = [
+    { id: 1, name: 'Private' },
+    { id: 2, name: 'Public' }
+  ];
+  const orgTypes = [
+    { id: 1, name: 'National' },
+    { id: 2, name: 'International' }
+  ];
+
   const { organizationsList: ORG } = useSelector((state) => state.organization);
-
-  const UpdateUserSchema = Yup.object().shape({
-    moduleCategoryId: Yup.string().required('Module name is required'),
-    serviceType: Yup.string().required('Service type is required'),
-    organizationType: Yup.string().required('Organization Type is required'),
-    orgName: Yup.string().required('Organizaton name is required'),
-    status: Yup.string().required('Status is required')
-  });
-
-  const formik = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      moduleCategoryId: '',
-      moduleCategory: '',
-      serviceType: '',
-      organizationType: '',
-      orgName: ORG.orgName,
-      secondEmail: ORG.secondEmail,
-      secondPhone: ORG.secondPhone,
-      shortDesc: ORG.shortDesc,
-      longDesc: ORG.longDesc,
-      logo: '',
-      bannerImg: '',
-      orgImg: '',
-      status: ''
-    },
-
-    validationSchema: UpdateUserSchema,
-    onSubmit: async (values, { setErrors, setSubmitting }) => {
-      try {
-        await updateProfile({ ...values });
-        enqueueSnackbar('Update success', { variant: 'success' });
-        if (isMountedRef.current) {
-          setSubmitting(false);
-        }
-      } catch (error) {
-        if (isMountedRef.current) {
-          setErrors({ afterSubmit: error.code });
-          setSubmitting(false);
-        }
-      }
-    }
-  });
+  const { moduleCategoryList: mCategory } = useSelector(
+    (state) => state.moduleCategory
+  );
+  const { modulesList: modules } = useSelector((state) => state.modules);
 
   const {
     values,
@@ -90,12 +54,22 @@ function General({ className }) {
     isSubmitting,
     handleSubmit,
     getFieldProps,
-    setFieldValue
-  } = formik;
+    setFieldValue,
+    initialValues
+  } = OrgFormik;
+
+  useEffect(() => {
+    if (Object.keys(ORG).length) {
+      Object.keys(initialValues).forEach((key) => {
+        setFieldValue(key, ORG[key]);
+      });
+    }
+    // eslint-disable-next-line
+  }, [ORG]);
 
   return (
     <div className={clsx(classes.root, className)}>
-      <FormikProvider value={formik}>
+      <FormikProvider value={OrgFormik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={4}>
@@ -109,7 +83,6 @@ function General({ className }) {
                   }}
                 >
                   <UploadAvatar
-                    disabled={user.email === 'demo@minimals.cc'} // You can remove this
                     value={values.photoURL}
                     onChange={(value) => setFieldValue('photoURL', value)}
                   />
@@ -131,7 +104,7 @@ function General({ className }) {
                     <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
-                        label="Name"
+                        label="Organization Name"
                         {...getFieldProps('orgName')}
                         error={Boolean(touched.orgName && errors.orgName)}
                       />
@@ -146,7 +119,7 @@ function General({ className }) {
                       />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
+                    {/* <Grid item xs={12} sm={6}>
                       <TextField
                         select
                         fullWidth
@@ -159,13 +132,13 @@ function General({ className }) {
                         className={classes.margin}
                       >
                         <option value="" />
-                        {countries.map((option) => (
-                          <option key={option.code} value={option.label}>
-                            {option.label}
+                        {modules.map((m) => (
+                          <option key={m.ids} value={m.ids}>
+                            {m.moduleName}
                           </option>
                         ))}
                       </TextField>
-                    </Grid>
+                    </Grid> */}
 
                     <Grid item xs={12} sm={6}>
                       <TextField
@@ -173,20 +146,20 @@ function General({ className }) {
                         fullWidth
                         label="Module Category"
                         placeholder="Module Category"
-                        {...getFieldProps('moduleCategory')}
+                        {...getFieldProps('moduleCategoryId')}
                         SelectProps={{ native: true }}
                         error={Boolean(
-                          touched.moduleCategory && errors.moduleCategory
+                          touched.moduleCategoryId && errors.moduleCategoryId
                         )}
                         helperText={
-                          touched.moduleCategory && errors.moduleCategory
+                          touched.moduleCategoryId && errors.moduleCategoryId
                         }
                         className={classes.margin}
                       >
                         <option value="" />
-                        {countries.map((option) => (
-                          <option key={option.code} value={option.label}>
-                            {option.label}
+                        {mCategory.map((c) => (
+                          <option key={c.ids} value={c.ids}>
+                            {c.moduleCategoryName}
                           </option>
                         ))}
                       </TextField>
@@ -207,9 +180,9 @@ function General({ className }) {
                         className={classes.margin}
                       >
                         <option value="" />
-                        {countries.map((option) => (
-                          <option key={option.code} value={option.label}>
-                            {option.label}
+                        {serviceTypes.map((s) => (
+                          <option key={s.id} value={s.id}>
+                            {s.name}
                           </option>
                         ))}
                       </TextField>
@@ -232,17 +205,17 @@ function General({ className }) {
                         className={classes.margin}
                       >
                         <option value="" />
-                        {countries.map((option) => (
-                          <option key={option.code} value={option.label}>
-                            {option.label}
+                        {orgTypes.map((o) => (
+                          <option key={o.id} value={o.id}>
+                            {o.name}
                           </option>
                         ))}
                       </TextField>
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
+                    {/* <Grid item xs={12} sm={6}>
                       <TextField fullWidth label="Organization Name" />
-                    </Grid>
+                    </Grid> */}
 
                     <Grid item xs={12} sm={6}>
                       <TextField
@@ -254,7 +227,6 @@ function General({ className }) {
 
                     <Grid item xs={12} sm={6}>
                       <TextField
-                        select
                         fullWidth
                         label="Phone Number"
                         {...getFieldProps('phoneNumber')}
