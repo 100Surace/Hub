@@ -82,11 +82,14 @@ function AccountView() {
       logo: '',
       bannerImg: '',
       orgImg: '',
-      status: false
+      status: false,
+      preview: ''
     },
 
     validationSchema: OrgProfileSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
+      delete values['preview'];
+      console.log(values);
       try {
         dispatch(updateOrgProfile(values))
           .then(() => {

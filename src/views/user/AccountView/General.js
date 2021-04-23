@@ -83,8 +83,11 @@ function General({ className, OrgFormik }) {
                   }}
                 >
                   <UploadAvatar
-                    value={values.photoURL}
-                    onChange={(value) => setFieldValue('photoURL', value)}
+                    value={values.preview}
+                    onChange={(value) => {
+                      setFieldValue('logo', value);
+                      setFieldValue('preview', URL.createObjectURL(value));
+                    }}
                   />
                   <FormControlLabel
                     control={

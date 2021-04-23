@@ -127,24 +127,25 @@ function UploadAvatar({
 
       try {
         if (checkSize && checkType) {
-          setIsLoading(true);
+          // setIsLoading(true);
           const formData = new FormData();
           formData.append('file', file);
           formData.append('folder', 'upload_minimal/avatar');
           formData.append('upload_preset', CLOUDINARY_PRESET);
           formData.append('api_key', CLOUDINARY_KEY);
-          return axios
-            .post(CLOUDINARY_URL, formData, {
-              headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            })
-            .then((response) => {
-              const data = response.data;
-              if (isMountedRef.current) {
-                setFile(data.secure_url);
-                setIsLoading(false);
-                setIsError(null);
-              }
-            });
+          setFile(file);
+          //   return axios
+          //     .post(CLOUDINARY_URL, formData, {
+          //       headers: { 'X-Requested-With': 'XMLHttpRequest' }
+          //     })
+          //     .then((response) => {
+          //       const data = response.data;
+          //       if (isMountedRef.current) {
+          //         setFile(data.secure_url);
+          //         setIsLoading(false);
+          //         setIsError(null);
+          //       }
+          //     });
         }
       } catch (error) {
         console.error(error);
@@ -193,16 +194,22 @@ function UploadAvatar({
             />
           )}
 
-          <div className={clsx(classes.placeholder, { [classes.hover]: file })}>
-            <Box
-              component={Icon}
-              icon={roundAddAPhoto}
-              sx={{ width: 24, height: 24, mb: 1 }}
-            />
-            <Typography variant="caption">
-              {file ? 'Update photo' : 'Upload photo'}
-            </Typography>
-          </div>
+          {file ? (
+            ''
+          ) : (
+            <div
+              className={clsx(classes.placeholder, { [classes.hover]: file })}
+            >
+              <Box
+                component={Icon}
+                icon={roundAddAPhoto}
+                sx={{ width: 24, height: 24, mb: 1 }}
+              />
+              <Typography variant="caption">
+                {file ? '' : 'Upload photo'}
+              </Typography>
+            </div>
+          )}
         </div>
       </div>
 
