@@ -15,6 +15,7 @@ import {
   FormHelperText,
   CircularProgress
 } from '@material-ui/core';
+import baseUrl from 'src/api/baseUrl';
 
 // ----------------------------------------------------------------------
 
@@ -91,8 +92,9 @@ UploadAvatar.propTypes = {
   disabled: PropTypes.bool,
   caption: PropTypes.string,
   error: PropTypes.bool,
-  file: PropTypes.object,
+  path: PropTypes.string,
   setFile: PropTypes.func,
+  values: PropTypes.object,
   className: PropTypes.string
 };
 
@@ -101,6 +103,7 @@ function UploadAvatar({
   caption,
   error = false,
   value: file,
+  path,
   onChange: setFile,
   className,
   ...other
@@ -185,11 +188,18 @@ function UploadAvatar({
             </Box>
           )}
 
-          {file && (
+          {file ? (
             <Box
               component="img"
               alt="avatar"
-              src={file}
+              src={URL.createObjectURL(file)}
+              sx={{ zIndex: 8, objectFit: 'cover' }}
+            />
+          ) : (
+            <Box
+              component="img"
+              alt="avatar"
+              src={baseUrl + '/' + path}
               sx={{ zIndex: 8, objectFit: 'cover' }}
             />
           )}

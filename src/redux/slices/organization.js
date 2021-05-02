@@ -73,13 +73,24 @@ export function getOrgProfile() {
 
 // ----------------------------------------------------------------------
 
-export function updateOrgProfile(fromData) {
+export function updateOrgProfile(values) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     const ID = initialState.ORG_ID;
-    const data = { ids: ID, ...fromData };
+    const formData = new FormData();
+    formData.append('ids', ID);
+    formData.append('orgName', values.orgName);
+    formData.append('moduleCategoryId', values.moduleCategoryId);
+    formData.append('serviceType', values.serviceType);
+    formData.append('organizationType', values.organizationType);
+    // formData.append('secondEmail', values.secondEmail);
+    // formData.append('secondPhone', values.secondPhone);
+    // formData.append('shortDesc', values.shortDesc);
+    // formData.append('longDesc', values.longDesc);
+    formData.append('status', values.status);
+    formData.append('imageFile', values.imageFile);
     try {
-      const response = await organization.PUT(ID, data);
+      const response = await organization.PUT(ID, formData);
       dispatch(slice.actions.updateOrgProfileSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

@@ -83,10 +83,14 @@ function General({ className, OrgFormik }) {
                   }}
                 >
                   <UploadAvatar
-                    value={values.preview}
+                    value={values.imageFile}
+                    path={values.logo}
                     onChange={(value) => {
-                      setFieldValue('logo', value);
-                      setFieldValue('preview', URL.createObjectURL(value));
+                      const reader = new FileReader();
+                      reader.onload = (x) => {
+                        setFieldValue('imageFile', value);
+                      };
+                      reader.readAsDataURL(value);
                     }}
                   />
                   <FormControlLabel

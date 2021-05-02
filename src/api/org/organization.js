@@ -1,7 +1,7 @@
 import axios from 'axios';
 import baseURL from 'src/api/baseUrl';
 
-const ENDPOINT = '/api/orgs/';
+const ENDPOINT = '/api/Orgs/';
 const URL = baseURL + ENDPOINT;
 const organization = {
   GETBYID: (id) => axios.get(URL + id),

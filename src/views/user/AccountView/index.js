@@ -83,13 +83,11 @@ function AccountView() {
       bannerImg: '',
       orgImg: '',
       status: false,
-      preview: ''
+      imageFile: null
     },
 
     validationSchema: OrgProfileSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
-      delete values['preview'];
-      console.log(values);
       try {
         dispatch(updateOrgProfile(values))
           .then(() => {
@@ -112,7 +110,7 @@ function AccountView() {
 
   useEffect(() => {
     dispatch(getOrgProfile());
-    dispatch(getModules());
+    // dispatch(getModules());
     dispatch(getModuleCategories());
     dispatch(getCards());
     dispatch(getAddressBook());
