@@ -22,22 +22,22 @@ import {
 const SOCIALS = [
   {
     name: 'FaceBook',
-    value: faker.random.number(),
+    value: faker.datatype.number(),
     icon: <Icon icon={facebookFill} color="#1877F2" width={32} height={32} />
   },
   {
     name: 'Google',
-    value: faker.random.number(),
+    value: faker.datatype.number(),
     icon: <Icon icon={googleFill} color="#DF3E30" width={32} height={32} />
   },
   {
     name: 'Linkedin',
-    value: faker.random.number(),
+    value: faker.datatype.number(),
     icon: <Icon icon={linkedinFill} color="#006097" width={32} height={32} />
   },
   {
     name: 'Twitter',
-    value: faker.random.number(),
+    value: faker.datatype.number(),
     icon: <Icon icon={twitterFill} color="#1C9CEA" width={32} height={32} />
   }
 ];

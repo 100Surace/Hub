@@ -91,9 +91,9 @@ const mails = [...Array(9)].map((mail, index) => {
     id: createId(setIndex),
     labelIds: createLabelIds(setIndex),
     folder: sample(FOLDER),
-    isImportant: faker.random.boolean(),
-    isStarred: faker.random.boolean(),
-    isUnread: faker.random.boolean(),
+    isImportant: faker.datatype.boolean(),
+    isStarred: faker.datatype.boolean(),
+    isUnread: faker.datatype.boolean(),
     subject: faker.lorem.words(),
     message: faker.lorem.paragraphs(),
 

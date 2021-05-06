@@ -2,15 +2,34 @@ import { createSlice } from '@reduxjs/toolkit';
 import organization from 'src/api/org/organization';
 
 // ----------------------------------------------------------------------
-const ORG_ID = 11;
+const USER_ID = '4fba38d8-4edc-4ec3-bb74-2d86a87c96df';
 const initialState = {
   isLoading: false,
   error: false,
-  organizationsList: {},
+  organizationsList: {
+    ids: 0,
+    id: USER_ID,
+    moduleCategoryId: 0,
+    serviceType: 0,
+    organizationType: 0,
+    orgName: '',
+    secondEmail: '',
+    secondPhone: '',
+    shortDesc: '',
+    longDesc: '',
+    logo: '',
+    bannerImg: '',
+    orgImg: '',
+    status: false,
+    imageFile: null,
+    moduleId: 0
+  },
   hasMore: true,
   index: 0,
   step: 11,
-  ORG_ID: ORG_ID
+  USER_ID: USER_ID,
+  ORG_ID: 0,
+  hasOrg: false
 };
 
 const slice = createSlice({
@@ -28,12 +47,21 @@ const slice = createSlice({
       state.error = action.payload;
     },
 
+    hasOrg(state, action) {
+      state.hasOrg = action.payload;
+    },
+
     // GET organizations
     getOrgProfileSuccess(state, action) {
       state.isLoading = false;
       state.organizationsList = action.payload;
+      state.ORG_ID = action.payload.ids;
     },
-
+    // Update organization
+    addOrgProfileSuccess(state, action) {
+      state.isLoading = false;
+      state.organizationsList = action.payload;
+    },
     // Update organization
     updateOrgProfileSuccess(state, action) {
       state.isLoading = false;
@@ -62,8 +90,39 @@ export function getOrgProfile() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await organization.GETBYID(initialState.ORG_ID);
-      dispatch(slice.actions.getOrgProfileSuccess(response.data));
+      const response = await organization.GET_USER_ORG(initialState.USER_ID);
+      if (response.data.length) {
+        dispatch(slice.actions.hasOrg(true));
+        dispatch(slice.actions.getOrgProfileSuccess(response.data[0]));
+      }
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+      return Promise.reject(new Error(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+export function addOrg(values) {
+  delete values.ids;
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    const ID = initialState.ORG_ID;
+    const formData = new FormData();
+    formData.append('id', initialState.USER_ID);
+    formData.append('orgName', values.orgName);
+    formData.append('moduleCategoryId', values.moduleCategoryId);
+    formData.append('serviceType', values.serviceType);
+    formData.append('organizationType', values.organizationType);
+    formData.append('secondEmail', values.secondEmail);
+    formData.append('secondPhone', values.secondPhone);
+    formData.append('shortDesc', values.shortDesc);
+    formData.append('longDesc', values.longDesc);
+    formData.append('status', values.status);
+    formData.append('imageFile', values.imageFile);
+    try {
+      const response = await organization.POST(formData);
+      dispatch(slice.actions.addOrgProfileSuccess(response.data[0]));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
       return Promise.reject(new Error(error));
@@ -76,22 +135,22 @@ export function getOrgProfile() {
 export function updateOrgProfile(values) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
-    const ID = initialState.ORG_ID;
     const formData = new FormData();
-    formData.append('ids', ID);
+    formData.append('ids', values.ids);
+    formData.append('id', values.id);
     formData.append('orgName', values.orgName);
     formData.append('moduleCategoryId', values.moduleCategoryId);
     formData.append('serviceType', values.serviceType);
     formData.append('organizationType', values.organizationType);
-    // formData.append('secondEmail', values.secondEmail);
-    // formData.append('secondPhone', values.secondPhone);
-    // formData.append('shortDesc', values.shortDesc);
-    // formData.append('longDesc', values.longDesc);
+    formData.append('secondEmail', values.secondEmail);
+    formData.append('secondPhone', values.secondPhone);
+    formData.append('shortDesc', values.shortDesc);
+    formData.append('longDesc', values.longDesc);
     formData.append('status', values.status);
     formData.append('imageFile', values.imageFile);
     try {
-      const response = await organization.PUT(ID, formData);
-      dispatch(slice.actions.updateOrgProfileSuccess(response.data));
+      const response = await organization.PUT(values.ids, formData);
+      dispatch(slice.actions.updateOrgProfileSuccess(response.data[0]));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
       return Promise.reject(new Error(error));

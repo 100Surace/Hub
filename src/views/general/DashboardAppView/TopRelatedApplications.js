@@ -25,40 +25,40 @@ const APPLICATIONS = [
     name: 'Chrome',
     system: 'Mac',
     price: 0,
-    rating: faker.random.number({ min: 0, max: 5, precision: 0.1 }),
-    review: faker.random.number(),
+    rating: faker.datatype.number({ min: 0, max: 5, precision: 0.1 }),
+    review: faker.datatype.number(),
     shortcut: '/static/icons/ic_chrome.svg'
   },
   {
     name: 'Drive',
     system: 'Mac',
-    price: faker.random.number({ min: 4, max: 99, precision: 0.01 }),
-    rating: faker.random.number({ min: 0, max: 5, precision: 0.1 }),
-    review: faker.random.number(),
+    price: faker.datatype.number({ min: 4, max: 99, precision: 0.01 }),
+    rating: faker.datatype.number({ min: 0, max: 5, precision: 0.1 }),
+    review: faker.datatype.number(),
     shortcut: '/static/icons/ic_drive.svg'
   },
   {
     name: 'Dropbox',
     system: 'Windows',
-    price: faker.random.number({ min: 4, max: 99, precision: 0.01 }),
-    rating: faker.random.number({ min: 0, max: 5, precision: 0.1 }),
-    review: faker.random.number(),
+    price: faker.datatype.number({ min: 4, max: 99, precision: 0.01 }),
+    rating: faker.datatype.number({ min: 0, max: 5, precision: 0.1 }),
+    review: faker.datatype.number(),
     shortcut: '/static/icons/ic_dropbox.svg'
   },
   {
     name: 'Evernote',
     system: 'Mac',
     price: 0,
-    rating: faker.random.number({ min: 0, max: 5, precision: 0.1 }),
-    review: faker.random.number(),
+    rating: faker.datatype.number({ min: 0, max: 5, precision: 0.1 }),
+    review: faker.datatype.number(),
     shortcut: '/static/icons/ic_evernote.svg'
   },
   {
     name: 'Github',
     system: 'Windows',
     price: 0,
-    rating: faker.random.number({ min: 0, max: 5, precision: 0.1 }),
-    review: faker.random.number(),
+    rating: faker.datatype.number({ min: 0, max: 5, precision: 0.1 }),
+    review: faker.datatype.number(),
     shortcut: '/static/icons/ic_github.svg'
   }
 ];

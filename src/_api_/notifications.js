@@ -8,7 +8,7 @@ import { getImgAvatar } from 'src/utils/getImages';
 
 let notifications = [
   {
-    id: faker.random.uuid(),
+    id: faker.datatype.uuid(),
     title: 'Your order is placed',
     description: 'waiting for shipping',
     avatar: null,
@@ -17,7 +17,7 @@ let notifications = [
     isUnRead: true
   },
   {
-    id: faker.random.uuid(),
+    id: faker.datatype.uuid(),
     title: faker.name.findName(),
     description: 'answered to your comment on the Minimal',
     avatar: getImgAvatar(2),
@@ -26,7 +26,7 @@ let notifications = [
     isUnRead: true
   },
   {
-    id: faker.random.uuid(),
+    id: faker.datatype.uuid(),
     title: 'You have new message',
     description: '5 unread messages',
     avatar: null,
@@ -35,7 +35,7 @@ let notifications = [
     isUnRead: false
   },
   {
-    id: faker.random.uuid(),
+    id: faker.datatype.uuid(),
     title: 'You have new mail',
     description: 'sent from Guido Padberg',
     avatar: null,
@@ -44,7 +44,7 @@ let notifications = [
     isUnRead: false
   },
   {
-    id: faker.random.uuid(),
+    id: faker.datatype.uuid(),
     title: 'Delivery processing',
     description: 'Your order is being shipped',
     avatar: null,

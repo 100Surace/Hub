@@ -5,7 +5,7 @@ import useIsMountedRef from 'src/hooks/useIsMountedRef';
 import General from './General';
 import UploadView from './UploadView';
 import Billing from './Billing';
-import useAuth from 'src/hooks/useAuth';
+// import useAuth from 'src/hooks/useAuth';
 import { Icon } from '@iconify/react';
 import Page from 'src/components/Page';
 import SocialLinks from './SocialLinks';
@@ -29,7 +29,11 @@ import {
   getAddressBook,
   getNotifications
 } from 'src/redux/slices/user';
-import { getOrgProfile, updateOrgProfile } from 'src/redux/slices/organization';
+import {
+  getOrgProfile,
+  updateOrgProfile,
+  addOrg
+} from 'src/redux/slices/organization';
 import { makeStyles } from '@material-ui/core/styles';
 import { getModules } from 'src/redux/slices/module';
 import { getModuleCategories } from 'src/redux/slices/moduleCategory';
@@ -58,9 +62,18 @@ function AccountView() {
   } = useSelector((state) => state.user);
   const isMountedRef = useIsMountedRef();
   const { enqueueSnackbar } = useSnackbar();
-  const { user, updateProfile } = useAuth();
+  // const { user, updateProfile } = useAuth();
 
-  // formik forms
+  // Profile ---------------------------------------
+  const { organizationsList: myOrg } = useSelector(
+    (state) => state.organization
+  );
+  const { hasOrg } = useSelector((state) => state.organization);
+  const { moduleCategoryList: mCategories } = useSelector(
+    (state) => state.moduleCategory
+  );
+  const { modulesList: modules } = useSelector((state) => state.modules);
+
   const OrgProfileSchema = Yup.object().shape({
     moduleCategoryId: Yup.string().required('Module name is required'),
     serviceType: Yup.string().required('Service type is required'),
@@ -71,6 +84,8 @@ function AccountView() {
   const OrgFormik = useFormik({
     enableReinitialize: true,
     initialValues: {
+      ids: 0,
+      id: '',
       moduleCategoryId: 0,
       serviceType: 0,
       organizationType: 0,
@@ -83,19 +98,33 @@ function AccountView() {
       bannerImg: '',
       orgImg: '',
       status: false,
-      imageFile: null
+      imageFile: null,
+      moduleId: 0
     },
 
     validationSchema: OrgProfileSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
+      delete values.moduleId;
       try {
-        dispatch(updateOrgProfile(values))
-          .then(() => {
-            enqueueSnackbar('Successfully updated', { variant: 'success' });
-          })
-          .catch(() => {
-            enqueueSnackbar('Failed to update', { variant: 'error' });
-          });
+        if (hasOrg)
+          dispatch(updateOrgProfile(values))
+            .then(() => {
+              enqueueSnackbar('Successfully updated', { variant: 'success' });
+            })
+            .catch(() => {
+              enqueueSnackbar('Failed to update', { variant: 'error' });
+            });
+        else
+          dispatch(addOrg(values))
+            .then(() => {
+              enqueueSnackbar('Organization added', { variant: 'success' });
+            })
+            .catch(() => {
+              enqueueSnackbar('Failed to add organization', {
+                variant: 'error'
+              });
+            });
+
         if (isMountedRef.current) {
           setSubmitting(false);
         }
@@ -107,17 +136,29 @@ function AccountView() {
       }
     }
   });
+  const orgProps = {
+    OrgFormik,
+    myOrg,
+    mCategories,
+    modules,
+    hasOrg
+  };
+  // ---------------------------------------
 
   useEffect(() => {
-    dispatch(getOrgProfile());
-    // dispatch(getModules());
-    dispatch(getModuleCategories());
     dispatch(getCards());
     dispatch(getAddressBook());
     dispatch(getInvoices());
     dispatch(getNotifications());
     dispatch(getProfile());
   }, [dispatch]);
+
+  // fetch necessary data on mount
+  useEffect(() => {
+    dispatch(getOrgProfile());
+    dispatch(getModules());
+    dispatch(getModuleCategories());
+  }, []);
 
   if (!myProfile) {
     return null;
@@ -135,7 +176,7 @@ function AccountView() {
     {
       value: 'general',
       icon: <Icon icon={roundAccountBox} width={20} height={20} />,
-      component: <General OrgFormik={OrgFormik} />
+      component: <General myProps={orgProps} />
     },
     {
       value: 'orgImage',

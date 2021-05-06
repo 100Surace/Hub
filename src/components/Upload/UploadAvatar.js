@@ -169,6 +169,54 @@ function UploadAvatar({
     disabled: disabled
   });
 
+  const renderImage = (file, path) => {
+    if (path) {
+      if (file) {
+        return (
+          <Box
+            component="img"
+            alt="avatar"
+            src={URL.createObjectURL(file)}
+            sx={{ zIndex: 8, objectFit: 'cover' }}
+          />
+        );
+      } else {
+        return (
+          <Box
+            component="img"
+            alt="avatar"
+            src={baseUrl + '/' + path}
+            sx={{ zIndex: 8, objectFit: 'cover' }}
+          />
+        );
+      }
+    } else {
+      if (file) {
+        return (
+          <Box
+            component="img"
+            alt="avatar"
+            src={URL.createObjectURL(file)}
+            sx={{ zIndex: 8, objectFit: 'cover' }}
+          />
+        );
+      } else {
+        return (
+          <div className={clsx(classes.placeholder, { [classes.hover]: file })}>
+            <Box
+              component={Icon}
+              icon={roundAddAPhoto}
+              sx={{ width: 24, height: 24, mb: 1 }}
+            />
+            <Typography variant="caption">
+              {file ? '' : 'Upload photo'}
+            </Typography>
+          </div>
+        );
+      }
+    }
+  };
+
   return (
     <>
       <div className={clsx(classes.root, className)} {...other}>
@@ -187,39 +235,7 @@ function UploadAvatar({
               <CircularProgress size={32} thickness={2.4} />
             </Box>
           )}
-
-          {file ? (
-            <Box
-              component="img"
-              alt="avatar"
-              src={URL.createObjectURL(file)}
-              sx={{ zIndex: 8, objectFit: 'cover' }}
-            />
-          ) : (
-            <Box
-              component="img"
-              alt="avatar"
-              src={baseUrl + '/' + path}
-              sx={{ zIndex: 8, objectFit: 'cover' }}
-            />
-          )}
-
-          {file ? (
-            ''
-          ) : (
-            <div
-              className={clsx(classes.placeholder, { [classes.hover]: file })}
-            >
-              <Box
-                component={Icon}
-                icon={roundAddAPhoto}
-                sx={{ width: 24, height: 24, mb: 1 }}
-              />
-              <Typography variant="caption">
-                {file ? '' : 'Upload photo'}
-              </Typography>
-            </div>
-          )}
+          {renderImage(file, path)}
         </div>
       </div>
 

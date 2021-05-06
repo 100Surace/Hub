@@ -19,17 +19,17 @@ const SALES = [
   {
     label: 'Total Profit',
     amount: faker.finance.amount(),
-    value: faker.random.number({ min: 9, max: 99, precision: 0.1 })
+    value: faker.datatype.number({ min: 9, max: 99, precision: 0.1 })
   },
   {
     label: 'Total Income',
     amount: faker.finance.amount(),
-    value: faker.random.number({ min: 9, max: 99, precision: 0.1 })
+    value: faker.datatype.number({ min: 9, max: 99, precision: 0.1 })
   },
   {
     label: 'Total Expenses',
     amount: faker.finance.amount(),
-    value: faker.random.number({ min: 9, max: 99, precision: 0.1 })
+    value: faker.datatype.number({ min: 9, max: 99, precision: 0.1 })
   }
 ];
 

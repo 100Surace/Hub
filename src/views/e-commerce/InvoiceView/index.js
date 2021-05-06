@@ -27,7 +27,7 @@ import { MLabel } from 'src/theme';
 // ----------------------------------------------------------------------
 
 const INVOICE = {
-  id: faker.random.uuid(),
+  id: faker.datatype.uuid(),
   taxes: 5,
   discount: 10,
   status: 'paid',
@@ -47,11 +47,11 @@ const INVOICE = {
   },
   items: [...Array(3)].map((item) => {
     return {
-      id: faker.random.uuid(),
+      id: faker.datatype.uuid(),
       title: faker.lorem.sentence(),
       description: faker.lorem.lines(),
-      qty: faker.random.number({ min: 1, max: 5 }),
-      price: faker.random.number({ min: 4, max: 99, precision: 0.01 })
+      qty: faker.datatype.number({ min: 1, max: 5 }),
+      price: faker.datatype.number({ min: 4, max: 99, precision: 0.01 })
     };
   })
 };

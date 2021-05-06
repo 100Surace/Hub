@@ -74,10 +74,10 @@ const setColorAndTime = (index) => {
 
 let events = [...Array(9)].map((event, index) => {
   return {
-    id: faker.random.uuid(),
+    id: faker.datatype.uuid(),
     title: faker.name.title(),
     description: faker.lorem.sentences(),
-    allDay: faker.random.boolean(),
+    allDay: faker.datatype.boolean(),
     ...setColorAndTime(index)
   };
 });
@@ -94,7 +94,7 @@ mock.onPost('/api/calendar/events/new').reply((request) => {
       request.data
     );
     const event = {
-      id: faker.random.uuid(),
+      id: faker.datatype.uuid(),
       title,
       description,
       textColor,

@@ -22,17 +22,17 @@ import {
 const AUTHORS = [
   {
     name: faker.name.findName(),
-    favourite: faker.random.number(),
+    favourite: faker.datatype.number(),
     avatar: '/static/images/avatars/avatar_2.jpg'
   },
   {
     name: faker.name.findName(),
-    favourite: faker.random.number(),
+    favourite: faker.datatype.number(),
     avatar: '/static/images/avatars/avatar_3.jpg'
   },
   {
     name: faker.name.findName(),
-    favourite: faker.random.number(),
+    favourite: faker.datatype.number(),
     avatar: '/static/images/avatars/avatar_4.jpg'
   }
 ];

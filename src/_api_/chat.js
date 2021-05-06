@@ -79,7 +79,7 @@ let conversations = [
     unreadCount: 0,
     messages: [
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [getImgFeed(128, 1)],
@@ -87,7 +87,7 @@ let conversations = [
         senderId: contacts[1].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [getImgFeed(128, 2)],
@@ -95,7 +95,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: ['/static/images/avatars/avatar_12.mp4'],
@@ -103,7 +103,7 @@ let conversations = [
         senderId: contacts[1].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [
@@ -115,7 +115,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [
@@ -128,7 +128,7 @@ let conversations = [
         senderId: contacts[1].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         attachments: [],
         contentType: 'image',
         body: {
@@ -139,7 +139,7 @@ let conversations = [
         senderId: contacts[1].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         contentType: 'text',
         body: faker.lorem.sentence(),
         attachments: [],
@@ -147,7 +147,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -163,7 +163,7 @@ let conversations = [
     unreadCount: 2,
     messages: [
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -171,7 +171,7 @@ let conversations = [
         senderId: contacts[2].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -179,7 +179,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -187,7 +187,7 @@ let conversations = [
         senderId: contacts[2].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -195,7 +195,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -203,7 +203,7 @@ let conversations = [
         senderId: contacts[2].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: {
           small: getImgFeed(640, 8),
           large: getImgFeed(1440, 8)
@@ -214,7 +214,7 @@ let conversations = [
         senderId: contacts[2].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -230,7 +230,7 @@ let conversations = [
     unreadCount: 0,
     messages: [
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -238,7 +238,7 @@ let conversations = [
         senderId: contacts[3].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -246,7 +246,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -254,7 +254,7 @@ let conversations = [
         senderId: contacts[3].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -262,7 +262,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -270,7 +270,7 @@ let conversations = [
         senderId: contacts[3].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: {
           small: getImgFeed(640, 16),
           large: getImgFeed(1440, 16)
@@ -281,7 +281,7 @@ let conversations = [
         senderId: contacts[3].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: {
           small: getImgFeed(640, 12),
           large: getImgFeed(1440, 12)
@@ -300,7 +300,7 @@ let conversations = [
     unreadCount: 2,
     messages: [
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -308,7 +308,7 @@ let conversations = [
         senderId: contacts[4].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -316,7 +316,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -324,7 +324,7 @@ let conversations = [
         senderId: contacts[4].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -332,7 +332,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -340,7 +340,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -356,7 +356,7 @@ let conversations = [
     unreadCount: 0,
     messages: [
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -364,7 +364,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -380,7 +380,7 @@ let conversations = [
     unreadCount: 2,
     messages: [
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -388,7 +388,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -410,7 +410,7 @@ let conversations = [
     unreadCount: 5,
     messages: [
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [
@@ -424,7 +424,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: ['https://mail.google.com/mail/u/file2.xlsx'],
@@ -432,7 +432,7 @@ let conversations = [
         senderId: contacts[1].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: ['https://mail.google.com/mail/u/file3.psd'],
@@ -440,7 +440,7 @@ let conversations = [
         senderId: contacts[2].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: ['https://mail.google.com/mail/u/file3.pptx'],
@@ -448,7 +448,7 @@ let conversations = [
         senderId: contacts[4].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: ['https://mail.google.com/mail/u/file3.ai'],
@@ -456,7 +456,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: ['https://mail.google.com/mail/u/file3.mp4'],
@@ -472,7 +472,7 @@ let conversations = [
     unreadCount: 0,
     messages: [
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -480,7 +480,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -496,7 +496,7 @@ let conversations = [
     unreadCount: 0,
     messages: [
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -504,7 +504,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -520,7 +520,7 @@ let conversations = [
     unreadCount: 0,
     messages: [
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -528,7 +528,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -551,7 +551,7 @@ let conversations = [
     unreadCount: 0,
     messages: [
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -559,7 +559,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -567,7 +567,7 @@ let conversations = [
         senderId: contacts[9].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -575,7 +575,7 @@ let conversations = [
         senderId: contacts[10].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -583,7 +583,7 @@ let conversations = [
         senderId: contacts[8].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         attachments: [],
         body: faker.lorem.sentence(),
         contentType: 'text',
@@ -591,7 +591,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -599,7 +599,7 @@ let conversations = [
         senderId: contacts[6].id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -615,7 +615,7 @@ let conversations = [
     unreadCount: 0,
     messages: [
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -623,7 +623,7 @@ let conversations = [
         senderId: MY_CONTACT.id
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         body: faker.lorem.sentence(),
         contentType: 'text',
         attachments: [],
@@ -802,7 +802,7 @@ mock.onPost('/api/chat/messages/new').reply((request) => {
     }
 
     const message = {
-      id: faker.random.uuid(),
+      id: faker.datatype.uuid(),
       attachments: [],
       body,
       contentType: 'text',
@@ -833,7 +833,7 @@ mock.onPost('/api/chat/messages/new').reply((request) => {
       });
 
       conversation = {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         messages: [message],
         participants,
         type: participants.length === 2 ? 'ONE_TO_ONE' : 'GROUP',

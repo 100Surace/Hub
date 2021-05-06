@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import { countries } from './countries';
+// import { useSelector } from 'react-redux';
+// import { countries } from './countries';
 import { UploadAvatar } from 'src/components/Upload';
 import { Form, FormikProvider } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
@@ -27,10 +27,13 @@ const useStyles = makeStyles((theme) => ({
 
 General.propTypes = {
   className: PropTypes.string,
-  OrgFormik: PropTypes.object
+  myProps: PropTypes.object
 };
 
-function General({ className, OrgFormik }) {
+function General({
+  className,
+  myProps: { OrgFormik, myOrg, mCategories, modules, hasOrg }
+}) {
   const classes = useStyles();
   const serviceTypes = [
     { id: 1, name: 'Private' },
@@ -40,12 +43,6 @@ function General({ className, OrgFormik }) {
     { id: 1, name: 'National' },
     { id: 2, name: 'International' }
   ];
-
-  const { organizationsList: ORG } = useSelector((state) => state.organization);
-  const { moduleCategoryList: mCategory } = useSelector(
-    (state) => state.moduleCategory
-  );
-  const { modulesList: modules } = useSelector((state) => state.modules);
 
   const {
     values,
@@ -58,14 +55,20 @@ function General({ className, OrgFormik }) {
     initialValues
   } = OrgFormik;
 
+  // get only the categories of selected module
+  mCategories = mCategories.filter(
+    (m) => parseInt(values.moduleId) === parseInt(m.moduleId)
+  );
+
   useEffect(() => {
-    if (Object.keys(ORG).length) {
+    if (Object.keys(myOrg).length) {
       Object.keys(initialValues).forEach((key) => {
-        setFieldValue(key, ORG[key]);
+        const value = myOrg[key] == 'null' ? '' : myOrg[key];
+        setFieldValue(key, value);
       });
     }
     // eslint-disable-next-line
-  }, [ORG]);
+  }, [myOrg]);
 
   return (
     <div className={clsx(classes.root, className)}>
@@ -86,11 +89,7 @@ function General({ className, OrgFormik }) {
                     value={values.imageFile}
                     path={values.logo}
                     onChange={(value) => {
-                      const reader = new FileReader();
-                      reader.onload = (x) => {
-                        setFieldValue('imageFile', value);
-                      };
-                      reader.readAsDataURL(value);
+                      setFieldValue('imageFile', value);
                     }}
                   />
                   <FormControlLabel
@@ -120,7 +119,40 @@ function General({ className, OrgFormik }) {
                         error={Boolean(touched.orgName && errors.orgName)}
                       />
                     </Grid>
-
+                    {/* disbale module selection if user has org */}
+                    {hasOrg ? (
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          disabled
+                          fullWidth
+                          label="Module"
+                          placeholder="Module"
+                          className={classes.margin}
+                          value={myOrg.moduleName}
+                        />
+                      </Grid>
+                    ) : (
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          select
+                          fullWidth
+                          label="Module"
+                          placeholder="Module"
+                          {...getFieldProps('moduleId')}
+                          SelectProps={{ native: true }}
+                          error={Boolean(touched.moduleId && errors.moduleId)}
+                          helperText={touched.moduleId && errors.moduleId}
+                          className={classes.margin}
+                        >
+                          <option value="" />
+                          {modules.map((m) => (
+                            <option key={m.ids} value={m.ids}>
+                              {m.moduleName}
+                            </option>
+                          ))}
+                        </TextField>
+                      </Grid>
+                    )}
                     <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
@@ -168,9 +200,9 @@ function General({ className, OrgFormik }) {
                         className={classes.margin}
                       >
                         <option value="" />
-                        {mCategory.map((c) => (
-                          <option key={c.ids} value={c.ids}>
-                            {c.moduleCategoryName}
+                        {mCategories.map((m) => (
+                          <option key={m.ids} value={m.ids}>
+                            {m.moduleCategoryName}
                           </option>
                         ))}
                       </TextField>
@@ -236,13 +268,13 @@ function General({ className, OrgFormik }) {
                       />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
+                    {/* <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
                         label="Phone Number"
                         {...getFieldProps('phoneNumber')}
                       />
-                    </Grid>
+                    </Grid> */}
 
                     <Grid item xs={12} sm={6}>
                       <TextField
@@ -282,7 +314,7 @@ function General({ className, OrgFormik }) {
                       variant="contained"
                       pending={isSubmitting}
                     >
-                      Save Changes
+                      {hasOrg ? 'Save Changes' : 'Add Organization'}
                     </LoadingButton>
                   </Box>
                 </CardContent>

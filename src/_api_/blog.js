@@ -143,7 +143,7 @@ const users = [...Array(12)].map((user, index) => {
 
 const POST_COMMENTS = [
   {
-    id: faker.random.uuid(),
+    id: faker.datatype.uuid(),
     name: users[0].name,
     avatarUrl: users[0].avatarUrl,
     message: faker.lorem.lines(),
@@ -151,20 +151,20 @@ const POST_COMMENTS = [
     users: [users[0], users[1], users[2]],
     replyComment: [
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         userId: users[1].id,
         message: faker.lorem.lines(),
         postedAt: faker.date.past()
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         userId: users[0].id,
         message: faker.lorem.lines(),
         tagUser: users[1].name,
         postedAt: faker.date.past()
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         userId: users[2].id,
         message: faker.lorem.lines(),
         postedAt: faker.date.past()
@@ -172,7 +172,7 @@ const POST_COMMENTS = [
     ]
   },
   {
-    id: faker.random.uuid(),
+    id: faker.datatype.uuid(),
     name: users[4].name,
     avatarUrl: users[4].avatarUrl,
     message: faker.lorem.lines(),
@@ -180,19 +180,19 @@ const POST_COMMENTS = [
     users: [users[5], users[6], users[7]],
     replyComment: [
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         userId: users[5].id,
         message: faker.lorem.lines(),
         postedAt: faker.date.past()
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         userId: users[6].id,
         message: faker.lorem.lines(),
         postedAt: faker.date.past()
       },
       {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         userId: users[7].id,
         message: faker.lorem.lines(),
         postedAt: faker.date.past()
@@ -200,7 +200,7 @@ const POST_COMMENTS = [
     ]
   },
   {
-    id: faker.random.uuid(),
+    id: faker.datatype.uuid(),
     name: users[8].name,
     avatarUrl: users[8].avatarUrl,
     message: faker.lorem.lines(),
@@ -209,7 +209,7 @@ const POST_COMMENTS = [
     replyComment: []
   },
   {
-    id: faker.random.uuid(),
+    id: faker.datatype.uuid(),
     name: users[9].name,
     avatarUrl: users[9].avatarUrl,
     message: faker.lorem.lines(),
@@ -231,10 +231,10 @@ let posts = [...Array(23)].map((blog, index) => {
     title: POST_TITLES[setIndex],
     description: faker.lorem.paragraph(),
     createdAt: faker.date.past(),
-    view: faker.random.number(),
-    comment: faker.random.number(),
-    share: faker.random.number(),
-    favorite: faker.random.number(),
+    view: faker.datatype.number(),
+    comment: faker.datatype.number(),
+    share: faker.datatype.number(),
+    favorite: faker.datatype.number(),
     author: {
       name: faker.name.findName(),
       avatarUrl: `/static/images/avatars/avatar_${setIndex}.jpg`

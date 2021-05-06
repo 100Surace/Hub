@@ -22,37 +22,37 @@ import {
 const INSTALLED = [
   {
     name: 'Germany',
-    android: faker.random.number(),
-    windows: faker.random.number(),
-    apple: faker.random.number(),
+    android: faker.datatype.number(),
+    windows: faker.datatype.number(),
+    apple: faker.datatype.number(),
     flag: '/static/icons/ic_flag_de.svg'
   },
   {
     name: 'England',
-    android: faker.random.number(),
-    windows: faker.random.number(),
-    apple: faker.random.number(),
+    android: faker.datatype.number(),
+    windows: faker.datatype.number(),
+    apple: faker.datatype.number(),
     flag: '/static/icons/ic_flag_en.svg'
   },
   {
     name: 'France',
-    android: faker.random.number(),
-    windows: faker.random.number(),
-    apple: faker.random.number(),
+    android: faker.datatype.number(),
+    windows: faker.datatype.number(),
+    apple: faker.datatype.number(),
     flag: '/static/icons/ic_flag_fr.svg'
   },
   {
     name: 'Korean',
-    android: faker.random.number(),
-    windows: faker.random.number(),
-    apple: faker.random.number(),
+    android: faker.datatype.number(),
+    windows: faker.datatype.number(),
+    apple: faker.datatype.number(),
     flag: '/static/icons/ic_flags_kr.svg'
   },
   {
     name: 'USA',
-    android: faker.random.number(),
-    windows: faker.random.number(),
-    apple: faker.random.number(),
+    android: faker.datatype.number(),
+    windows: faker.datatype.number(),
+    apple: faker.datatype.number(),
     flag: '/static/icons/ic_flags_us.svg'
   }
 ];

@@ -29,31 +29,31 @@ import { MLabel } from 'src/theme';
 
 const INVOICES = [
   {
-    id: faker.random.uuid(),
+    id: faker.datatype.uuid(),
     category: 'Android',
     price: faker.finance.amount(),
     status: 'in_progress'
   },
   {
-    id: faker.random.uuid(),
+    id: faker.datatype.uuid(),
     category: 'Windows',
     price: faker.finance.amount(),
     status: 'paid'
   },
   {
-    id: faker.random.uuid(),
+    id: faker.datatype.uuid(),
     category: 'Mac',
     price: faker.finance.amount(),
     status: 'out_of_date'
   },
   {
-    id: faker.random.uuid(),
+    id: faker.datatype.uuid(),
     category: 'Windows',
     price: faker.finance.amount(),
     status: 'paid'
   },
   {
-    id: faker.random.uuid(),
+    id: faker.datatype.uuid(),
     category: 'Windows',
     price: faker.finance.amount(),
     status: 'in_progress'

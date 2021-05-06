@@ -25,10 +25,10 @@ const PRODUCTS = [...Array(5)].map((product, index) => {
   return {
     name: faker.commerce.productName(),
     image: getImgProduct(128, setIndex),
-    price: faker.random.number({ min: 4, max: 49, precision: 0.1 }),
+    price: faker.datatype.number({ min: 4, max: 49, precision: 0.1 }),
     priceSale: sample([
       0,
-      faker.random.number({ min: 49, max: 99, precision: 0.1 })
+      faker.datatype.number({ min: 49, max: 99, precision: 0.1 })
     ]),
     colors: (index === 1 && [faker.vehicle.color(), faker.vehicle.color()]) ||
       (index === 2 && [

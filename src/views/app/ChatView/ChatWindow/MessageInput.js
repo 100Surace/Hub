@@ -71,7 +71,7 @@ function MessageInput({
     if (onSend) {
       onSend({
         conversationId: conversationId,
-        messageId: faker.random.uuid(),
+        messageId: faker.datatype.uuid(),
         message: message,
         contentType: 'text',
         attachments: [],

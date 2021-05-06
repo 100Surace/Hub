@@ -87,29 +87,29 @@ let products = [...Array(24)].map((product, index) => {
       };
     }),
     name: PRODUCT_NAME[index],
-    price: faker.random.number({ min: 4, max: 99, precision: 0.01 }),
+    price: faker.datatype.number({ min: 4, max: 99, precision: 0.01 }),
     priceSale:
       setIndex % 3
         ? null
-        : faker.random.number({ min: 19, max: 29, precision: 0.01 }),
-    totalRating: faker.random.number({ min: 0, max: 5, precision: 0.1 }),
-    totalReview: faker.random.number(),
+        : faker.datatype.number({ min: 19, max: 29, precision: 0.01 }),
+    totalRating: faker.datatype.number({ min: 0, max: 5, precision: 0.1 }),
+    totalReview: faker.datatype.number(),
     ratings: [...Array(5)].map((rating, index) => {
       return {
         name: `${index + 1} Star`,
-        starCount: faker.random.number(),
-        reviewCount: faker.random.number()
+        starCount: faker.datatype.number(),
+        reviewCount: faker.datatype.number()
       };
     }),
     reviews: [...Array(8)].map((review, index) => {
       return {
-        id: faker.random.uuid(),
+        id: faker.datatype.uuid(),
         name: faker.name.findName(),
         avatarUrl: `/static/images/avatars/avatar_${index + 1}.jpg`,
         comment: faker.lorem.lines(),
-        rating: faker.random.number({ min: 1, max: 5 }),
-        isPurchased: faker.random.boolean(),
-        helpful: faker.random.number({ min: 1, max: 500 }),
+        rating: faker.datatype.number({ min: 1, max: 5 }),
+        isPurchased: faker.datatype.boolean(),
+        helpful: faker.datatype.number({ min: 1, max: 500 }),
         postedAt: faker.date.past()
       };
     }),
@@ -125,9 +125,9 @@ let products = [...Array(24)].map((product, index) => {
     inventoryType: sample(['in_stock', 'out_of_stock', 'low_stock']),
     sizes: PRODUCT_SIZE,
     available:
-      setIndex % 3 === 0 ? faker.random.number({ min: 19, max: 100 }) : 2,
+      setIndex % 3 === 0 ? faker.datatype.number({ min: 19, max: 100 }) : 2,
     description: PRODUCT_DESCRIPTION,
-    sold: faker.random.number(),
+    sold: faker.datatype.number(),
     createdAt: faker.date.past(),
     category: sample(['Accessories', 'Apparel', 'Shose']),
     gender: sample(['Men', 'Women', 'Kids'])

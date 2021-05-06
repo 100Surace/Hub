@@ -17,8 +17,8 @@ mock.onGet('/api/user/profile').reply(() => {
       medium: getImgCover(1200, 1)
     },
     position: 'UI Designer',
-    follower: faker.random.number(),
-    following: faker.random.number(),
+    follower: faker.datatype.number(),
+    following: faker.datatype.number(),
     quote:
       'Tart I love sugar plum I love oat cake. Sweet roll caramels I love jujubes. Topping cake wafer..',
     country: faker.address.country(),
@@ -47,9 +47,9 @@ mock.onGet('/api/user/all').reply(() => {
         medium: getImgCover(960, setIndex)
       },
       name: faker.name.findName(),
-      follower: faker.random.number(),
-      following: faker.random.number(),
-      totalPost: faker.random.number(),
+      follower: faker.datatype.number(),
+      following: faker.datatype.number(),
+      totalPost: faker.datatype.number(),
       position: sample([
         'Leader',
         'Hr Manager',
@@ -78,7 +78,7 @@ mock.onGet('/api/user/manage-users').reply(() => {
       avatarUrl: getImgAvatar(setIndex),
       name: faker.name.findName(),
       company: faker.company.companyName(),
-      isVerified: faker.random.boolean(),
+      isVerified: faker.datatype.boolean(),
       status: sample(['active', 'banned']),
       role: sample([
         'Leader',
@@ -108,7 +108,7 @@ mock.onGet('/api/user/social/followers').reply(() => {
       avatarUrl: getImgAvatar(setIndex),
       name: faker.name.findName(),
       country: faker.address.country(),
-      isFollowed: faker.random.boolean()
+      isFollowed: faker.datatype.boolean()
     };
   });
 
@@ -167,7 +167,7 @@ mock.onGet('/api/user/social/gallery').reply(() => {
 mock.onGet('/api/user/account/cards').reply(() => {
   const cards = [...Array(2)].map((card, index) => {
     return {
-      id: faker.random.uuid(),
+      id: faker.datatype.uuid(),
       cardNumber:
         (index === 0 && '**** **** **** 1234') ||
         (index === 1 && '**** **** **** 5678'),
@@ -183,7 +183,7 @@ mock.onGet('/api/user/account/cards').reply(() => {
 mock.onGet('/api/user/account/address-book').reply(() => {
   const addressBook = [...Array(4)].map((address, index) => {
     return {
-      id: faker.random.uuid(),
+      id: faker.datatype.uuid(),
       name: faker.name.findName(),
       phone: faker.phone.phoneNumber(),
       country: faker.address.country(),
@@ -202,9 +202,9 @@ mock.onGet('/api/user/account/address-book').reply(() => {
 mock.onGet('/api/user/account/invoices').reply(() => {
   const invoices = [...Array(10)].map((invoice, index) => {
     return {
-      id: faker.random.uuid(),
+      id: faker.datatype.uuid(),
       createdAt: faker.date.past(),
-      price: faker.random.number({ min: 4, max: 99, precision: 0.01 })
+      price: faker.datatype.number({ min: 4, max: 99, precision: 0.01 })
     };
   });
 
@@ -232,7 +232,7 @@ mock.onGet('/api/user/posts').reply(() => {
   const posts = [...Array(3)].map((post, index) => {
     const setIndex = index + 1;
     return {
-      id: faker.random.uuid(),
+      id: faker.datatype.uuid(),
       author: {
         id: createId(1),
         avatarUrl: getImgAvatar(1),
@@ -253,7 +253,7 @@ mock.onGet('/api/user/posts').reply(() => {
       }),
       comments: (setIndex === 2 && []) || [
         {
-          id: faker.random.uuid(),
+          id: faker.datatype.uuid(),
           author: {
             id: createId(2),
             avatarUrl: getImgAvatar(sample([2, 3, 4, 5, 6])),
@@ -263,7 +263,7 @@ mock.onGet('/api/user/posts').reply(() => {
           message: faker.lorem.sentence()
         },
         {
-          id: faker.random.uuid(),
+          id: faker.datatype.uuid(),
           author: {
             id: createId(3),
             avatarUrl: getImgAvatar(sample([7, 8, 9, 10, 11])),

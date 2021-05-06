@@ -70,7 +70,7 @@ mock.onPost('/api/account/register').reply(async (config) => {
     }
 
     user = {
-      id: faker.random.uuid(),
+      id: faker.datatype.uuid(),
       displayName: firstName + ' ' + lastName,
       email,
       password,
