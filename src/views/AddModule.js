@@ -9,7 +9,7 @@ import { addModule, getModuleById, updateModule } from '../redux/slices/module';
 import { PATH_DASHBOARD } from '../routes/paths';
 import HeaderDashboard from '../components/HeaderDashboard';
 import Page from '../components/Page';
-import ModuleForm from '../components/organization/module/ModuleForm';
+import { ModuleForm } from '../components/organization/module';
 
 // ----------------------------------------------------------------------
 function AddModuleView() {
