@@ -1,10 +1,11 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { switchMode, switchDirection } from 'src/redux/slices/settings';
+// redux
+import { switchMode, switchDirection } from '../redux/slices/settings';
 
 // ----------------------------------------------------------------------
 
-function useSettings() {
+export default function useSettings() {
   const dispatch = useDispatch();
   const { themeMode, themeDirection } = useSelector((state) => state.settings);
   const isLight = themeMode === 'light';
@@ -26,13 +27,11 @@ function useSettings() {
 
   return {
     // Mode
-    themeMode: themeMode,
+    themeMode,
     toggleMode: handleToggleTheme,
     selectMode: handleChangeTheme,
     // Direction
-    themeDirection: themeDirection,
+    themeDirection,
     selectDirection: handleChangeDirection
   };
 }
-
-export default useSettings;

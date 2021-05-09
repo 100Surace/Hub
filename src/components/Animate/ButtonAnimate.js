@@ -1,42 +1,34 @@
-import clsx from 'clsx';
-import React from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
-import { varSmallClick } from 'src/components/Animate';
-import { makeStyles } from '@material-ui/core/styles';
+// material
 import { Box } from '@material-ui/core';
-
-// ----------------------------------------------------------------------
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'inline-flex'
-  }
-}));
+//
+import { varSmallClick, varMediumClick } from '.';
 
 // ----------------------------------------------------------------------
 
 ButtonAnimate.propTypes = {
-  small: PropTypes.bool,
+  mediumClick: PropTypes.bool,
   children: PropTypes.node,
-  className: PropTypes.string
+  sx: PropTypes.object
 };
 
-function ButtonAnimate({ children, className, ...other }) {
-  const classes = useStyles();
-
+export default function ButtonAnimate({
+  mediumClick = false,
+  children,
+  sx,
+  ...other
+}) {
   return (
     <Box
       component={motion.div}
       whileTap="tap"
       whileHover="hover"
-      variants={varSmallClick}
-      className={clsx(classes.root, className)}
+      variants={mediumClick ? varMediumClick : varSmallClick}
+      sx={{ display: 'inline-flex', ...sx }}
       {...other}
     >
       {children}
     </Box>
   );
 }
-
-export default ButtonAnimate;

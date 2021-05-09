@@ -1,24 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+// material
 import { Box } from '@material-ui/core';
 
 // ----------------------------------------------------------------------
 
-Logo.propTypes = {
-  className: PropTypes.string
-};
-
-function Logo({ className, ...other }) {
+export default function Logo({ ...other }) {
   return (
     <Box
       component="img"
       alt="logo"
       src="/static/brand/logo_single.svg"
       height={40}
-      className={className}
       {...other}
     />
   );
 }
-
-export default Logo;

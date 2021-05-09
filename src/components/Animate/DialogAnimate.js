@@ -1,39 +1,26 @@
-import clsx from 'clsx';
-import React from 'react';
 import PropTypes from 'prop-types';
-import { varFadeInUp } from 'src/components/Animate';
 import { motion, AnimatePresence } from 'framer-motion';
-import { makeStyles } from '@material-ui/core/styles';
+// material
 import { Dialog } from '@material-ui/core';
-
-// ----------------------------------------------------------------------
-
-const useStyles = makeStyles((theme) => ({
-  root: {},
-  paper: {
-    borderRadius: theme.shape.borderRadiusMd,
-    backgroundColor: theme.palette.background.paper
-  }
-}));
+//
+import { varFadeInUp } from '.';
 
 // ----------------------------------------------------------------------
 
 DialogAnimate.propTypes = {
   open: PropTypes.bool.isRequired,
+  animate: PropTypes.object,
   onClose: PropTypes.func,
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string
+  children: PropTypes.node.isRequired
 };
 
-function DialogAnimate({
+export default function DialogAnimate({
   open = false,
+  animate,
   onClose,
   children,
-  className,
   ...other
 }) {
-  const classes = useStyles();
-
   return (
     <AnimatePresence>
       {open && (
@@ -43,9 +30,13 @@ function DialogAnimate({
           open={open}
           onClose={onClose}
           PaperComponent={motion.div}
-          PaperProps={{ ...varFadeInUp }}
-          classes={{ paper: classes.paper }}
-          className={clsx(classes.root, className)}
+          PaperProps={{
+            sx: {
+              borderRadius: 2,
+              bgcolor: 'background.paper'
+            },
+            ...(animate || varFadeInUp)
+          }}
           {...other}
         >
           {children}
@@ -54,5 +45,3 @@ function DialogAnimate({
     </AnimatePresence>
   );
 }
-
-export default DialogAnimate;

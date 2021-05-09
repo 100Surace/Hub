@@ -1,17 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="28" height="20" viewBox="0 0 28 20">
-  <defs>
-    <rect id="ic_flag_en-a" width="28" height="20" x="0" y="0" rx="3"/>
-  </defs>
-  <g fill="none" fill-rule="evenodd">
-    <mask id="ic_flag_en-b" fill="#fff">
-      <use xlink:href="#ic_flag_en-a"/>
-    </mask>
-    <use fill="#0A17A7" xlink:href="#ic_flag_en-a"/>
-    <path fill="#FFF" d="M29.2824692,-1.91644623 L30.7736503,0.29432063 L21.3253497,6.66655377 L28,6.66666667 L28,13.3333333 L21.3253497,13.3325538 L30.7736503,19.7056794 L29.2824692,21.9164462 L17.3323497,13.8555538 L17.3333333,21.3333333 L10.6666667,21.3333333 L10.6663497,13.8555538 L-1.2824692,21.9164462 L-2.77365027,19.7056794 L6.67434973,13.3325538 L4.4408921e-16,13.3333333 L4.4408921e-16,6.66666667 L6.67434973,6.66655377 L-2.77365027,0.29432063 L-1.2824692,-1.91644623 L10.6663497,6.14355377 L10.6666667,-1.33333333 L17.3333333,-1.33333333 L17.3323497,6.14355377 L29.2824692,-1.91644623 Z" mask="url(#ic_flag_en-b)"/>
-    <line x1="18.668" x2="31.333" y1="6.332" y2="-2" stroke="#DB1F35" stroke-linecap="round" stroke-width=".667" mask="url(#ic_flag_en-b)"/>
-    <line x1="20.013" x2="31.367" y1="21.35" y2="13.698" stroke="#DB1F35" stroke-linecap="round" stroke-width=".667" mask="url(#ic_flag_en-b)" transform="matrix(1 0 0 -1 0 35.048)"/>
-    <line x1="8.006" x2="-3.837" y1="6.31" y2="-1.671" stroke="#DB1F35" stroke-linecap="round" stroke-width=".667" mask="url(#ic_flag_en-b)"/>
-    <line x1="9.29" x2="-3.837" y1="22.31" y2="13.605" stroke="#DB1F35" stroke-linecap="round" stroke-width=".667" mask="url(#ic_flag_en-b)" transform="matrix(1 0 0 -1 0 35.915)"/>
-    <polygon fill="#E6273E" points="0 12 12 12 12 20 16 20 16 12 28 12 28 8 16 8 16 0 12 0 12 8 0 8" mask="url(#ic_flag_en-b)"/>
-  </g>
-</svg>
+<svg height="20" viewBox="0 0 28 20" width="28" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><rect id="a" height="20" rx="3" width="28"/><mask id="b" fill="#fff"><use fill="#fff" fill-rule="evenodd" xlink:href="#a"/></mask></defs><g fill="none" fill-rule="evenodd"><use fill="#0a17a7" xlink:href="#a"/><path d="m29.2824692-1.91644623 1.4911811 2.21076686-9.4483006 6.37223314 6.6746503.0001129v6.66666663l-6.6746503-.0007795 9.4483006 6.3731256-1.4911811 2.2107668-11.9501195-8.0608924.0009836 7.4777795h-6.6666666l-.000317-7.4777795-11.9488189 8.0608924-1.49118107-2.2107668 9.448-6.3731256-6.67434973.0007795v-6.66666663l6.67434973-.0001129-9.448-6.37223314 1.49118107-2.21076686 11.9488189 8.06.000317-7.4768871h6.6666666l-.0009836 7.4768871z" fill="#fff" mask="url(#b)"/><g stroke="#db1f35" stroke-linecap="round" stroke-width=".667"><path d="m18.668 6.332 12.665-8.332" mask="url(#b)"/><path d="m20.013 21.35 11.354-7.652" mask="url(#b)" transform="matrix(1 0 0 -1 0 35.048)"/><path d="m8.006 6.31-11.843-7.981" mask="url(#b)"/><path d="m9.29 22.31-13.127-8.705" mask="url(#b)" transform="matrix(1 0 0 -1 0 35.915)"/></g><path d="m0 12h12v8h4v-8h12v-4h-12v-8h-4v8h-12z" fill="#e6273e" mask="url(#b)"/></g></svg>

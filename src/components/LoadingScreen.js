@@ -1,78 +1,59 @@
-import clsx from 'clsx';
-import React from 'react';
-import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
-import Logo from 'src/components/Logo';
-import { makeStyles, alpha } from '@material-ui/core/styles';
+// material
+import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
+import { Box } from '@material-ui/core';
+//
+import Logo from './Logo';
 
 // ----------------------------------------------------------------------
 
-const TRANSITION = {
-  ease: 'linear',
-  duration: 3.2,
-  loop: Infinity
-};
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: theme.palette.background.default
-  },
-  box: {
-    position: 'absolute',
-    borderRadius: '25%'
-  },
-  inner: {
-    width: 100,
-    height: 100,
-    border: `solid 3px ${alpha(theme.palette.primary.dark, 0.24)}`
-  },
-  outside: {
-    width: 120,
-    height: 120,
-    border: `solid 8px ${alpha(theme.palette.primary.dark, 0.24)}`
-  }
+const RootStyle = styled('div')(({ theme }) => ({
+  height: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: theme.palette.background.default
 }));
 
 // ----------------------------------------------------------------------
 
-LoadingScreen.propTypes = {
-  className: PropTypes.string
-};
-
-function LoadingScreen({ className, ...other }) {
-  const classes = useStyles();
-
+export default function LoadingScreen({ ...other }) {
   return (
-    <div className={clsx(classes.root, className)} {...other}>
+    <RootStyle {...other}>
       <motion.div
         initial={{ rotateY: 0 }}
         animate={{ rotateY: 360 }}
         transition={{
           duration: 2,
           ease: 'easeInOut',
-          flip: Infinity,
-          repeatDelay: 1
+          repeatDelay: 1,
+          repeat: Infinity
         }}
       >
         <Logo sx={{ height: 64 }} />
       </motion.div>
 
-      <motion.div
+      <Box
+        component={motion.div}
         animate={{
           scale: [1.2, 1, 1, 1.2, 1.2],
           rotate: [270, 0, 0, 270, 270],
           opacity: [0.25, 1, 1, 1, 0.25],
           borderRadius: ['25%', '25%', '50%', '50%', '25%']
         }}
-        transition={TRANSITION}
-        className={clsx(classes.box, classes.inner)}
+        transition={{ ease: 'linear', duration: 3.2, repeat: Infinity }}
+        sx={{
+          width: 100,
+          height: 100,
+          borderRadius: '25%',
+          position: 'absolute',
+          border: (theme) =>
+            `solid 3px ${alpha(theme.palette.primary.dark, 0.24)}`
+        }}
       />
 
-      <motion.div
+      <Box
+        component={motion.div}
         animate={{
           scale: [1, 1.2, 1.2, 1, 1],
           rotate: [0, 270, 270, 0, 0],
@@ -82,12 +63,17 @@ function LoadingScreen({ className, ...other }) {
         transition={{
           ease: 'linear',
           duration: 3.2,
-          loop: Infinity
+          repeat: Infinity
         }}
-        className={clsx(classes.box, classes.outside)}
+        sx={{
+          width: 120,
+          height: 120,
+          borderRadius: '25%',
+          position: 'absolute',
+          border: (theme) =>
+            `solid 8px ${alpha(theme.palette.primary.dark, 0.24)}`
+        }}
       />
-    </div>
+    </RootStyle>
   );
 }
-
-export default LoadingScreen;

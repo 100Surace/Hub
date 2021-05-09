@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 
 export default function useOffSetTop(top) {
   const [offsetTop, setOffSetTop] = useState(false);
-  const isTop = top ? top : 100;
+  const isTop = top || 100;
 
   useEffect(() => {
-    window.onscroll = function () {
+    window.onscroll = () => {
       if (window.pageYOffset > isTop) {
         setOffSetTop(true);
       } else {

@@ -1,8 +1,3 @@
-export const mapConfig = {
-  apiGoogle: process.env.REACT_APP_MAP_GOOGLE,
-  apiMapBox: process.env.REACT_APP_MAP_MAPBOX
-};
-
 export const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -20,4 +15,5 @@ export const cloudinaryConfig = {
   cloudinaryUrl: process.env.REACT_APP_CLOUDINARY_URL
 };
 
+export const mapConfig = process.env.REACT_APP_MAP_MAPBOX;
 export const googleAnalyticsConfig = process.env.REACT_APP_GA_MEASUREMENT_ID;
