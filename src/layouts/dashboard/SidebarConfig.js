@@ -24,19 +24,25 @@ const sidebarConfig = [
     subheader: 'general',
     items: [
       {
-        title: 'Page One',
-        href: PATH_DASHBOARD.general.pageOne,
-        icon: ICONS.page
-      },
-      {
-        title: 'Page Two',
-        href: PATH_DASHBOARD.general.pageTwo,
-        icon: ICONS.page
-      },
-      {
-        title: 'Page Three',
-        href: PATH_DASHBOARD.general.pageThree,
-        icon: ICONS.page
+        title: 'Organization',
+        href: PATH_DASHBOARD.app.root,
+        icon: ICONS.dashboard,
+        items: [
+          {
+            title: 'Module',
+            href: PATH_DASHBOARD.root,
+            items: [
+              {
+                title: 'Add Module',
+                href: PATH_DASHBOARD.general.organization.module.add
+              },
+              {
+                title: 'Module List',
+                href: PATH_DASHBOARD.general.organization.module.list
+              }
+            ]
+          }
+        ]
       }
     ]
   },

@@ -12,7 +12,17 @@ const DashboardRoutes = {
   layout: DashboardLayout,
   routes: [
     // GENERAL
-    // ----------------------------------------------------------------------
+    // Organization
+    {
+      exact: true,
+      path: PATH_DASHBOARD.general.organization.module.add,
+      component: lazy(() => import('../views/AddModule'))
+    },
+    {
+      exact: true,
+      path: PATH_DASHBOARD.general.organization.module.list,
+      component: lazy(() => import('../views/ModuleList'))
+    },
     {
       exact: true,
       path: PATH_DASHBOARD.general.pageOne,
@@ -34,8 +44,8 @@ const DashboardRoutes = {
       component: () => <Redirect to={PATH_DASHBOARD.general.pageOne} />
     },
 
-    // APP
     // ----------------------------------------------------------------------
+    // APP
     {
       exact: true,
       path: PATH_DASHBOARD.app.pageFour,
@@ -56,7 +66,6 @@ const DashboardRoutes = {
       path: PATH_DASHBOARD.app.root,
       component: () => <Redirect to={PATH_DASHBOARD.app.pageFour} />
     },
-
     // ----------------------------------------------------------------------
 
     {

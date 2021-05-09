@@ -20,7 +20,13 @@ export const PATH_DASHBOARD = {
   general: {
     pageOne: path(ROOTS_DASHBOARD, '/one'),
     pageTwo: path(ROOTS_DASHBOARD, '/two'),
-    pageThree: path(ROOTS_DASHBOARD, '/three')
+    pageThree: path(ROOTS_DASHBOARD, '/three'),
+    organization: {
+      module: {
+        add: path(ROOTS_DASHBOARD, '/module/add'),
+        list: path(ROOTS_DASHBOARD, '/module/list')
+      }
+    }
   },
   app: {
     root: path(ROOTS_DASHBOARD, '/drop'),
