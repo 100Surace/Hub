@@ -3,6 +3,7 @@ import storage from 'redux-persist/lib/storage';
 // slices
 import settingsReducer from './slices/settings';
 import moduleReducer from './slices/module';
+import moduleCategoryReducer from './slices/moduleCategory';
 
 // ----------------------------------------------------------------------
 
@@ -15,7 +16,8 @@ const rootPersistConfig = {
 
 const rootReducer = combineReducers({
   settings: settingsReducer,
-  module: moduleReducer
+  module: moduleReducer,
+  moduleCategory: moduleCategoryReducer
 });
 
 export { rootPersistConfig, rootReducer };

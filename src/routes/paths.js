@@ -25,6 +25,10 @@ export const PATH_DASHBOARD = {
       module: {
         add: path(ROOTS_DASHBOARD, '/module/add'),
         list: path(ROOTS_DASHBOARD, '/module/list')
+      },
+      moduleCategory: {
+        add: path(ROOTS_DASHBOARD, '/module-category/add'),
+        list: path(ROOTS_DASHBOARD, '/module-category/list')
       }
     }
   },

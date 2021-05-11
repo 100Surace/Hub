@@ -41,6 +41,20 @@ const sidebarConfig = [
                 href: PATH_DASHBOARD.general.organization.module.list
               }
             ]
+          },
+          {
+            title: 'Module Category',
+            href: PATH_DASHBOARD.root,
+            items: [
+              {
+                title: 'Add Module Category',
+                href: PATH_DASHBOARD.general.organization.moduleCategory.add
+              },
+              {
+                title: 'Module Category List',
+                href: PATH_DASHBOARD.general.organization.moduleCategory.list
+              }
+            ]
           }
         ]
       }

@@ -13,6 +13,7 @@ const DashboardRoutes = {
   routes: [
     // GENERAL
     // Organization
+    // Module
     {
       exact: true,
       path: PATH_DASHBOARD.general.organization.module.add,
@@ -22,6 +23,17 @@ const DashboardRoutes = {
       exact: true,
       path: PATH_DASHBOARD.general.organization.module.list,
       component: lazy(() => import('../views/ModuleList'))
+    },
+    // Module Category
+    {
+      exact: true,
+      path: PATH_DASHBOARD.general.organization.moduleCategory.add,
+      component: lazy(() => import('../views/AddModuleCategory'))
+    },
+    {
+      exact: true,
+      path: PATH_DASHBOARD.general.organization.moduleCategory.list,
+      component: lazy(() => import('../views/ModuleCategoryList'))
     },
     {
       exact: true,
