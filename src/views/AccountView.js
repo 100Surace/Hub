@@ -21,7 +21,10 @@ import { makeStyles } from '@material-ui/core/styles';
 // } from 'src/redux/slices/user';
 import { getMyOrg, updateOrg, addOrg } from '../redux/slices/organization';
 import { getModules } from '../redux/slices/module';
-import { getModuleCategories } from '../redux/slices/moduleCategory';
+import {
+  getModuleCategories,
+  getModuleCatByModuleId
+} from '../redux/slices/moduleCategory';
 import HeaderDashboard from '../components/HeaderDashboard';
 import { PATH_DASHBOARD } from '../routes/paths';
 import Page from '../components/Page';
@@ -150,9 +153,15 @@ function AccountView() {
 
   // fetch necessary data on mount
   useEffect(() => {
-    dispatch(getMyOrg());
-    dispatch(getModules());
-    dispatch(getModuleCategories());
+    dispatch(getMyOrg()).then((hasOrg) => {
+      console.log(hasOrg[0]);
+      if (!hasOrg.length) {
+        dispatch(getModules());
+        dispatch(getModuleCategories());
+      } else {
+        dispatch(getModuleCatByModuleId(hasOrg[0].moduleId));
+      }
+    });
   }, []);
 
   // if (!myProfile) {

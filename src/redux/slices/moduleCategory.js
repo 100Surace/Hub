@@ -88,6 +88,20 @@ export function getModuleCategories() {
   };
 }
 
+// GET Module Categories
+export function getModuleCatByModuleId(moduleId) {
+  return async (dispatch) => {
+    dispatch(startLoading());
+    try {
+      const { data } = await API.GET_BY_MODULE_ID(moduleId);
+      return dispatch(getSuccess(data));
+    } catch (error) {
+      dispatch(hasError(error));
+      return Promise.reject(new Error(error));
+    }
+  };
+}
+
 // POST Module Category
 export function addModuleCategory(formData) {
   return async (dispatch) => {
