@@ -35,6 +35,14 @@ const DashboardRoutes = {
       path: PATH_DASHBOARD.general.organization.moduleCategory.list,
       component: lazy(() => import('../views/ModuleCategoryList'))
     },
+    // GENERAL
+    // User
+    // Profile
+    {
+      exact: true,
+      path: PATH_DASHBOARD.general.user.profile,
+      component: lazy(() => import('../views/AccountView'))
+    },
     {
       exact: true,
       path: PATH_DASHBOARD.general.pageOne,

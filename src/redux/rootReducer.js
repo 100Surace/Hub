@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import settingsReducer from './slices/settings';
 import moduleReducer from './slices/module';
 import moduleCategoryReducer from './slices/moduleCategory';
+import organizationReducer from './slices/organization';
 
 // ----------------------------------------------------------------------
 
@@ -17,7 +18,8 @@ const rootPersistConfig = {
 const rootReducer = combineReducers({
   settings: settingsReducer,
   module: moduleReducer,
-  moduleCategory: moduleCategoryReducer
+  moduleCategory: moduleCategoryReducer,
+  organization: organizationReducer
 });
 
 export { rootPersistConfig, rootReducer };

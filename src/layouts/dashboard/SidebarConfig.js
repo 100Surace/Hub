@@ -57,6 +57,17 @@ const sidebarConfig = [
             ]
           }
         ]
+      },
+      {
+        title: 'User',
+        href: PATH_DASHBOARD.app.root,
+        icon: ICONS.dashboard,
+        items: [
+          {
+            title: 'Profile',
+            href: PATH_DASHBOARD.general.user.profile
+          }
+        ]
       }
     ]
   },

@@ -30,6 +30,9 @@ export const PATH_DASHBOARD = {
         add: path(ROOTS_DASHBOARD, '/module-category/add'),
         list: path(ROOTS_DASHBOARD, '/module-category/list')
       }
+    },
+    user: {
+      profile: path(ROOTS_DASHBOARD, '/profile')
     }
   },
   app: {
