@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import organization from '../../api/organization/organization';
+import { getModules } from './module';
+import { getModuleCategories, getModuleCatByModuleId } from './moduleCategory';
 
 // Mock user id
 // TODO: get user id from session
@@ -95,12 +97,12 @@ export const {
   hasOrg
 } = slice.actions;
 
-// GET Organization of user
-export function getMyOrg() {
+// GET Organization by user id
+function getOrgByUsesrId() {
   return async (dispatch) => {
     dispatch(startLoading());
     try {
-      const { data } = await organization.GET_USER_ORG(initialState.USER_ID);
+      const { data } = await organization.GET_USER_ORG(USER_ID);
       if (data.length > 0) {
         dispatch(hasOrg(true));
         dispatch(getSuccess(data[0]));
@@ -110,6 +112,20 @@ export function getMyOrg() {
       dispatch(hasError(error));
       return Promise.reject(new Error(error));
     }
+  };
+}
+
+// GET Organization of user
+export function getMyOrg() {
+  return (dispatch) => {
+    dispatch(getOrgByUsesrId()).then((data) => {
+      if (!data.length) {
+        dispatch(getModules());
+        dispatch(getModuleCategories());
+      } else {
+        dispatch(getModuleCatByModuleId(data[0].moduleId));
+      }
+    });
   };
 }
 
