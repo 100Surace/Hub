@@ -30,10 +30,8 @@ import Scrollbars from '../components/Scrollbars';
 import Page from '../components/Page';
 import { PATH_DASHBOARD } from '../routes/paths';
 import HeaderDashboard from '../components/HeaderDashboard';
-import {
-  HeadTable,
-  ToolbarTable
-} from '../components/organization/moduleCategory';
+import { ToolbarTable } from '../components/organization/moduleCategory';
+import HeadTable from '../components/organization/HeadTable';
 import { getModuleCategories } from '../redux/slices/moduleCategory';
 
 // ----------------------------------------------------------------------

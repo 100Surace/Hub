@@ -31,7 +31,8 @@ import { PATH_DASHBOARD } from '../routes/paths';
 import HeaderDashboard from '../components/HeaderDashboard';
 import Scrollbars from '../components/Scrollbars';
 import SearchNotFound from '../components/SearchNotFound';
-import { HeadTable, ToolbarTable } from '../components/organization/module';
+import { ToolbarTable } from '../components/organization/module';
+import HeadTable from '../components/organization/HeadTable';
 
 // ----------------------------------------------------------------------
 
