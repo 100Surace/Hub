@@ -1,0 +1,45 @@
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { Card, Container, CardHeader, CardContent } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
+import Page from '../Page';
+import { UploadMultiFile } from '../Upload';
+import { updateOrgImages } from '../../redux/slices/organization';
+
+// ----------------------------------------------------------------------
+
+const useStyles = makeStyles((theme) => ({
+  root: {}
+}));
+
+// ----------------------------------------------------------------------
+
+function UploadView() {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const [files, setFiles] = useState([]);
+
+  const uploadImages = () => {
+    console.log(files);
+    dispatch(updateOrgImages(files));
+  };
+
+  return (
+    <Page title="Upload-Components | Minimal-UI" className={classes.root}>
+      <Container maxWidth="lg">
+        <Card sx={{ mb: 3 }}>
+          <CardHeader title="Upload MultiFile" />
+          <CardContent>
+            <UploadMultiFile
+              value={files}
+              onChange={setFiles}
+              uploadImages={uploadImages}
+            />
+          </CardContent>
+        </Card>
+      </Container>
+    </Page>
+  );
+}
+
+export default UploadView;

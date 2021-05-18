@@ -136,7 +136,7 @@ export function addOrg(values) {
   return async (dispatch) => {
     dispatch(startLoading());
     const formData = convertToFormData(values);
-    formData.append('id', initialState.USER_ID);
+    formData.append('id', USER_ID);
 
     try {
       const response = await organization.POST(formData);
@@ -156,6 +156,29 @@ export function updateOrg(values) {
 
     try {
       const response = await organization.PUT(values.ids, formData);
+      return dispatch(updateSuccess(response.data[0]));
+    } catch (error) {
+      dispatch(hasError(error));
+      return Promise.reject(new Error(error));
+    }
+  };
+}
+// PUT Organization
+export function updateOrgImages(files) {
+  return async (dispatch, state) => {
+    dispatch(startLoading());
+    const {
+      organization: {
+        organizationsList: { ids, id }
+      }
+    } = state();
+
+    const formData = convertToFormData({ orgImageFiles: files });
+    formData.append('ids', ids);
+    formData.append('id', id);
+
+    try {
+      const response = await organization.PUT(ids, formData);
       return dispatch(updateSuccess(response.data[0]));
     } catch (error) {
       dispatch(hasError(error));

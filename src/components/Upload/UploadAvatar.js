@@ -5,12 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import React, { useCallback, useState } from 'react';
 import roundAddAPhoto from '@iconify-icons/ic/round-add-a-photo';
 import { alpha, makeStyles } from '@material-ui/core/styles';
-import {
-  Box,
-  Typography,
-  FormHelperText,
-  CircularProgress
-} from '@material-ui/core';
+import { Box, Typography, FormHelperText } from '@material-ui/core';
 import { fData } from '../../utils/formatNumber';
 import { cloudinaryConfig } from '../../config';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
@@ -107,7 +102,7 @@ function UploadAvatar({
   ...other
 }) {
   const classes = useStyles();
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(null);
   const isMountedRef = useIsMountedRef();
 
@@ -137,18 +132,6 @@ function UploadAvatar({
           formData.append('upload_preset', CLOUDINARY_PRESET);
           formData.append('api_key', CLOUDINARY_KEY);
           setFile(file);
-          // return axios
-          //   .post(CLOUDINARY_URL, formData, {
-          //     headers: { 'X-Requested-With': 'XMLHttpRequest' }
-          //   })
-          //   .then((response) => {
-          //     const data = response.data;
-          //     if (isMountedRef.current) {
-          //       setFile(data.secure_url);
-          //       setIsLoading(false);
-          //       setIsError(null);
-          //     }
-          //   });
         }
       } catch (error) {
         console.error(error);
@@ -230,11 +213,11 @@ function UploadAvatar({
         >
           <input {...getInputProps()} />
 
-          {isLoading && (
+          {/* {isLoading && (
             <Box className={classes.loading}>
               <CircularProgress size={32} thickness={2.4} />
             </Box>
-          )}
+          )} */}
           {renderImage(file, path)}
         </div>
       </div>

@@ -24,9 +24,8 @@ import HeaderDashboard from '../components/HeaderDashboard';
 import { PATH_DASHBOARD } from '../routes/paths';
 import Page from '../components/Page';
 import useIsMountedRef from '../hooks/useIsMountedRef';
-import { General } from '../components/user';
+import { General, UploadView } from '../components/user';
 // import useAuth from 'src/hooks/useAuth';
-// import UploadView from './UploadView';
 // import Billing from './Billing';
 // import ChangePassword from './ChangePassword';
 // import Notifications from './Notifications';
@@ -168,12 +167,12 @@ function AccountView() {
       value: 'general',
       icon: <Icon icon={roundAccountBox} width={20} height={20} />,
       component: <General myProps={orgProps} />
+    },
+    {
+      value: 'orgImage',
+      icon: <Icon icon={roundAccountBox} width={20} height={20} />,
+      component: <UploadView />
     }
-    // {
-    //   value: 'orgImage',
-    //   icon: <Icon icon={roundAccountBox} width={20} height={20} />,
-    //   component: <UploadView />
-    // },
     // {
     //   value: 'billing',
     //   icon: <Icon icon={roundReceipt} width={20} height={20} />,

@@ -73,8 +73,9 @@ UploadMultiFile.propTypes = {
   caption: PropTypes.string,
   error: PropTypes.bool,
   files: PropTypes.object,
-  value: PropTypes.object,
+  value: PropTypes.array,
   onChange: PropTypes.func,
+  uploadImages: PropTypes.func,
   className: PropTypes.string
 };
 
@@ -83,6 +84,7 @@ function UploadMultiFile({
   error = false,
   value: files,
   onChange: setFiles,
+  uploadImages,
   className,
   ...other
 }) {
@@ -195,7 +197,9 @@ function UploadMultiFile({
           <Button onClick={handleRemoveAll} sx={{ ml: 1.5 }}>
             Remove all
           </Button>
-          <Button variant="contained">Upload files</Button>
+          <Button onClick={uploadImages} variant="contained">
+            Upload files
+          </Button>
         </Box>
       )}
     </div>
