@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import organization from '../../api/organization/organization';
 import { getModules } from './module';
 import { getModuleCategories, getModuleCatByModuleId } from './moduleCategory';
+import { convertToFormData } from '../../utils/formatFormData';
 
 // Mock user id
 // TODO: get user id from session
@@ -134,18 +135,9 @@ export function addOrg(values) {
   delete values.ids;
   return async (dispatch) => {
     dispatch(startLoading());
-    const formData = new FormData();
+    const formData = convertToFormData(values);
     formData.append('id', initialState.USER_ID);
-    formData.append('orgName', values.orgName);
-    formData.append('moduleCategoryId', values.moduleCategoryId);
-    formData.append('serviceType', values.serviceType);
-    formData.append('organizationType', values.organizationType);
-    formData.append('secondEmail', values.secondEmail);
-    formData.append('secondPhone', values.secondPhone);
-    formData.append('shortDesc', values.shortDesc);
-    formData.append('longDesc', values.longDesc);
-    formData.append('status', values.status);
-    formData.append('imageFile', values.imageFile);
+
     try {
       const response = await organization.POST(formData);
       return dispatch(addSuccess(response.data[0]));
@@ -160,19 +152,8 @@ export function addOrg(values) {
 export function updateOrg(values) {
   return async (dispatch) => {
     dispatch(startLoading());
-    const formData = new FormData();
-    formData.append('ids', values.ids);
-    formData.append('id', values.id);
-    formData.append('orgName', values.orgName);
-    formData.append('moduleCategoryId', values.moduleCategoryId);
-    formData.append('serviceType', values.serviceType);
-    formData.append('organizationType', values.organizationType);
-    formData.append('secondEmail', values.secondEmail);
-    formData.append('secondPhone', values.secondPhone);
-    formData.append('shortDesc', values.shortDesc);
-    formData.append('longDesc', values.longDesc);
-    formData.append('status', values.status);
-    formData.append('imageFile', values.imageFile);
+    const formData = convertToFormData(values);
+
     try {
       const response = await organization.PUT(values.ids, formData);
       return dispatch(updateSuccess(response.data[0]));
