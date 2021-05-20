@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, Container, CardHeader, CardContent } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
+import { useSnackbar } from 'notistack';
 import Page from '../Page';
 import { UploadMultiFile } from '../Upload';
 import { updateOrgImages } from '../../redux/slices/organization';
@@ -18,10 +19,17 @@ function UploadView() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [files, setFiles] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
 
   const uploadImages = () => {
-    console.log(files);
-    dispatch(updateOrgImages(files));
+    dispatch(updateOrgImages(files))
+      .then(() => {
+        enqueueSnackbar('Successfully added images', { variant: 'success' });
+        setFiles([]);
+      })
+      .catch(() => {
+        enqueueSnackbar('Failed to add images', { variant: 'error' });
+      });
   };
 
   return (

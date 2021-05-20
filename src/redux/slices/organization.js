@@ -139,8 +139,8 @@ export function addOrg(values) {
     formData.append('id', USER_ID);
 
     try {
-      const response = await organization.POST(formData);
-      return dispatch(addSuccess(response.data[0]));
+      const { data } = await organization.POST(formData);
+      return dispatch(addSuccess(data[0]));
     } catch (error) {
       dispatch(hasError(error));
       return Promise.reject(new Error(error));
@@ -155,8 +155,8 @@ export function updateOrg(values) {
     const formData = convertToFormData(values);
 
     try {
-      const response = await organization.PUT(values.ids, formData);
-      return dispatch(updateSuccess(response.data[0]));
+      const { data } = await organization.PUT(values.ids, formData);
+      return dispatch(updateSuccess(data[0]));
     } catch (error) {
       dispatch(hasError(error));
       return Promise.reject(new Error(error));
@@ -168,18 +168,20 @@ export function updateOrgImages(files) {
   return async (dispatch, state) => {
     dispatch(startLoading());
     const {
-      organization: {
-        organizationsList: { ids, id }
-      }
+      organization: { organizationsList }
     } = state();
 
-    const formData = convertToFormData({ orgImageFiles: files });
-    formData.append('ids', ids);
-    formData.append('id', id);
+    const formData = convertToFormData({
+      ...organizationsList
+    });
+    files.forEach((file) => {
+      formData.append('orgImageFiles', file);
+    });
 
     try {
-      const response = await organization.PUT(ids, formData);
-      return dispatch(updateSuccess(response.data[0]));
+      const { data } = await organization.PUT(organizationsList.ids, formData);
+      console.log(data[0]);
+      return dispatch(updateSuccess(data[0]));
     } catch (error) {
       dispatch(hasError(error));
       return Promise.reject(new Error(error));
