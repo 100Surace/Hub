@@ -21,6 +21,7 @@ import {
 } from '@material-ui/core';
 import { fData } from '../../utils/formatNumber';
 import { varFadeInRight } from '../animate';
+import { Gallery } from '../user';
 
 // ----------------------------------------------------------------------
 
@@ -154,6 +155,8 @@ function UploadMultiFile({
           )}
         </Box>
       </div>
+
+      <Gallery />
 
       <List disablePadding className={clsx({ [classes.list]: hasFile })}>
         <AnimatePresence>
