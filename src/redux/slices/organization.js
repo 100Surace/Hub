@@ -3,6 +3,7 @@ import organization from '../../api/organization/organization';
 import { getModules } from './module';
 import { getModuleCategories, getModuleCatByModuleId } from './moduleCategory';
 import { convertToFormData } from '../../utils/formatFormData';
+import { stringToArray, removeByValue } from '../../utils/arrayFunctions';
 
 // Mock user id
 // TODO: get user id from session
@@ -30,6 +31,7 @@ const initialState = {
     moduleId: 0
   },
   hasMore: true,
+  orgImages: [],
   index: 0,
   step: 11,
   USER_ID,
@@ -63,6 +65,10 @@ const slice = createSlice({
       state.organizationsList = action.payload;
       state.ORG_ID = action.payload.ids;
     },
+    // SET ORGANIZATION IMAGES
+    setOrgImages(state, action) {
+      state.orgImages = action.payload;
+    },
     // ADD ORGANIZATION
     addSuccess(state, action) {
       state.isLoading = false;
@@ -91,6 +97,7 @@ export default slice.reducer;
 export const {
   startLoading,
   getSuccess,
+  setOrgImages,
   addSuccess,
   updateSuccess,
   deleteSuccess,
@@ -107,6 +114,8 @@ function getOrgByUsesrId() {
       if (data.length > 0) {
         dispatch(hasOrg(true));
         dispatch(getSuccess(data[0]));
+        const images = stringToArray(data[0].orgImg, ';');
+        dispatch(setOrgImages(images));
       }
       return data;
     } catch (error) {
@@ -163,6 +172,18 @@ export function updateOrg(values) {
     }
   };
 }
+export function addOrgImages(images) {
+  return (dispatch, state) => {
+    const {
+      organization: { orgImages }
+    } = state();
+
+    const newImages = orgImages.slice();
+
+    images.forEach((image) => newImages.push(image));
+    dispatch(setOrgImages(newImages));
+  };
+}
 // PUT Organization
 export function updateOrgImages(files) {
   return async (dispatch, state) => {
@@ -180,11 +201,45 @@ export function updateOrgImages(files) {
 
     try {
       const { data } = await organization.PUT(organizationsList.ids, formData);
-      console.log(data[0]);
       return dispatch(updateSuccess(data[0]));
     } catch (error) {
       dispatch(hasError(error));
       return Promise.reject(new Error(error));
+    }
+  };
+}
+
+// DELETE Organization Image
+export function deleteOrgImage(file, local = false) {
+  return async (dispatch, state) => {
+    dispatch(startLoading());
+    const {
+      organization: { organizationsList, orgImages }
+    } = state();
+
+    const images = orgImages.slice();
+    const updatedImages = removeByValue(images, file);
+    dispatch(setOrgImages(updatedImages));
+
+    if (!local) {
+      let orgImg = updatedImages.join(';');
+      orgImg += ';';
+
+      const formData = convertToFormData({
+        ...organizationsList,
+        orgImg
+      });
+
+      try {
+        const { data } = await organization.PUT(
+          organizationsList.ids,
+          formData
+        );
+        return dispatch(updateSuccess(data[0]));
+      } catch (error) {
+        dispatch(hasError(error));
+        return Promise.reject(new Error(error));
+      }
     }
   };
 }

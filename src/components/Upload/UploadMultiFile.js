@@ -77,6 +77,9 @@ UploadMultiFile.propTypes = {
   value: PropTypes.array,
   onChange: PropTypes.func,
   uploadImages: PropTypes.func,
+  addDroppedImages: PropTypes.func,
+  remove: PropTypes.func,
+  images: PropTypes.array,
   className: PropTypes.string
 };
 
@@ -85,8 +88,11 @@ function UploadMultiFile({
   error = false,
   value: files,
   onChange: setFiles,
+  addDroppedImages,
   uploadImages,
   className,
+  images,
+  remove,
   ...other
 }) {
   const classes = useStyles();
@@ -95,6 +101,7 @@ function UploadMultiFile({
   const handleDrop = useCallback(
     (acceptedFiles) => {
       setFiles(acceptedFiles);
+      addDroppedImages(acceptedFiles);
     },
     [setFiles]
   );
@@ -156,9 +163,9 @@ function UploadMultiFile({
         </Box>
       </div>
 
-      <Gallery />
+      <Gallery gallery={images} remove={remove} />
 
-      <List disablePadding className={clsx({ [classes.list]: hasFile })}>
+      {/* <List disablePadding className={clsx({ [classes.list]: hasFile })}>
         <AnimatePresence>
           {files.map((file) => (
             <ListItem
@@ -187,7 +194,7 @@ function UploadMultiFile({
             </ListItem>
           ))}
         </AnimatePresence>
-      </List>
+      </List> */}
 
       {hasFile && (
         <Box

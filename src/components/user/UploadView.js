@@ -1,25 +1,43 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, Container, CardHeader, CardContent } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import Page from '../Page';
 import { UploadMultiFile } from '../Upload';
-import { updateOrgImages } from '../../redux/slices/organization';
+import {
+  updateOrgImages,
+  deleteOrgImage,
+  addOrgImages
+} from '../../redux/slices/organization';
 
 // ----------------------------------------------------------------------
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {}
 }));
 
 // ----------------------------------------------------------------------
+UploadView.propTypes = {
+  orgImages: PropTypes.array
+};
 
 function UploadView() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [files, setFiles] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
+
+  const { orgImages } = useSelector((state) => state.organization);
+
+  const remove = (image, local = false) => {
+    dispatch(deleteOrgImage(image, local));
+  };
+
+  const addDroppedImages = (images) => {
+    dispatch(addOrgImages(images));
+  };
 
   const uploadImages = () => {
     dispatch(updateOrgImages(files))
@@ -42,6 +60,9 @@ function UploadView() {
               value={files}
               onChange={setFiles}
               uploadImages={uploadImages}
+              images={orgImages}
+              remove={remove}
+              addDroppedImages={addDroppedImages}
             />
           </CardContent>
         </Card>
