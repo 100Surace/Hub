@@ -210,7 +210,7 @@ export function updateOrgImages(files) {
 }
 
 // DELETE Organization Image
-export function deleteOrgImage(file, local = false) {
+export function deleteOrgImage(file, fileOnserver = false) {
   return async (dispatch, state) => {
     dispatch(startLoading());
     const {
@@ -221,9 +221,13 @@ export function deleteOrgImage(file, local = false) {
     const updatedImages = removeByValue(images, file);
     dispatch(setOrgImages(updatedImages));
 
-    if (!local) {
-      let orgImg = updatedImages.join(';');
-      orgImg += ';';
+    if (fileOnserver) {
+      let orgImg = '';
+      updatedImages.forEach((image) => {
+        if (typeof image === 'string') {
+          orgImg += `${image};`;
+        }
+      });
 
       const formData = convertToFormData({
         ...organizationsList,

@@ -31,8 +31,8 @@ function UploadView() {
 
   const { orgImages } = useSelector((state) => state.organization);
 
-  const remove = (image, local = false) => {
-    dispatch(deleteOrgImage(image, local));
+  const remove = (image, fileOnserver = false) => {
+    dispatch(deleteOrgImage(image, fileOnserver));
   };
 
   const addDroppedImages = (images) => {
@@ -44,6 +44,7 @@ function UploadView() {
       .then(() => {
         enqueueSnackbar('Successfully added images', { variant: 'success' });
         setFiles([]);
+        dispatch(addOrgImages([]));
       })
       .catch(() => {
         enqueueSnackbar('Failed to add images', { variant: 'error' });

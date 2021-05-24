@@ -45,7 +45,7 @@ function GalleryItem({ image, remove }) {
             src={`${baseUrl}/${imageUrl}`}
             className={classes.image}
           />
-          <button onClick={() => remove(imageUrl)}>Remove</button>
+          <button onClick={() => remove(imageUrl, true)}>Remove</button>
         </>
       );
     } else {
@@ -58,7 +58,7 @@ function GalleryItem({ image, remove }) {
             size="100vw"
             sx={{ zIndex: 8, objectFit: 'cover' }}
           />
-          <button onClick={() => remove(imageUrl, true)}>Remove</button>
+          <button onClick={() => remove(imageUrl)}>Remove</button>
         </>
       );
     }
