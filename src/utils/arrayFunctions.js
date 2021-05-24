@@ -1,9 +1,12 @@
 export function stringToArray(strValue = '', deliminator = ',') {
-  const imageArray = strValue.split(deliminator);
-  if (!imageArray[imageArray.lenght - 1]) {
-    imageArray.pop();
+  if (strValue !== '' && strValue !== null) {
+    const imageArray = strValue.split(deliminator);
+    if (!imageArray[imageArray.lenght - 1]) {
+      imageArray.pop();
+    }
+    return imageArray;
   }
-  return imageArray;
+  return [];
 }
 
 export function removeByValue(arr, value) {
