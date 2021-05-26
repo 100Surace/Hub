@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const baseUrl = process.env.REACT_APP_API_SERVER;
+const baseUrl = process.env.REACT_APP_API_URL;
 
 GalleryItem.propTypes = {
   image: PropTypes.array.isRequired,

@@ -36,7 +36,8 @@ const initialState = {
   step: 11,
   USER_ID,
   ORG_ID: 0,
-  hasOrg: false
+  hasOrg: false,
+  overLimit: false
 };
 
 const slice = createSlice({
@@ -57,6 +58,11 @@ const slice = createSlice({
     // USER HAS ORGANIZATION
     hasOrg(state, action) {
       state.hasOrg = action.payload;
+    },
+
+    // IMAGE COUNT OVER LIMIT
+    overLimit(state, action) {
+      state.overLimit = action.payload;
     },
 
     // GET ORGANIZATIONS
@@ -102,6 +108,7 @@ export const {
   updateSuccess,
   deleteSuccess,
   hasError,
+  overLimit,
   hasOrg
 } = slice.actions;
 
@@ -172,15 +179,28 @@ export function updateOrg(values) {
     }
   };
 }
+//
+function validateMaxImageCount(dispatch, imageArr) {
+  // index start from 0
+  const maxLimit = 12;
+  const curCount = imageArr.length;
+  if (curCount > maxLimit) {
+    dispatch(overLimit(true));
+    imageArr.splice(maxLimit);
+  }
+  return imageArr;
+}
 export function addOrgImages(images) {
   return (dispatch, state) => {
+    dispatch(overLimit(false));
     const {
       organization: { orgImages }
     } = state();
 
-    const newImages = orgImages.slice();
-
-    images.forEach((image) => newImages.push(image));
+    const newImages = validateMaxImageCount(dispatch, [
+      ...orgImages,
+      ...images
+    ]);
     dispatch(setOrgImages(newImages));
   };
 }

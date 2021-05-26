@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, Container, CardHeader, CardContent } from '@material-ui/core';
+import {
+  Card,
+  Container,
+  CardHeader,
+  CardContent,
+  Alert
+} from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import Page from '../Page';
@@ -29,7 +35,7 @@ function UploadView() {
   const [files, setFiles] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
 
-  const { orgImages } = useSelector((state) => state.organization);
+  const { orgImages, overLimit } = useSelector((state) => state.organization);
 
   const remove = (image, fileOnserver = false) => {
     dispatch(deleteOrgImage(image, fileOnserver));
@@ -57,6 +63,11 @@ function UploadView() {
         <Card sx={{ mb: 3 }}>
           <CardHeader title="Upload MultiFile" />
           <CardContent>
+            {overLimit ? (
+              <Alert severity="error">
+                Maximum image limit is 12 (some images are removed)
+              </Alert>
+            ) : null}
             <UploadMultiFile
               value={files}
               onChange={setFiles}

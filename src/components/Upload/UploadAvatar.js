@@ -106,7 +106,7 @@ function UploadAvatar({
   const [isError, setIsError] = useState(null);
   const isMountedRef = useIsMountedRef();
 
-  const baseUrl = process.env.REACT_APP_API_SERVER;
+  const baseUrl = process.env.REACT_APP_API_URL;
 
   const handleDrop = useCallback(
     async (acceptedFiles) => {
