@@ -105,7 +105,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [options, setOptions] = useState([defaultOption]);
-  const [maxReached, setMaxReached] = useState(false);
+  const [resetOptions, setResetOptions] = useState(VariantOptions);
 
   const NewProductSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
@@ -175,20 +175,35 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
         if (v.name === o.optName) variants.splice(index, 1);
       });
     });
+
+    variants.sort((a, b) => {
+      if (a.id < b.id) return -1;
+      return a.id > b.id ? 1 : 0;
+    });
+
     if (variants.length !== 0) {
       setOptions([...options, { ...defaultOption, id, optName: variants[0].name }]);
+      variants.splice(0, 1);
     }
-    if (options.length === VariantOptions.length - 1) {
-      setMaxReached(true);
-    }
+    setResetOptions(variants);
   };
 
   const removeOption = (index) => {
     const newOptions = options.slice();
+    const name = options[index].optName;
+    let id = 0;
+    VariantOptions.forEach((v) => {
+      if (v.name === name) id = v.id;
+    });
     newOptions.splice(index, 1);
     if (newOptions.length === 0) newOptions.push(defaultOption);
     setOptions(newOptions);
-    setMaxReached(false);
+    const selectOptions = [...resetOptions, { id, name }];
+    selectOptions.sort((a, b) => {
+      if (a.id < b.id) return -1;
+      return a.id > b.id ? 1 : 0;
+    });
+    setResetOptions(selectOptions);
   };
 
   const handleOptValueChange = (id, optValues) => {
@@ -281,23 +296,16 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                           value={optName}
                           onChange={(e) => handleOptNameChange(e, id)}
                         >
-                          {VariantOptions.map(({ id, name }) => {
-                            let opt = '';
-                            let exist = false;
-                            options.forEach((o) => {
-                              if (optName !== name && name === o.optName) {
-                                exist = true;
-                              }
-                            });
-                            if (!exist) {
-                              opt = (
-                                <option key={id} value={name}>
-                                  {name}
-                                </option>
-                              );
-                            }
-                            return opt;
-                          })}
+                          <option key={id} value={optName}>
+                            {optName}
+                          </option>
+                          {resetOptions
+                            .filter((a) => a.name !== optName)
+                            .map(({ id, name }) => (
+                              <option key={id} value={name}>
+                                {name}
+                              </option>
+                            ))}
                         </Select>
                       </FormControl>
                       <Autocomplete
@@ -322,7 +330,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     </Stack>
                   ))}
                   <Stack direction="row" mt={1}>
-                    {maxReached ? (
+                    {resetOptions.length === 0 ? (
                       ''
                     ) : (
                       <LoadingButton variant="outlined" size="medium" onClick={handleAddOption}>
