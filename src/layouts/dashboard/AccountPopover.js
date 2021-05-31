@@ -6,14 +6,7 @@ import settings2Fill from '@iconify/icons-eva/settings-2-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { alpha } from '@material-ui/core/styles';
-import {
-  Box,
-  Avatar,
-  Button,
-  Divider,
-  MenuItem,
-  Typography
-} from '@material-ui/core';
+import { Avatar, Button, Box, Divider, MenuItem, Typography } from '@material-ui/core';
 // components
 import { MIconButton } from '../../components/@material-extend';
 import MenuPopover from '../../components/MenuPopover';
@@ -21,28 +14,15 @@ import MenuPopover from '../../components/MenuPopover';
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
-  {
-    label: 'Home',
-    icon: homeFill,
-    linkTo: '/'
-  },
-  {
-    label: 'Profile',
-    icon: personFill,
-    linkTo: '#'
-  },
-  {
-    label: 'Settings',
-    icon: settings2Fill,
-    linkTo: '#'
-  }
+  { label: 'Home', icon: homeFill, linkTo: '/' },
+  { label: 'Profile', icon: personFill, linkTo: '#' },
+  { label: 'Settings', icon: settings2Fill, linkTo: '#' }
 ];
 
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
   const anchorRef = useRef(null);
-
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -74,18 +54,10 @@ export default function AccountPopover() {
           })
         }}
       >
-        <Avatar
-          alt="My Avatar"
-          src="/static/mock-images/avatars/avatar_default.jpg"
-        />
+        <Avatar alt="My Avatar" src="/static/mock-images/avatars/avatar_default.jpg" />
       </MIconButton>
 
-      <MenuPopover
-        open={open}
-        onClose={handleClose}
-        anchorEl={anchorRef.current}
-        sx={{ width: 220 }}
-      >
+      <MenuPopover open={open} onClose={handleClose} anchorEl={anchorRef.current} sx={{ width: 220 }}>
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
             displayName

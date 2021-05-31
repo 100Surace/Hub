@@ -1,219 +1,218 @@
-import clsx from 'clsx';
+import { isString } from 'lodash';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
-import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import fileFill from '@iconify-icons/eva/file-fill';
-import closeFill from '@iconify-icons/eva/close-fill';
+import fileFill from '@iconify/icons-eva/file-fill';
+import closeFill from '@iconify/icons-eva/close-fill';
 import { motion, AnimatePresence } from 'framer-motion';
-import { makeStyles } from '@material-ui/core/styles';
+// material
+import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
 import {
   Box,
   List,
   Link,
+  Stack,
+  Paper,
   Button,
   ListItem,
   Typography,
   ListItemIcon,
   ListItemText,
-  ListItemSecondaryAction,
-  IconButton
+  ListItemSecondaryAction
 } from '@material-ui/core';
+// utils
 import { fData } from '../../utils/formatNumber';
+//
+import { MIconButton } from '../@material-extend';
 import { varFadeInRight } from '../animate';
-import { Gallery } from '../user';
+import { UploadIllustration } from '../../assets';
 
 // ----------------------------------------------------------------------
 
-const useStyles = makeStyles((theme) => ({
-  root: { width: '100%' },
-  dropZone: {
-    outline: 'none',
-    display: 'flex',
-    textAlign: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    padding: theme.spacing(5, 1),
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.background.neutral,
-    border: `1px dashed ${theme.palette.grey[500_32]}`,
-    '&:hover': {
-      opacity: 0.72,
-      cursor: 'pointer'
-    },
-    [theme.breakpoints.up('md')]: {
-      textAlign: 'left',
-      flexDirection: 'row'
-    }
-  },
-  list: {
-    margin: theme.spacing(5, 0)
-  },
-  listItem: {
-    margin: theme.spacing(1, 0),
-    padding: theme.spacing(0.5, 2),
-    borderRadius: theme.shape.borderRadius,
-    border: `solid 1px ${theme.palette.divider}`,
-    backgroundColor: theme.palette.background.paper
-  },
-  dragActive: {
-    opacity: 0.72
-  },
-  isDragReject: {
-    color: theme.palette.error.main,
-    borderColor: theme.palette.error.light,
-    backgroundColor: theme.palette.error.lighter
-  },
-  isDragAccept: {}
+const DropZoneStyle = styled('div')(({ theme }) => ({
+  outline: 'none',
+  display: 'flex',
+  textAlign: 'center',
+  alignItems: 'center',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  padding: theme.spacing(5, 1),
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: theme.palette.background.neutral,
+  border: `1px dashed ${theme.palette.grey[500_32]}`,
+  '&:hover': { opacity: 0.72, cursor: 'pointer' },
+  [theme.breakpoints.up('md')]: { textAlign: 'left', flexDirection: 'row' }
 }));
 
 // ----------------------------------------------------------------------
 
 UploadMultiFile.propTypes = {
-  caption: PropTypes.string,
   error: PropTypes.bool,
-  files: PropTypes.object,
-  value: PropTypes.array,
-  onChange: PropTypes.func,
-  uploadImages: PropTypes.func,
-  addDroppedImages: PropTypes.func,
-  remove: PropTypes.func,
-  images: PropTypes.array,
-  className: PropTypes.string
+  showPreview: PropTypes.bool,
+  files: PropTypes.array,
+  onRemove: PropTypes.func,
+  onRemoveAll: PropTypes.func,
+  sx: PropTypes.object
 };
 
-function UploadMultiFile({
-  caption,
-  error = false,
-  value: files,
-  onChange: setFiles,
-  addDroppedImages,
-  uploadImages,
-  className,
-  images,
-  remove,
-  ...other
-}) {
-  const classes = useStyles();
+export default function UploadMultiFile({ error, showPreview = false, files, onRemove, onRemoveAll, sx, ...other }) {
   const hasFile = files.length > 0;
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      setFiles(acceptedFiles);
-      addDroppedImages(acceptedFiles);
-    },
-    [setFiles]
-  );
-
-  const handleRemoveAll = () => {
-    setFiles([]);
-  };
-
-  const handleRemoveFile = (file) => {
-    const newFiles = [...files];
-    newFiles.splice(newFiles.indexOf(file), 1);
-    setFiles(newFiles);
-  };
-
-  const {
-    getRootProps,
-    getInputProps,
-    isDragActive,
-    isDragReject,
-    isDragAccept
-  } = useDropzone({
-    onDrop: handleDrop
+  const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
+    ...other
   });
 
+  const ShowRejectionItems = () => (
+    <Paper
+      variant="outlined"
+      sx={{
+        py: 1,
+        px: 2,
+        mt: 3,
+        borderColor: 'error.light',
+        bgcolor: (theme) => alpha(theme.palette.error.main, 0.08)
+      }}
+    >
+      {fileRejections.map(({ file, errors }) => {
+        const { path, size } = file;
+        return (
+          <Box key={path} sx={{ my: 1 }}>
+            <Typography variant="subtitle2" noWrap>
+              {path} - {fData(size)}
+            </Typography>
+            {errors.map((e) => (
+              <Typography key={e.code} variant="caption" component="p">
+                - {e.message}
+              </Typography>
+            ))}
+          </Box>
+        );
+      })}
+    </Paper>
+  );
+
   return (
-    <div className={clsx(classes.root, className)} {...other}>
-      <div
-        className={clsx(classes.dropZone, {
-          [classes.isDragActive]: isDragActive,
-          [classes.isDragAccept]: isDragAccept,
-          [classes.isDragReject]: isDragReject || error
-        })}
+    <Box sx={{ width: '100%', ...sx }}>
+      <DropZoneStyle
         {...getRootProps()}
+        sx={{
+          ...(isDragActive && { opacity: 0.72 }),
+          ...((isDragReject || error) && {
+            color: 'error.main',
+            borderColor: 'error.light',
+            bgcolor: 'error.lighter'
+          })
+        }}
       >
         <input {...getInputProps()} />
 
-        <Box
-          component="img"
-          alt="select file"
-          src="/static/illustrations/illustration_upload.svg"
-          sx={{ height: 160 }}
-        />
+        <UploadIllustration sx={{ width: 220 }} />
 
-        <Box sx={{ ml: { md: 5 } }}>
+        <Box sx={{ p: 3, ml: { md: 2 } }}>
           <Typography gutterBottom variant="h5">
             Drop or Select file
           </Typography>
 
-          {caption ? (
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {caption}
-            </Typography>
-          ) : (
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Drop files here or click&nbsp;
-              <Link underline="always">browse</Link>&nbsp;thorough your machine
-            </Typography>
-          )}
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            Drop files here or click&nbsp;
+            <Link underline="always">browse</Link>&nbsp;thorough your machine
+          </Typography>
         </Box>
-      </div>
+      </DropZoneStyle>
 
-      <Gallery gallery={images} remove={remove} />
+      {fileRejections.length > 0 && <ShowRejectionItems />}
 
-      {/* <List disablePadding className={clsx({ [classes.list]: hasFile })}>
+      <List disablePadding sx={{ ...(hasFile && { my: 3 }) }}>
         <AnimatePresence>
-          {files.map((file) => (
-            <ListItem
-              key={file.name}
-              component={motion.div}
-              className={classes.listItem}
-              {...varFadeInRight}
-            >
-              <ListItemIcon>
-                <Icon icon={fileFill} width={32} height={32} />
-              </ListItemIcon>
-              <ListItemText
-                primary={file.name}
-                secondary={fData(file.size)}
-                primaryTypographyProps={{ variant: 'subtitle2' }}
-              />
-              <ListItemSecondaryAction>
-                <IconButton
-                  edge="end"
-                  size="small"
-                  onClick={() => handleRemoveFile(file)}
+          {files.map((file) => {
+            const { name, size, preview } = file;
+            const key = isString(file) ? file : name;
+
+            if (showPreview) {
+              return (
+                <ListItem
+                  key={key}
+                  component={motion.div}
+                  {...varFadeInRight}
+                  sx={{
+                    p: 0,
+                    m: 0.5,
+                    width: 80,
+                    height: 80,
+                    borderRadius: 1.5,
+                    overflow: 'hidden',
+                    position: 'relative',
+                    display: 'inline-flex'
+                  }}
                 >
-                  <Icon icon={closeFill} />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
+                  <Paper
+                    variant="outlined"
+                    component="img"
+                    src={isString(file) ? file : preview}
+                    sx={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute' }}
+                  />
+                  <Box sx={{ top: 6, right: 6, position: 'absolute' }}>
+                    <MIconButton
+                      size="small"
+                      onClick={() => onRemove(file)}
+                      sx={{
+                        p: '2px',
+                        color: 'common.white',
+                        bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72),
+                        '&:hover': {
+                          bgcolor: (theme) => alpha(theme.palette.grey[900], 0.48)
+                        }
+                      }}
+                    >
+                      <Icon icon={closeFill} />
+                    </MIconButton>
+                  </Box>
+                </ListItem>
+              );
+            }
+
+            return (
+              <ListItem
+                key={key}
+                component={motion.div}
+                {...varFadeInRight}
+                sx={{
+                  my: 1,
+                  py: 0.75,
+                  px: 2,
+                  borderRadius: 1,
+                  border: (theme) => `solid 1px ${theme.palette.divider}`,
+                  bgcolor: 'background.paper'
+                }}
+              >
+                <ListItemIcon>
+                  <Icon icon={fileFill} width={28} height={28} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={isString(file) ? file : name}
+                  secondary={isString(file) ? '' : fData(size)}
+                  primaryTypographyProps={{ variant: 'subtitle2' }}
+                  secondaryTypographyProps={{ variant: 'caption' }}
+                />
+                <ListItemSecondaryAction>
+                  <MIconButton edge="end" size="small" onClick={() => onRemove(file)}>
+                    <Icon icon={closeFill} />
+                  </MIconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            );
+          })}
         </AnimatePresence>
-      </List> */}
+      </List>
 
       {hasFile && (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            '& > *': { ml: 1.5 }
-          }}
-        >
-          <Button onClick={handleRemoveAll} sx={{ ml: 1.5 }}>
+        <Stack direction="row" justifyContent="flex-end">
+          <Button onClick={onRemoveAll} sx={{ mr: 1.5 }}>
             Remove all
           </Button>
-          <Button onClick={uploadImages} variant="contained">
-            Upload files
-          </Button>
-        </Box>
+          <Button variant="contained">Upload files</Button>
+        </Stack>
       )}
-    </div>
+    </Box>
   );
 }
-
-export default UploadMultiFile;

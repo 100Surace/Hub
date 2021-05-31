@@ -8,37 +8,29 @@ const ROOTS_DASHBOARD = '/dashboard';
 
 // ----------------------------------------------------------------------
 
-export const PATH_HOME = {
-  components: '/components',
-  cloud: 'https://www.sketch.com/s/0fa4699d-a3ff-4cd5-a3a7-d851eb7e17f0',
-  purchase: 'https://material-ui.com/store/items/minimal-dashboard/',
-  dashboard: ROOTS_DASHBOARD
-};
-
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   general: {
     pageOne: path(ROOTS_DASHBOARD, '/one'),
     pageTwo: path(ROOTS_DASHBOARD, '/two'),
     pageThree: path(ROOTS_DASHBOARD, '/three'),
-    organization: {
-      module: {
-        add: path(ROOTS_DASHBOARD, '/module/add'),
-        list: path(ROOTS_DASHBOARD, '/module/list')
-      },
-      moduleCategory: {
-        add: path(ROOTS_DASHBOARD, '/module-category/add'),
-        list: path(ROOTS_DASHBOARD, '/module-category/list')
-      }
-    },
-    user: {
-      profile: path(ROOTS_DASHBOARD, '/profile')
-    }
+    ecommerce: path(ROOTS_DASHBOARD, '/ecommerce')
   },
   app: {
-    root: path(ROOTS_DASHBOARD, '/drop'),
-    pageFour: path(ROOTS_DASHBOARD, '/drop/four'),
-    pageFive: path(ROOTS_DASHBOARD, '/drop/five'),
-    pageSix: path(ROOTS_DASHBOARD, '/drop/six')
+    root: path(ROOTS_DASHBOARD, '/app'),
+    pageFour: path(ROOTS_DASHBOARD, '/app/four'),
+    pageFive: path(ROOTS_DASHBOARD, '/app/five'),
+    pageSix: path(ROOTS_DASHBOARD, '/app/six')
+  },
+  eCommerce: {
+    root: path(ROOTS_DASHBOARD, '/e-commerce'),
+    shop: path(ROOTS_DASHBOARD, '/e-commerce/shop'),
+    product: path(ROOTS_DASHBOARD, '/e-commerce/product/:name'),
+    productById: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-air-force-1-ndestrukt'),
+    list: path(ROOTS_DASHBOARD, '/e-commerce/list'),
+    newProduct: path(ROOTS_DASHBOARD, '/e-commerce/product/new'),
+    editById: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-blazer-low-77-vintage/edit'),
+    checkout: path(ROOTS_DASHBOARD, '/e-commerce/checkout'),
+    invoice: path(ROOTS_DASHBOARD, '/e-commerce/invoice')
   }
 };

@@ -3,8 +3,9 @@ import { Icon } from '@iconify/react';
 import menu2Fill from '@iconify/icons-eva/menu-2-fill';
 // material
 import { alpha, experimentalStyled as styled } from '@material-ui/core/styles';
-import { Box, AppBar, Hidden, Toolbar, IconButton } from '@material-ui/core';
+import { Box, Stack, AppBar, Toolbar, IconButton } from '@material-ui/core';
 //
+import { MHidden } from '../../components/@material-extend';
 import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
@@ -44,31 +45,20 @@ export default function DashboardNavbar({ onOpenSidebar }) {
   return (
     <RootStyle>
       <ToolbarStyle>
-        <Hidden lgUp>
-          <IconButton
-            onClick={onOpenSidebar}
-            sx={{ mr: 1, color: 'text.primary' }}
-          >
+        <MHidden width="lgUp">
+          <IconButton onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary' }}>
             <Icon icon={menu2Fill} />
           </IconButton>
-        </Hidden>
+        </MHidden>
 
         <Searchbar />
         <Box sx={{ flexGrow: 1 }} />
 
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            '& > *:not(:first-of-type)': {
-              ml: { xs: 0.5, sm: 2, lg: 3 }
-            }
-          }}
-        >
+        <Stack direction="row" spacing={{ xs: 0.5, sm: 1.5 }}>
           <LanguagePopover />
           <NotificationsPopover />
           <AccountPopover />
-        </Box>
+        </Stack>
       </ToolbarStyle>
     </RootStyle>
   );

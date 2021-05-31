@@ -2,13 +2,45 @@
 import 'simplebar/src/simplebar.css';
 
 import ReactDOM from 'react-dom';
+import { StrictMode } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+import { Provider as ReduxProvider } from 'react-redux';
+import { PersistGate } from 'redux-persist/lib/integration/react';
+// highlight
+import './utils/highlight';
+// editor
+import 'react-quill/dist/quill.snow.css';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+// redux
+import { store, persistor } from './redux/store';
+// components
+import LoadingScreen from './components/LoadingScreen';
+// contexts
+import { SettingsProvider } from './contexts/SettingsContext';
+//
+import App from './App';
 import * as serviceWorker from './serviceWorker';
 import reportWebVitals from './reportWebVitals';
-import App from './App';
 
 // ----------------------------------------------------------------------
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+  <StrictMode>
+    <HelmetProvider>
+      <ReduxProvider store={store}>
+        <PersistGate loading={<LoadingScreen />} persistor={persistor}>
+          <SettingsProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </SettingsProvider>
+        </PersistGate>
+      </ReduxProvider>
+    </HelmetProvider>
+  </StrictMode>,
+  document.getElementById('root')
+);
 
 // If you want to enable client cache, register instead.
 serviceWorker.unregister();

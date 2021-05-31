@@ -6,14 +6,13 @@ import SvgIconStyle from '../../components/SvgIconStyle';
 // ----------------------------------------------------------------------
 
 const getIcon = (name) => (
-  <SvgIconStyle
-    src={`/static/icons/navbar/${name}.svg`}
-    sx={{ width: 22, height: 22 }}
-  />
+  <SvgIconStyle src={`/static/icons/navbar/${name}.svg`} sx={{ width: '100%', height: '100%' }} />
 );
 
 const ICONS = {
-  page: getIcon('ic_page'),
+  user: getIcon('ic_user'),
+  ecommerce: getIcon('ic_ecommerce'),
+  analytics: getIcon('ic_analytics'),
   dashboard: getIcon('ic_dashboard')
 };
 
@@ -23,77 +22,40 @@ const sidebarConfig = [
   {
     subheader: 'general',
     items: [
-      {
-        title: 'Organization',
-        href: PATH_DASHBOARD.app.root,
-        icon: ICONS.dashboard,
-        items: [
-          {
-            title: 'Module',
-            href: PATH_DASHBOARD.root,
-            items: [
-              {
-                title: 'Add Module',
-                href: PATH_DASHBOARD.general.organization.module.add
-              },
-              {
-                title: 'Module List',
-                href: PATH_DASHBOARD.general.organization.module.list
-              }
-            ]
-          },
-          {
-            title: 'Module Category',
-            href: PATH_DASHBOARD.root,
-            items: [
-              {
-                title: 'Add Module Category',
-                href: PATH_DASHBOARD.general.organization.moduleCategory.add
-              },
-              {
-                title: 'Module Category List',
-                href: PATH_DASHBOARD.general.organization.moduleCategory.list
-              }
-            ]
-          }
-        ]
-      },
-      {
-        title: 'User',
-        href: PATH_DASHBOARD.app.root,
-        icon: ICONS.dashboard,
-        items: [
-          {
-            title: 'Profile',
-            href: PATH_DASHBOARD.general.user.profile
-          }
-        ]
-      }
+      { title: 'One', path: PATH_DASHBOARD.general.pageOne, icon: ICONS.dashboard },
+      { title: 'Two', path: PATH_DASHBOARD.general.pageTwo, icon: ICONS.ecommerce },
+      { title: 'Three', path: PATH_DASHBOARD.general.pageThree, icon: ICONS.analytics }
     ]
   },
 
-  // APP
+  // MANAGEMENT
   // ----------------------------------------------------------------------
   {
-    subheader: 'app',
+    subheader: 'management',
     items: [
       {
-        title: 'Drop',
-        href: PATH_DASHBOARD.app.root,
-        icon: ICONS.dashboard,
-        items: [
-          {
-            title: 'page Four',
-            href: PATH_DASHBOARD.app.pageFour
-          },
-          {
-            title: 'Page Five',
-            href: PATH_DASHBOARD.app.pageFive
-          },
-          {
-            title: 'Page Six',
-            href: PATH_DASHBOARD.app.pageSix
-          }
+        title: 'user',
+        path: PATH_DASHBOARD.app.root,
+        icon: ICONS.user,
+        children: [
+          { title: 'Four', path: PATH_DASHBOARD.app.pageFour },
+          { title: 'Five', path: PATH_DASHBOARD.app.pageFive },
+          { title: 'Six', path: PATH_DASHBOARD.app.pageSix }
+        ]
+      },
+      // MANAGEMENT : E-COMMERCE
+      {
+        title: 'e-commerce',
+        path: PATH_DASHBOARD.eCommerce.root,
+        icon: ICONS.cart,
+        children: [
+          { title: 'shop', path: PATH_DASHBOARD.eCommerce.shop },
+          { title: 'product', path: PATH_DASHBOARD.eCommerce.productById },
+          { title: 'list', path: PATH_DASHBOARD.eCommerce.list },
+          { title: 'create', path: PATH_DASHBOARD.eCommerce.newProduct },
+          { title: 'edit', path: PATH_DASHBOARD.eCommerce.editById },
+          { title: 'checkout', path: PATH_DASHBOARD.eCommerce.checkout },
+          { title: 'invoice', path: PATH_DASHBOARD.eCommerce.invoice }
         ]
       }
     ]

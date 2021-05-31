@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 // material
 import { Dialog } from '@material-ui/core';
 //
-import { varFadeInUp } from '.';
+import { varFadeInUp } from './variants';
 
 // ----------------------------------------------------------------------
 
@@ -14,13 +14,7 @@ DialogAnimate.propTypes = {
   children: PropTypes.node.isRequired
 };
 
-export default function DialogAnimate({
-  open = false,
-  animate,
-  onClose,
-  children,
-  ...other
-}) {
+export default function DialogAnimate({ open = false, animate, onClose, children, ...other }) {
   return (
     <AnimatePresence>
       {open && (

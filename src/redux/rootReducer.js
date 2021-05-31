@@ -1,10 +1,8 @@
 import { combineReducers } from 'redux';
+import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 // slices
-import settingsReducer from './slices/settings';
-import moduleReducer from './slices/module';
-import moduleCategoryReducer from './slices/moduleCategory';
-import organizationReducer from './slices/organization';
+import productReducer from './slices/product';
 
 // ----------------------------------------------------------------------
 
@@ -12,14 +10,18 @@ const rootPersistConfig = {
   key: 'root',
   storage,
   keyPrefix: 'redux-',
-  whitelist: ['settings']
+  whitelist: []
+};
+
+const productPersistConfig = {
+  key: 'product',
+  storage,
+  keyPrefix: 'redux-',
+  whitelist: ['sortBy', 'checkout']
 };
 
 const rootReducer = combineReducers({
-  settings: settingsReducer,
-  module: moduleReducer,
-  moduleCategory: moduleCategoryReducer,
-  organization: organizationReducer
+  product: persistReducer(productPersistConfig, productReducer)
 });
 
 export { rootPersistConfig, rootReducer };

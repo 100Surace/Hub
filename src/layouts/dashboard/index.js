@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 //
@@ -32,21 +32,16 @@ const MainStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-DashboardLayout.propTypes = {
-  children: PropTypes.node
-};
-
-export default function DashboardLayout({ children }) {
+export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
 
   return (
     <RootStyle>
       <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
-      <DashboardSidebar
-        isOpenSidebar={open}
-        onCloseSidebar={() => setOpen(false)}
-      />
-      <MainStyle>{children}</MainStyle>
+      <DashboardSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
+      <MainStyle>
+        <Outlet />
+      </MainStyle>
     </RootStyle>
   );
 }

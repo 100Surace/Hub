@@ -32,8 +32,6 @@ MenuPopover.propTypes = {
 export default function MenuPopover({ children, sx, ...other }) {
   return (
     <Popover
-      keepMounted
-      getContentAnchorEl={null}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       PaperProps={{

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 // material
 import { Box } from '@material-ui/core';
 //
-import { varWrapEnter } from '.';
+import { varWrapEnter } from './variants';
 
 // ----------------------------------------------------------------------
 
@@ -14,13 +14,7 @@ MotionContainer.propTypes = {
 
 export default function MotionContainer({ open, children, ...other }) {
   return (
-    <Box
-      component={motion.div}
-      initial={false}
-      animate={open ? 'animate' : 'exit'}
-      variants={varWrapEnter}
-      {...other}
-    >
+    <Box component={motion.div} initial={false} animate={open ? 'animate' : 'exit'} variants={varWrapEnter} {...other}>
       {children}
     </Box>
   );
