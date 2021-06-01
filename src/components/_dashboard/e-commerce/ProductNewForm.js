@@ -66,7 +66,7 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(1)
 }));
 
-const VariantOptions = [
+const VARIANTS = [
   {
     id: 1,
     name: 'Color'
@@ -97,15 +97,18 @@ ProductNewForm.propTypes = {
 };
 
 export default function ProductNewForm({ isEdit, currentProduct }) {
-  const defaultOption = {
+  const defaultVariantOption = {
     id: 1,
     optName: 'Color',
     optValues: []
   };
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const [options, setOptions] = useState([defaultOption]);
-  const [resetOptions, setResetOptions] = useState(VariantOptions);
+  const [optionRow, setOptionRow] = useState([defaultVariantOption]);
+  // remove first element to get rest available options
+  const REST_OPTIONS = VARIANTS.slice();
+  REST_OPTIONS.splice(0, 1);
+  const [restOptions, setRestOptions] = useState(REST_OPTIONS);
 
   const NewProductSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
@@ -168,62 +171,93 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   };
 
   const handleAddOption = () => {
-    const id = options.length + 1;
-    const variants = VariantOptions.slice();
-    options.forEach((o) => {
-      variants.forEach((v, index) => {
-        if (v.name === o.optName) variants.splice(index, 1);
-      });
-    });
+    let maxId = 0;
 
-    variants.sort((a, b) => {
+    // gets max id number
+    optionRow.forEach((or) => {
+      if (or.id > maxId) maxId = or.id;
+    });
+    const options = restOptions.slice();
+
+    if (options.length !== 0) {
+      setOptionRow([...optionRow, { id: maxId + 1, optName: options[0].name, optValues: [] }]);
+      options.splice(0, 1);
+    }
+
+    // sort options by id (ASC)
+    options.sort((a, b) => {
       if (a.id < b.id) return -1;
       return a.id > b.id ? 1 : 0;
     });
 
-    if (variants.length !== 0) {
-      setOptions([...options, { ...defaultOption, id, optName: variants[0].name }]);
-      variants.splice(0, 1);
-    }
-    setResetOptions(variants);
+    setRestOptions(options);
   };
 
   const removeOption = (index) => {
-    const newOptions = options.slice();
-    const name = options[index].optName;
+    const newOptions = optionRow.slice();
+    const curName = optionRow[index].optName;
     let id = 0;
-    VariantOptions.forEach((v) => {
-      if (v.name === name) id = v.id;
+
+    // get id of deleted option name
+    VARIANTS.forEach((v) => {
+      if (v.name === curName) id = v.id;
     });
+
     newOptions.splice(index, 1);
-    if (newOptions.length === 0) newOptions.push(defaultOption);
-    setOptions(newOptions);
-    const selectOptions = [...resetOptions, { id, name }];
+    if (newOptions.length === 0) newOptions.push(defaultVariantOption);
+    setOptionRow(newOptions);
+
+    // adds deleted option name as available select option
+    const selectOptions = [...restOptions, { id, name: curName }];
+    // sort by id (ASC)
     selectOptions.sort((a, b) => {
       if (a.id < b.id) return -1;
       return a.id > b.id ? 1 : 0;
     });
-    setResetOptions(selectOptions);
+
+    setRestOptions(selectOptions);
   };
 
-  const handleOptValueChange = (id, optValues) => {
-    const newOptions = options.map((opt) => {
+  const handleOptValueChange = (id, newValue) => {
+    const newOptions = optionRow.map((opt) => {
       if (opt.id === id) {
-        opt.optValues = optValues.slice();
+        opt.optValues = newValue.slice();
       }
       return opt;
     });
-    setOptions(newOptions);
+
+    setOptionRow(newOptions);
   };
 
-  const handleOptNameChange = (e, id) => {
-    const newOptions = options.map((opt) => {
+  const handleOptNameChange = ({ target: { value } }, id) => {
+    let oldValue = '';
+    let oId = 0;
+
+    const newOptions = optionRow.map((opt) => {
       if (opt.id === id) {
-        opt.optName = e.value;
+        oldValue = opt.optName;
+        opt.optName = value;
       }
       return opt;
     });
-    setOptions(newOptions);
+
+    VARIANTS.forEach((v) => {
+      if (v.name === oldValue) oId = v.id;
+    });
+    const selectOptions = restOptions.slice();
+    restOptions.forEach((o, index) => {
+      if (o.name === value) {
+        selectOptions.splice(index, 1);
+        selectOptions.push({ id: oId, name: oldValue });
+      }
+    });
+    selectOptions.sort((a, b) => {
+      if (a.id < b.id) return -1;
+      return a.id > b.id ? 1 : 0;
+    });
+
+    setRestOptions(selectOptions);
+    setOptionRow(newOptions);
   };
 
   const handleRemove = (file) => {
@@ -283,7 +317,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
 
                 <div>
                   <LabelStyle>Variants</LabelStyle>
-                  {options.map(({ id, optName, optValues }, index) => (
+                  {optionRow.map(({ id, optName, optValues }, index) => (
                     <Stack key={index} direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }} mb={1}>
                       <FormControl fullWidth>
                         <InputLabel id="opt-name" shrink>
@@ -299,7 +333,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                           <option key={id} value={optName}>
                             {optName}
                           </option>
-                          {resetOptions
+                          {restOptions
                             .filter((a) => a.name !== optName)
                             .map(({ id, name }) => (
                               <option key={id} value={name}>
@@ -330,7 +364,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     </Stack>
                   ))}
                   <Stack direction="row" mt={1}>
-                    {resetOptions.length === 0 ? (
+                    {restOptions.length === 0 ? (
                       ''
                     ) : (
                       <LoadingButton variant="outlined" size="medium" onClick={handleAddOption}>
