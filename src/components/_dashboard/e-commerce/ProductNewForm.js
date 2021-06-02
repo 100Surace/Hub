@@ -24,8 +24,17 @@ import {
   Autocomplete,
   InputAdornment,
   FormHelperText,
-  FormControlLabel
+  FormControlLabel,
+  OutlinedInput,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper
 } from '@material-ui/core';
+import { Delete } from '@material-ui/icons';
 // utils
 import fakeRequest from '../../../utils/fakeRequest';
 // routes
@@ -265,6 +274,15 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     setFieldValue('images', filteredItems);
   };
 
+  const variants = [];
+  optionRow.forEach((opt) => {
+    if (opt.optValues.length) variants.push(opt.optValues);
+  });
+
+  const cartesianVariants = variants.length
+    ? variants.reduce((vars, arr) => vars.flatMap((v) => arr.map((a) => [v, a].flat())))
+    : [];
+
   return (
     <FormikProvider value={formik}>
       <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -373,6 +391,12 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     )}
                   </Stack>
                 </div>
+                {cartesianVariants.length ? (
+                  <div>
+                    <LabelStyle>Preview</LabelStyle>
+                    <PreviewRow options={cartesianVariants} />
+                  </div>
+                ) : null}
               </Stack>
             </Card>
           </Grid>
@@ -475,5 +499,75 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
         </Grid>
       </Form>
     </FormikProvider>
+  );
+}
+
+PreviewRow.propTypes = {
+  options: PropTypes.array
+};
+
+function PreviewRow({ options }) {
+  const renderRow = (variants) =>
+    variants.map((opts) => {
+      let variant = '';
+      let label;
+      if (opts instanceof Array) {
+        opts.map((option) => (variant += `${option} /`));
+
+        label = variant.split('/');
+        label.pop();
+        label = label.join(' / ');
+      } else {
+        label = opts;
+      }
+
+      return (
+        <TableRow key={label}>
+          <TableCell>{label}</TableCell>
+          <TableCell>
+            <FormControl fullWidth variant="outlined" size="small">
+              <OutlinedInput value="12000" startAdornment={<InputAdornment position="start">$</InputAdornment>} />
+            </FormControl>
+          </TableCell>
+          <TableCell>
+            <TextField type="number" variant="outlined" size="small" value="1" />
+          </TableCell>
+          <TableCell>
+            <TextField variant="outlined" size="small" />
+          </TableCell>
+          <TableCell>
+            <TextField variant="outlined" size="small" />
+          </TableCell>
+          <TableCell>
+            <Delete />
+          </TableCell>
+        </TableRow>
+      );
+    });
+
+  return (
+    <TableContainer component={Paper}>
+      <Table style={{ width: '900px' }}>
+        <TableHead>
+          <TableRow>
+            <TableCell style={{ width: '200px' }}>Variant</TableCell>
+            <TableCell align="left" style={{ width: '200px' }}>
+              Price
+            </TableCell>
+            <TableCell align="left" style={{ width: '50px' }}>
+              Quantity
+            </TableCell>
+            <TableCell align="left" style={{ width: '200px' }}>
+              SKU
+            </TableCell>
+            <TableCell align="left" style={{ width: '200px' }}>
+              Barcode
+            </TableCell>
+            <TableCell align="center" />
+          </TableRow>
+        </TableHead>
+        <TableBody>{renderRow(options)}</TableBody>
+      </Table>
+    </TableContainer>
   );
 }
