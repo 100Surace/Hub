@@ -24,17 +24,8 @@ import {
   Autocomplete,
   InputAdornment,
   FormHelperText,
-  FormControlLabel,
-  OutlinedInput,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper
+  FormControlLabel
 } from '@material-ui/core';
-import { Delete } from '@material-ui/icons';
 // utils
 import fakeRequest from '../../../utils/fakeRequest';
 // routes
@@ -42,6 +33,7 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 //
 import { QuillEditor } from '../../editor';
 import { UploadMultiFile } from '../../upload';
+import { PreviewVariant } from './product-create';
 
 // ----------------------------------------------------------------------
 
@@ -202,6 +194,12 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     setRestOptions(options);
   };
 
+  const sortOptions = (arr) =>
+    arr.sort((a, b) => {
+      if (a.id < b.id) return -1;
+      return a.id > b.id ? 1 : 0;
+    });
+
   const removeOption = (index) => {
     const newOptions = optionRow.slice();
     const curName = optionRow[index].optName;
@@ -219,10 +217,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     // adds deleted option name as available select option
     const selectOptions = [...restOptions, { id, name: curName }];
     // sort by id (ASC)
-    selectOptions.sort((a, b) => {
-      if (a.id < b.id) return -1;
-      return a.id > b.id ? 1 : 0;
-    });
+    sortOptions(selectOptions);
 
     setRestOptions(selectOptions);
   };
@@ -260,10 +255,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
         selectOptions.push({ id: oId, name: oldValue });
       }
     });
-    selectOptions.sort((a, b) => {
-      if (a.id < b.id) return -1;
-      return a.id > b.id ? 1 : 0;
-    });
+    sortOptions(selectOptions);
 
     setRestOptions(selectOptions);
     setOptionRow(newOptions);
@@ -394,7 +386,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                 {cartesianVariants.length ? (
                   <div>
                     <LabelStyle>Preview</LabelStyle>
-                    <PreviewRow options={cartesianVariants} />
+                    <PreviewVariant variants={cartesianVariants} />
                   </div>
                 ) : null}
               </Stack>
@@ -499,75 +491,5 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
         </Grid>
       </Form>
     </FormikProvider>
-  );
-}
-
-PreviewRow.propTypes = {
-  options: PropTypes.array
-};
-
-function PreviewRow({ options }) {
-  const renderRow = (variants) =>
-    variants.map((opts) => {
-      let variant = '';
-      let label;
-      if (opts instanceof Array) {
-        opts.map((option) => (variant += `${option} /`));
-
-        label = variant.split('/');
-        label.pop();
-        label = label.join(' / ');
-      } else {
-        label = opts;
-      }
-
-      return (
-        <TableRow key={label}>
-          <TableCell>{label}</TableCell>
-          <TableCell>
-            <FormControl fullWidth variant="outlined" size="small">
-              <OutlinedInput value="12000" startAdornment={<InputAdornment position="start">$</InputAdornment>} />
-            </FormControl>
-          </TableCell>
-          <TableCell>
-            <TextField type="number" variant="outlined" size="small" value="1" />
-          </TableCell>
-          <TableCell>
-            <TextField variant="outlined" size="small" />
-          </TableCell>
-          <TableCell>
-            <TextField variant="outlined" size="small" />
-          </TableCell>
-          <TableCell>
-            <Delete />
-          </TableCell>
-        </TableRow>
-      );
-    });
-
-  return (
-    <TableContainer component={Paper}>
-      <Table style={{ width: '900px' }}>
-        <TableHead>
-          <TableRow>
-            <TableCell style={{ width: '200px' }}>Variant</TableCell>
-            <TableCell align="left" style={{ width: '200px' }}>
-              Price
-            </TableCell>
-            <TableCell align="left" style={{ width: '50px' }}>
-              Quantity
-            </TableCell>
-            <TableCell align="left" style={{ width: '200px' }}>
-              SKU
-            </TableCell>
-            <TableCell align="left" style={{ width: '200px' }}>
-              Barcode
-            </TableCell>
-            <TableCell align="center" />
-          </TableRow>
-        </TableHead>
-        <TableBody>{renderRow(options)}</TableBody>
-      </Table>
-    </TableContainer>
   );
 }
