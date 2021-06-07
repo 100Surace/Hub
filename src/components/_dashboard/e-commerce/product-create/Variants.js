@@ -24,20 +24,19 @@ function PreviewVariant({ variants }) {
   const [productVariants, setProductVariants] = useState([]);
 
   const onChangeHandler = ({ target: { name, value } }, label) => {
-    console.log(productVariants);
     const newProductVariants = productVariants.slice();
     newProductVariants.forEach((v) => {
-      console.log(v.label);
       if (v.label === label) {
         v[name] = value;
       }
     });
-    console.log(label);
-    console.log(newProductVariants);
+
+    setProductVariants(newProductVariants);
   };
 
   useEffect(() => {
     const labels = [];
+    const optionRows = [];
     variants.forEach((opts) => {
       let variant = '';
       let label;
@@ -51,13 +50,26 @@ function PreviewVariant({ variants }) {
         label = opts;
       }
       labels.push(label);
+      optionRows.push({ label, price: '0.00', quantity: '1', sku: '', barcode: '' });
     });
+
+    const newProductVariants = [];
+    optionRows.forEach((o) => {
+      /* eslint-disable-next-line no-plusplus */
+      for (let i = 0; i < productVariants.length; i++) {
+        if (o.label.match(productVariants[i].label)) {
+          o.price = productVariants[i].price;
+          o.quantity = productVariants[i].quantity;
+          o.sku = productVariants[i].sku;
+          o.barcode = productVariants[i].barcode;
+          break;
+        }
+      }
+      newProductVariants.push(o);
+    });
+    setProductVariants(newProductVariants);
     setLabels(labels);
   }, [variants]);
-
-  useEffect(() => {
-    setProductVariants([]);
-  }, [labels]);
 
   return (
     <TableContainer component={Paper}>
@@ -81,13 +93,8 @@ function PreviewVariant({ variants }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {labels.map((label) => (
-            <VarRow
-              label={label}
-              onChangeHandler={onChangeHandler}
-              productVariants={productVariants}
-              setProductVariants={setProductVariants}
-            />
+          {productVariants.map((variant) => (
+            <VarRow onChangeHandler={onChangeHandler} variant={variant} />
           ))}
         </TableBody>
       </Table>
@@ -96,27 +103,21 @@ function PreviewVariant({ variants }) {
 }
 
 VarRow.propTypes = {
-  label: PropTypes.string,
   onChangeHandler: PropTypes.func,
-  setProductVariants: PropTypes.func,
-  productVariants: PropTypes.array
+  variant: PropTypes.object
 };
 
-function VarRow({ label, onChangeHandler, productVariants, setProductVariants }) {
-  useEffect(() => {
-    setProductVariants([...productVariants, { label, price: '0.00', quantity: '1', sku: '', barcode: '' }]);
-  }, []);
-
+function VarRow({ onChangeHandler, variant }) {
   return (
-    <TableRow key={label}>
-      <TableCell>{label}</TableCell>
+    <TableRow key={variant.label}>
+      <TableCell>{variant.label}</TableCell>
       <TableCell>
         <FormControl fullWidth variant="outlined" size="small">
           <OutlinedInput
             name="price"
             type="number"
-            value={productVariants.price}
-            onChange={(e) => onChangeHandler(e, label)}
+            value={variant.price}
+            onChange={(e) => onChangeHandler(e, variant.label)}
             startAdornment={<InputAdornment position="start">$</InputAdornment>}
           />
         </FormControl>
@@ -124,8 +125,8 @@ function VarRow({ label, onChangeHandler, productVariants, setProductVariants })
       <TableCell>
         <TextField
           name="quantity"
-          value={productVariants.quantity}
-          onChange={(e) => onChangeHandler(e, label)}
+          value={variant.quantity}
+          onChange={(e) => onChangeHandler(e, variant.label)}
           type="number"
           variant="outlined"
           size="small"
@@ -134,8 +135,8 @@ function VarRow({ label, onChangeHandler, productVariants, setProductVariants })
       <TableCell>
         <TextField
           name="sku"
-          value={productVariants.sku}
-          onChange={(e) => onChangeHandler(e, label)}
+          value={variant.sku}
+          onChange={(e) => onChangeHandler(e, variant.label)}
           variant="outlined"
           size="small"
         />
@@ -143,8 +144,8 @@ function VarRow({ label, onChangeHandler, productVariants, setProductVariants })
       <TableCell>
         <TextField
           name="barcode"
-          value={productVariants.barcode}
-          onChange={(e) => onChangeHandler(e, label)}
+          value={variant.barcode}
+          onChange={(e) => onChangeHandler(e, variant.label)}
           variant="outlined"
           size="small"
         />
