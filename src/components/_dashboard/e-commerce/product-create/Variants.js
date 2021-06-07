@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   TextField,
@@ -19,8 +20,25 @@ PreviewVariant.propTypes = {
 };
 
 function PreviewVariant({ variants }) {
-  const renderRow = (variants) =>
-    variants.map((opts) => {
+  const [labels, setLabels] = useState([]);
+  const [productVariants, setProductVariants] = useState([]);
+
+  const onChangeHandler = ({ target: { name, value } }, label) => {
+    console.log(productVariants);
+    const newProductVariants = productVariants.slice();
+    newProductVariants.forEach((v) => {
+      console.log(v.label);
+      if (v.label === label) {
+        v[name] = value;
+      }
+    });
+    console.log(label);
+    console.log(newProductVariants);
+  };
+
+  useEffect(() => {
+    const labels = [];
+    variants.forEach((opts) => {
       let variant = '';
       let label;
       if (opts instanceof Array) {
@@ -32,30 +50,14 @@ function PreviewVariant({ variants }) {
       } else {
         label = opts;
       }
-
-      return (
-        <TableRow key={label}>
-          <TableCell>{label}</TableCell>
-          <TableCell>
-            <FormControl fullWidth variant="outlined" size="small">
-              <OutlinedInput startAdornment={<InputAdornment position="start">$</InputAdornment>} />
-            </FormControl>
-          </TableCell>
-          <TableCell>
-            <TextField type="number" variant="outlined" size="small" />
-          </TableCell>
-          <TableCell>
-            <TextField variant="outlined" size="small" />
-          </TableCell>
-          <TableCell>
-            <TextField variant="outlined" size="small" />
-          </TableCell>
-          <TableCell>
-            <Delete />
-          </TableCell>
-        </TableRow>
-      );
+      labels.push(label);
     });
+    setLabels(labels);
+  }, [variants]);
+
+  useEffect(() => {
+    setProductVariants([]);
+  }, [labels]);
 
   return (
     <TableContainer component={Paper}>
@@ -78,9 +80,79 @@ function PreviewVariant({ variants }) {
             <TableCell align="center" />
           </TableRow>
         </TableHead>
-        <TableBody>{renderRow(variants)}</TableBody>
+        <TableBody>
+          {labels.map((label) => (
+            <VarRow
+              label={label}
+              onChangeHandler={onChangeHandler}
+              productVariants={productVariants}
+              setProductVariants={setProductVariants}
+            />
+          ))}
+        </TableBody>
       </Table>
     </TableContainer>
+  );
+}
+
+VarRow.propTypes = {
+  label: PropTypes.string,
+  onChangeHandler: PropTypes.func,
+  setProductVariants: PropTypes.func,
+  productVariants: PropTypes.array
+};
+
+function VarRow({ label, onChangeHandler, productVariants, setProductVariants }) {
+  useEffect(() => {
+    setProductVariants([...productVariants, { label, price: '0.00', quantity: '1', sku: '', barcode: '' }]);
+  }, []);
+
+  return (
+    <TableRow key={label}>
+      <TableCell>{label}</TableCell>
+      <TableCell>
+        <FormControl fullWidth variant="outlined" size="small">
+          <OutlinedInput
+            name="price"
+            type="number"
+            value={productVariants.price}
+            onChange={(e) => onChangeHandler(e, label)}
+            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+          />
+        </FormControl>
+      </TableCell>
+      <TableCell>
+        <TextField
+          name="quantity"
+          value={productVariants.quantity}
+          onChange={(e) => onChangeHandler(e, label)}
+          type="number"
+          variant="outlined"
+          size="small"
+        />
+      </TableCell>
+      <TableCell>
+        <TextField
+          name="sku"
+          value={productVariants.sku}
+          onChange={(e) => onChangeHandler(e, label)}
+          variant="outlined"
+          size="small"
+        />
+      </TableCell>
+      <TableCell>
+        <TextField
+          name="barcode"
+          value={productVariants.barcode}
+          onChange={(e) => onChangeHandler(e, label)}
+          variant="outlined"
+          size="small"
+        />
+      </TableCell>
+      <TableCell>
+        <Delete />
+      </TableCell>
+    </TableRow>
   );
 }
 
