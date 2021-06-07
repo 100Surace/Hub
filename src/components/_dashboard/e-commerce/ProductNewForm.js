@@ -186,11 +186,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     }
 
     // sort options by id (ASC)
-    options.sort((a, b) => {
-      if (a.id < b.id) return -1;
-      return a.id > b.id ? 1 : 0;
-    });
-
+    sortOptions(options);
     setRestOptions(options);
   };
 
