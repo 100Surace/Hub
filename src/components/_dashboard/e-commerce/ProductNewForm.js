@@ -37,8 +37,6 @@ import { PreviewVariant } from './product-create';
 
 // ----------------------------------------------------------------------
 
-const GENDER_OPTION = ['Men', 'Women', 'Kids'];
-
 const CATEGORY_OPTION = [
   { group: 'Clothing', classify: ['Shirts', 'T-shirts', 'Jeans', 'Leather'] },
   { group: 'Tailored', classify: ['Suits', 'Blazers', 'Trousers', 'Waistcoats'] },
@@ -78,14 +76,18 @@ const VARIANTS = [
   },
   {
     id: 3,
-    name: 'Material'
+    name: 'Gender'
   },
   {
     id: 4,
-    name: 'Style'
+    name: 'Material'
   },
   {
     id: 5,
+    name: 'Style'
+  },
+  {
+    id: 6,
     name: 'Title'
   }
 ];
@@ -131,7 +133,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       tags: currentProduct?.tags || [TAGS_OPTION[0]],
       inStock: Boolean(currentProduct?.inventoryType !== 'out_of_stock'),
       taxes: true,
-      gender: currentProduct?.gender || GENDER_OPTION[2],
+      // gender: currentProduct?.gender || GENDER_OPTION[2],
       category: currentProduct?.category || CATEGORY_OPTION[0].classify[1],
       option: ''
     },
@@ -364,7 +366,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                         }
                         renderInput={(params) => <TextField label="Values" {...params} />}
                       />
-                      <Button size="small" color="secondary" variant="outlined" onClick={() => removeOption(index)}>
+                      <Button size="small" color="secondary" variant="text" onClick={() => removeOption(index)}>
                         Remove
                       </Button>
                     </Stack>
@@ -392,29 +394,9 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
           <Grid item xs={12} md={4}>
             <Stack spacing={3}>
               <Card sx={{ p: 3 }}>
-                <FormControlLabel
-                  control={<Switch {...getFieldProps('inStock')} checked={values.inStock} />}
-                  label="In stock"
-                  sx={{ mb: 2 }}
-                />
-
-                <Stack spacing={3}>
-                  <TextField fullWidth label="Product Code" {...getFieldProps('code')} />
-                  <TextField fullWidth label="Product SKU" {...getFieldProps('sku')} />
-
-                  <div>
-                    <LabelStyle>Gender</LabelStyle>
-                    <RadioGroup {...getFieldProps('gender')} row>
-                      <Stack spacing={1} direction="row">
-                        {GENDER_OPTION.map((gender) => (
-                          <FormControlLabel key={gender} value={gender} control={<Radio />} label={gender} />
-                        ))}
-                      </Stack>
-                    </RadioGroup>
-                  </div>
-
+                <Stack spacing={2}>
                   <FormControl fullWidth>
-                    <InputLabel>Category</InputLabel>
+                    <InputLabel>Status</InputLabel>
                     <Select label="Category" native {...getFieldProps('category')} value={values.category}>
                       {CATEGORY_OPTION.map((category) => (
                         <optgroup key={category.group} label={category.group}>
@@ -427,6 +409,40 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                       ))}
                     </Select>
                   </FormControl>
+                  <FormControl fullWidth>
+                    <InputLabel>Vendor</InputLabel>
+                    <Select label="Category" native {...getFieldProps('category')} value={values.category}>
+                      {CATEGORY_OPTION.map((category) => (
+                        <optgroup key={category.group} label={category.group}>
+                          {category.classify.map((classify) => (
+                            <option key={classify} value={classify}>
+                              {classify}
+                            </option>
+                          ))}
+                        </optgroup>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  <FormControl fullWidth>
+                    <InputLabel>Collection</InputLabel>
+                    <Select label="Category" native {...getFieldProps('category')} value={values.category}>
+                      {CATEGORY_OPTION.map((category) => (
+                        <optgroup key={category.group} label={category.group}>
+                          {category.classify.map((classify) => (
+                            <option key={classify} value={classify}>
+                              {classify}
+                            </option>
+                          ))}
+                        </optgroup>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  <TextField fullWidth label="Product Barcode" {...getFieldProps('code')} />
+                  <TextField fullWidth label="Product SKU" {...getFieldProps('sku')} />
+                  <TextField fullWidth label="Quantity" type="number" InputLabelProps={{ shrink: true }} />
+
                   <Autocomplete
                     multiple
                     freeSolo
@@ -442,9 +458,61 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     }
                     renderInput={(params) => <TextField label="Tags" {...params} />}
                   />
+                  <FormControlLabel
+                    control={<Switch {...getFieldProps('inStock')} checked={values.inStock} />}
+                    label="In stock"
+                    sx={{ mb: 2 }}
+                  />
                 </Stack>
               </Card>
-
+              <Stack spacing={3}>
+                <Card sx={{ p: 3 }}>
+                  <Stack spacing={2}>
+                    <FormControl fullWidth>
+                      <InputLabel>Category A</InputLabel>
+                      <Select label="Category" native {...getFieldProps('category')} value={values.category}>
+                        {CATEGORY_OPTION.map((category) => (
+                          <optgroup key={category.group} label={category.group}>
+                            {category.classify.map((classify) => (
+                              <option key={classify} value={classify}>
+                                {classify}
+                              </option>
+                            ))}
+                          </optgroup>
+                        ))}
+                      </Select>
+                    </FormControl>
+                    <FormControl fullWidth>
+                      <InputLabel>Category B</InputLabel>
+                      <Select label="Category" native {...getFieldProps('category')} value={values.category}>
+                        {CATEGORY_OPTION.map((category) => (
+                          <optgroup key={category.group} label={category.group}>
+                            {category.classify.map((classify) => (
+                              <option key={classify} value={classify}>
+                                {classify}
+                              </option>
+                            ))}
+                          </optgroup>
+                        ))}
+                      </Select>
+                    </FormControl>
+                    <FormControl fullWidth m={1}>
+                      <InputLabel>Category C</InputLabel>
+                      <Select label="Category" native {...getFieldProps('category')} value={values.category}>
+                        {CATEGORY_OPTION.map((category) => (
+                          <optgroup key={category.group} label={category.group}>
+                            {category.classify.map((classify) => (
+                              <option key={classify} value={classify}>
+                                {classify}
+                              </option>
+                            ))}
+                          </optgroup>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Stack>
+                </Card>
+              </Stack>
               <Card sx={{ p: 3 }}>
                 <Stack spacing={3}>
                   <TextField
@@ -454,7 +522,8 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     {...getFieldProps('price')}
                     InputProps={{
                       startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                      type: 'number'
+                      type: 'number',
+                      shrink: true
                     }}
                     error={Boolean(touched.price && errors.price)}
                     helperText={touched.price && errors.price}
@@ -469,6 +538,20 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                       startAdornment: <InputAdornment position="start">$</InputAdornment>,
                       type: 'number'
                     }}
+                  />
+
+                  <TextField
+                    fullWidth
+                    placeholder="0.00"
+                    label="Cost Price"
+                    {...getFieldProps('price')}
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                      type: 'number',
+                      shrink: true
+                    }}
+                    error={Boolean(touched.price && errors.price)}
+                    helperText={touched.price && errors.price}
                   />
                 </Stack>
 
