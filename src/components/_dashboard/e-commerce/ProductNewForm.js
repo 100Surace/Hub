@@ -4,6 +4,7 @@ import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { useState, useCallback } from 'react';
 import { Form, FormikProvider, useFormik } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { LoadingButton } from '@material-ui/lab';
@@ -26,14 +27,13 @@ import {
   FormHelperText,
   FormControlLabel
 } from '@material-ui/core';
-// utils
-import fakeRequest from '../../../utils/fakeRequest';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 //
 import { QuillEditor } from '../../editor';
 import { UploadMultiFile } from '../../upload';
 import { PreviewVariant } from './product-create';
+import { addNewProduct } from '../../../redux/slices/product';
 
 // ----------------------------------------------------------------------
 
@@ -43,21 +43,10 @@ const CATEGORY_OPTION = [
   { group: 'Accessories', classify: ['Shoes', 'Backpacks and bags', 'Bracelets', 'Face masks'] }
 ];
 
-const TAGS_OPTION = [
-  'Toy Story 3',
-  'Logan',
-  'Full Metal Jacket',
-  'Dangal',
-  'The Sting',
-  '2001: A Space Odyssey',
-  "Singin' in the Rain",
-  'Toy Story',
-  'Bicycle Thieves',
-  'The Kid',
-  'Inglourious Basterds',
-  'Snatch',
-  '3 Idiots'
-];
+// product status
+const PRODUCT_STATUS = ['Draft', 'Active', 'Disable'];
+
+const TAGS_OPTION = ['product'];
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -106,6 +95,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     optValues: []
   };
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const [optionRow, setOptionRow] = useState([defaultVariantOption]);
   // remove first element to get rest available options
@@ -114,18 +104,21 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   const [restOptions, setRestOptions] = useState(REST_OPTIONS);
 
   const NewProductSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    description: Yup.string().required('Description is required'),
-    images: Yup.array().min(1, 'Images is required'),
-    price: Yup.number().required('Price is required')
+    productTitle: Yup.string()
+      .required('Name is required')
+      .matches(/^[A-Z]+/, 'First letter must be in UPPERCASE'),
+    description: Yup.string().required('Description is required')
+    // images: Yup.array().min(1, 'Images is required'),
+    // price: Yup.number().required('Price is required')
   });
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: currentProduct?.name || '',
+      productTitle: currentProduct?.productTitle || '',
       description: currentProduct?.description || '',
       images: currentProduct?.images || [],
+      productStatus: currentProduct?.productStatus || PRODUCT_STATUS[0],
       code: currentProduct?.code || '',
       sku: currentProduct?.sku || '',
       price: currentProduct?.price || '',
@@ -140,11 +133,11 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     validationSchema: NewProductSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        await fakeRequest(500);
+        dispatch(addNewProduct(values));
         resetForm();
         setSubmitting(false);
         enqueueSnackbar(!isEdit ? 'Create success' : 'Update success', { variant: 'success' });
-        navigate(PATH_DASHBOARD.eCommerce.list);
+        // navigate(PATH_DASHBOARD.eCommerce.list);
       } catch (error) {
         console.error(error);
         setSubmitting(false);
@@ -283,9 +276,9 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                 <TextField
                   fullWidth
                   label="Product Name"
-                  {...getFieldProps('name')}
-                  error={Boolean(touched.name && errors.name)}
-                  helperText={touched.name && errors.name}
+                  {...getFieldProps('productTitle')}
+                  error={Boolean(touched.productTitle && errors.productTitle)}
+                  helperText={touched.productTitle && errors.productTitle}
                 />
 
                 <div>
@@ -397,15 +390,16 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                 <Stack spacing={2}>
                   <FormControl fullWidth>
                     <InputLabel>Status</InputLabel>
-                    <Select label="Category" native {...getFieldProps('category')} value={values.category}>
-                      {CATEGORY_OPTION.map((category) => (
-                        <optgroup key={category.group} label={category.group}>
-                          {category.classify.map((classify) => (
-                            <option key={classify} value={classify}>
-                              {classify}
-                            </option>
-                          ))}
-                        </optgroup>
+                    <Select
+                      label="productStatus"
+                      native
+                      {...getFieldProps('productStatus')}
+                      value={values.productStatus}
+                    >
+                      {PRODUCT_STATUS.map((status) => (
+                        <option key={status} value={status}>
+                          {status}
+                        </option>
                       ))}
                     </Select>
                   </FormControl>

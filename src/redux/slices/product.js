@@ -2,6 +2,8 @@ import { sum, map, filter, uniqBy, reject } from 'lodash';
 import { createSlice } from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';
+import API from '../../api/ecommerce/product';
+import { convertToFormData } from '../../utils/formatFormData';
 
 // ----------------------------------------------------------------------
 
@@ -238,6 +240,28 @@ export function getProduct(name) {
     } catch (error) {
       console.error(error);
       dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function addNewProduct(product) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    product.userId = '85f92f31-4b6f-4eaf-b71f-f6023ae9a395';
+    const formData = {
+      userId: product.userId,
+      productTitle: product.productTitle,
+      description: product.description,
+      productStatus: product.productStatus,
+      ecomCategoryId: 23,
+      vendorId: 1
+    };
+    console.log(formData);
+    try {
+      const { data } = await API.POST(formData);
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+      return Promise.reject(error);
     }
   };
 }
