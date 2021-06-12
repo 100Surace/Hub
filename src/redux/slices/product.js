@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';
 import API from '../../api/ecommerce/product';
-import { convertToFormData } from '../../utils/formatFormData';
 
 // ----------------------------------------------------------------------
 
@@ -254,9 +253,8 @@ export function addNewProduct(product) {
       description: product.description,
       productStatus: product.productStatus,
       ecomCategoryId: 23,
-      vendorId: 1
+      vendorId: product.vendorId
     };
-    console.log(formData);
     try {
       const { data } = await API.POST(formData);
     } catch (error) {

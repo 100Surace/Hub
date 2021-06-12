@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 // material
@@ -34,6 +34,7 @@ import { QuillEditor } from '../../editor';
 import { UploadMultiFile } from '../../upload';
 import { PreviewVariant } from './product-create';
 import { addNewProduct } from '../../../redux/slices/product';
+import { getVendors } from '../../../redux/slices/vendor';
 
 // ----------------------------------------------------------------------
 
@@ -102,6 +103,8 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   const REST_OPTIONS = VARIANTS.slice();
   REST_OPTIONS.splice(0, 1);
   const [restOptions, setRestOptions] = useState(REST_OPTIONS);
+  // states from store
+  const { vendors } = useSelector((state) => state.vendor);
 
   const NewProductSchema = Yup.object().shape({
     productTitle: Yup.string()
@@ -128,6 +131,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       taxes: true,
       // gender: currentProduct?.gender || GENDER_OPTION[2],
       category: currentProduct?.category || CATEGORY_OPTION[0].classify[1],
+      vendorId: currentProduct?.vendorId || vendors[0]?.id,
       option: ''
     },
     validationSchema: NewProductSchema,
@@ -265,6 +269,10 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   const cartesianVariants = variants.length
     ? variants.reduce((vars, arr) => vars.flatMap((v) => arr.map((a) => [v, a].flat())))
     : [];
+
+  useEffect(() => {
+    dispatch(getVendors());
+  }, []);
 
   return (
     <FormikProvider value={formik}>
@@ -404,16 +412,12 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     </Select>
                   </FormControl>
                   <FormControl fullWidth>
-                    <InputLabel>Vendor</InputLabel>
-                    <Select label="Category" native {...getFieldProps('category')} value={values.category}>
-                      {CATEGORY_OPTION.map((category) => (
-                        <optgroup key={category.group} label={category.group}>
-                          {category.classify.map((classify) => (
-                            <option key={classify} value={classify}>
-                              {classify}
-                            </option>
-                          ))}
-                        </optgroup>
+                    <InputLabel shrink>Vendor</InputLabel>
+                    <Select label="Vendor" native {...getFieldProps('vendorId')} value={values.vendorId}>
+                      {vendors.map((vendor) => (
+                        <option key={vendor.id} value={vendor.id}>
+                          {vendor.vendorName}
+                        </option>
                       ))}
                     </Select>
                   </FormControl>

@@ -3,6 +3,7 @@ import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 // slices
 import productReducer from './slices/product';
+import vendorReducer from './slices/vendor';
 
 // ----------------------------------------------------------------------
 
@@ -21,7 +22,8 @@ const productPersistConfig = {
 };
 
 const rootReducer = combineReducers({
-  product: persistReducer(productPersistConfig, productReducer)
+  product: persistReducer(productPersistConfig, productReducer),
+  vendor: vendorReducer
 });
 
 export { rootPersistConfig, rootReducer };
