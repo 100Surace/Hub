@@ -11,7 +11,7 @@ const initialState = {
 };
 
 const slice = createSlice({
-  name: 'vendor',
+  name: 'ecomCategory',
   initialState,
   reducers: {
     // START LOADING
