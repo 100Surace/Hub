@@ -252,9 +252,10 @@ export function addNewProduct(product) {
       productTitle: product.productTitle,
       description: product.description,
       productStatus: product.productStatus,
-      ecomCategoryId: 23,
+      ecomCategoryId: product.ecomCategoryId,
       vendorId: product.vendorId
     };
+    console.log(formData);
     try {
       const { data } = await API.POST(formData);
     } catch (error) {

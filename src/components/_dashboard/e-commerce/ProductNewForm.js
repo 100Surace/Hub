@@ -35,6 +35,7 @@ import { UploadMultiFile } from '../../upload';
 import { PreviewVariant } from './product-create';
 import { addNewProduct } from '../../../redux/slices/product';
 import { getVendors } from '../../../redux/slices/vendor';
+import { getEcomCategories } from '../../../redux/slices/ecomCategory';
 
 // ----------------------------------------------------------------------
 
@@ -105,12 +106,15 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   const [restOptions, setRestOptions] = useState(REST_OPTIONS);
   // states from store
   const { vendors } = useSelector((state) => state.vendor);
+  const { ecomCategories } = useSelector((state) => state.ecomCategory);
+  const [categoryIds, setCategoryIds] = useState({ categoryA: 0, categoryB: 0, categoryC: 0 });
 
   const NewProductSchema = Yup.object().shape({
     productTitle: Yup.string()
       .required('Name is required')
       .matches(/^[A-Z]+/, 'First letter must be in UPPERCASE'),
-    description: Yup.string().required('Description is required')
+    description: Yup.string().required('Description is required'),
+    ecomCategoryId: Yup.number().moreThan(1, 'At least one catgeory is required')
     // images: Yup.array().min(1, 'Images is required'),
     // price: Yup.number().required('Price is required')
   });
@@ -122,6 +126,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       description: currentProduct?.description || '',
       images: currentProduct?.images || [],
       productStatus: currentProduct?.productStatus || PRODUCT_STATUS[0],
+      ecomCategoryId: currentProduct?.ecomCategoryId || 0,
       code: currentProduct?.code || '',
       sku: currentProduct?.sku || '',
       price: currentProduct?.price || '',
@@ -261,6 +266,30 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     setFieldValue('images', filteredItems);
   };
 
+  const handleCatAChange = (category) => {
+    const newCategoryId = {
+      ...categoryIds,
+      categoryA: category.id
+    };
+    setCategoryIds(newCategoryId);
+  };
+
+  const handleCatBChange = (category) => {
+    const newCategoryId = {
+      ...categoryIds,
+      categoryB: category.id
+    };
+    setCategoryIds(newCategoryId);
+  };
+
+  const handleCatCChange = (category) => {
+    const newCategoryId = {
+      ...categoryIds,
+      categoryC: category.id
+    };
+    setCategoryIds(newCategoryId);
+  };
+
   const variants = [];
   optionRow.forEach((opt) => {
     if (opt.optValues.length) variants.push(opt.optValues);
@@ -272,6 +301,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
 
   useEffect(() => {
     dispatch(getVendors());
+    dispatch(getEcomCategories());
   }, []);
 
   return (
@@ -414,9 +444,9 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                   <FormControl fullWidth>
                     <InputLabel shrink>Vendor</InputLabel>
                     <Select label="Vendor" native {...getFieldProps('vendorId')} value={values.vendorId}>
-                      {vendors.map((vendor) => (
-                        <option key={vendor.id} value={vendor.id}>
-                          {vendor.vendorName}
+                      {vendors.map(({ id, vendorName }) => (
+                        <option key={id} value={id}>
+                          {vendorName}
                         </option>
                       ))}
                     </Select>
@@ -466,48 +496,47 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
               <Stack spacing={3}>
                 <Card sx={{ p: 3 }}>
                   <Stack spacing={2}>
-                    <FormControl fullWidth>
-                      <InputLabel>Category A</InputLabel>
-                      <Select label="Category" native {...getFieldProps('category')} value={values.category}>
-                        {CATEGORY_OPTION.map((category) => (
-                          <optgroup key={category.group} label={category.group}>
-                            {category.classify.map((classify) => (
-                              <option key={classify} value={classify}>
-                                {classify}
-                              </option>
-                            ))}
-                          </optgroup>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <FormControl fullWidth>
-                      <InputLabel>Category B</InputLabel>
-                      <Select label="Category" native {...getFieldProps('category')} value={values.category}>
-                        {CATEGORY_OPTION.map((category) => (
-                          <optgroup key={category.group} label={category.group}>
-                            {category.classify.map((classify) => (
-                              <option key={classify} value={classify}>
-                                {classify}
-                              </option>
-                            ))}
-                          </optgroup>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <FormControl fullWidth m={1}>
-                      <InputLabel>Category C</InputLabel>
-                      <Select label="Category" native {...getFieldProps('category')} value={values.category}>
-                        {CATEGORY_OPTION.map((category) => (
-                          <optgroup key={category.group} label={category.group}>
-                            {category.classify.map((classify) => (
-                              <option key={classify} value={classify}>
-                                {classify}
-                              </option>
-                            ))}
-                          </optgroup>
-                        ))}
-                      </Select>
-                    </FormControl>
+                    <Autocomplete
+                      fullWidth
+                      onChange={(event, newValue) => {
+                        setFieldValue('ecomCategoryId', newValue.id);
+                        handleCatAChange(newValue);
+                      }}
+                      options={ecomCategories.filter((cat) => cat.parentcategoryId === null)}
+                      getOptionLabel={(option) => option.categoryName}
+                      renderInput={(params) => <TextField label="Category A" {...params} />}
+                      error={Boolean(touched.ecomCategoryId && errors.ecomCategoryId)}
+                      helperText={touched.ecomCategoryId && errors.ecomCategoryId}
+                    />
+                    <Autocomplete
+                      fullWidth
+                      onChange={(event, newValue) => {
+                        setFieldValue('ecomCategoryId', newValue.id);
+                        handleCatBChange(newValue);
+                      }}
+                      options={ecomCategories.filter((cat) => cat.parentcategoryId === categoryIds.categoryA)}
+                      getOptionLabel={(option) => option.categoryName}
+                      renderInput={(params) => <TextField label="Category B" {...params} />}
+                    />
+                    <Autocomplete
+                      fullWidth
+                      onChange={(event, newValue) => {
+                        setFieldValue('ecomCategoryId', newValue.id);
+                        handleCatCChange(newValue);
+                      }}
+                      options={ecomCategories.filter((cat) => cat.parentcategoryId === categoryIds.categoryB)}
+                      getOptionLabel={(option) => option.categoryName}
+                      renderInput={(params) => <TextField label="Category C" {...params} />}
+                    />
+                    <Autocomplete
+                      fullWidth
+                      onChange={(event, newValue) => {
+                        setFieldValue('ecomCategoryId', newValue.id);
+                      }}
+                      options={ecomCategories.filter((cat) => cat.parentcategoryId === categoryIds.categoryC)}
+                      getOptionLabel={(option) => option.categoryName}
+                      renderInput={(params) => <TextField label="Category D" {...params} />}
+                    />
                   </Stack>
                 </Card>
               </Stack>
