@@ -108,6 +108,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   const { vendors } = useSelector((state) => state.vendor);
   const { ecomCategories } = useSelector((state) => state.ecomCategory);
   const [categoryIds, setCategoryIds] = useState({ categoryA: 0, categoryB: 0, categoryC: 0 });
+  const [Values, setValues] = useState({ categoryB: null, categoryC: null, categoryD: null });
 
   const NewProductSchema = Yup.object().shape({
     productTitle: Yup.string()
@@ -271,6 +272,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       ...categoryIds,
       categoryA: category.id
     };
+    setValues({ categoryB: null, categoryC: null, categoryD: null });
     setCategoryIds(newCategoryId);
   };
 
@@ -279,6 +281,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       ...categoryIds,
       categoryB: category.id
     };
+    setValues({ categoryB: category, categoryC: null, categoryD: null });
     setCategoryIds(newCategoryId);
   };
 
@@ -287,6 +290,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       ...categoryIds,
       categoryC: category.id
     };
+    setValues({ ...Values, categoryC: category, categoryD: null });
     setCategoryIds(newCategoryId);
   };
 
@@ -510,6 +514,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     />
                     <Autocomplete
                       fullWidth
+                      value={Values.categoryB}
                       onChange={(event, newValue) => {
                         setFieldValue('ecomCategoryId', newValue.id);
                         handleCatBChange(newValue);
@@ -520,6 +525,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     />
                     <Autocomplete
                       fullWidth
+                      value={Values.categoryC}
                       onChange={(event, newValue) => {
                         setFieldValue('ecomCategoryId', newValue.id);
                         handleCatCChange(newValue);
@@ -530,7 +536,9 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     />
                     <Autocomplete
                       fullWidth
+                      value={Values.categoryD}
                       onChange={(event, newValue) => {
+                        setValues({ ...Values, categoryD: newValue });
                         setFieldValue('ecomCategoryId', newValue.id);
                       }}
                       options={ecomCategories.filter((cat) => cat.parentcategoryId === categoryIds.categoryC)}
