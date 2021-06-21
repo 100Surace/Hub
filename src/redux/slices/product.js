@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';
 import API from '../../api/ecommerce/product';
+import { convertToFormData } from '../../utils/formatFormData';
 
 // ----------------------------------------------------------------------
 
@@ -247,7 +248,7 @@ export function addNewProduct(product) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     product.userId = '85f92f31-4b6f-4eaf-b71f-f6023ae9a395';
-    const formData = {
+    const form = {
       userId: product.userId,
       productTitle: product.productTitle,
       description: product.description,
@@ -255,7 +256,10 @@ export function addNewProduct(product) {
       ecomCategoryId: product.ecomCategoryId,
       vendorId: product.vendorId
     };
-    console.log(formData);
+    const formData = convertToFormData(form);
+    product.proImages.forEach((file) => {
+      formData.append('proImages', file);
+    });
     try {
       const { data } = await API.POST(formData);
     } catch (error) {

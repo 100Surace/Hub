@@ -116,7 +116,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       .matches(/^[A-Z]+/, 'First letter must be in UPPERCASE'),
     description: Yup.string().required('Description is required'),
     ecomCategoryId: Yup.number().moreThan(1, 'At least one catgeory is required')
-    // images: Yup.array().min(1, 'Images is required'),
+    // proImages: Yup.array().min(1, 'Images is required'),
     // price: Yup.number().required('Price is required')
   });
 
@@ -125,7 +125,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     initialValues: {
       productTitle: currentProduct?.productTitle || '',
       description: currentProduct?.description || '',
-      images: currentProduct?.images || [],
+      proImages: currentProduct?.proImages || [],
       productStatus: currentProduct?.productStatus || PRODUCT_STATUS[0],
       ecomCategoryId: currentProduct?.ecomCategoryId || 0,
       code: currentProduct?.code || '',
@@ -143,10 +143,16 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     validationSchema: NewProductSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        dispatch(addNewProduct(values));
-        resetForm();
-        setSubmitting(false);
-        enqueueSnackbar(!isEdit ? 'Create success' : 'Update success', { variant: 'success' });
+        dispatch(addNewProduct(values))
+          .then(() => {
+            resetForm();
+            setSubmitting(false);
+            enqueueSnackbar(!isEdit ? 'Create success' : 'Update success', { variant: 'success' });
+          })
+          .catch(() => {
+            enqueueSnackbar(!isEdit ? 'Create error' : 'Update error', { variant: 'error' });
+          });
+
         // navigate(PATH_DASHBOARD.eCommerce.list);
       } catch (error) {
         console.error(error);
@@ -161,7 +167,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   const handleDrop = useCallback(
     (acceptedFiles) => {
       setFieldValue(
-        'images',
+        'proImages',
         acceptedFiles.map((file) =>
           Object.assign(file, {
             preview: URL.createObjectURL(file)
@@ -173,7 +179,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   );
 
   const handleRemoveAll = () => {
-    setFieldValue('images', []);
+    setFieldValue('proImages', []);
   };
 
   const handleAddOption = () => {
@@ -263,8 +269,8 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   };
 
   const handleRemove = (file) => {
-    const filteredItems = values.images.filter((_file) => _file !== file);
-    setFieldValue('images', filteredItems);
+    const filteredItems = values.proImages.filter((_file) => _file !== file);
+    setFieldValue('proImages', filteredItems);
   };
 
   const handleCatAChange = (category) => {
@@ -345,15 +351,15 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     showPreview
                     maxSize={3145728}
                     accept="image/*"
-                    files={values.images}
+                    files={values.proImages}
                     onDrop={handleDrop}
                     onRemove={handleRemove}
                     onRemoveAll={handleRemoveAll}
-                    error={Boolean(touched.images && errors.images)}
+                    error={Boolean(touched.proImages && errors.proImages)}
                   />
-                  {touched.images && errors.images && (
+                  {touched.proImages && errors.proImages && (
                     <FormHelperText error sx={{ px: 2 }}>
-                      {touched.images && errors.images}
+                      {touched.proImages && errors.proImages}
                     </FormHelperText>
                   )}
                 </div>
