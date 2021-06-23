@@ -108,16 +108,21 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   const { vendors } = useSelector((state) => state.vendor);
   const { ecomCategories } = useSelector((state) => state.ecomCategory);
   const [categoryIds, setCategoryIds] = useState({ categoryA: 0, categoryB: 0, categoryC: 0 });
-  const [Values, setValues] = useState({ categoryB: null, categoryC: null, categoryD: null });
+  const [Values, setValues] = useState({ categoryA: null, categoryB: null, categoryC: null, categoryD: null });
 
   const NewProductSchema = Yup.object().shape({
     productTitle: Yup.string()
       .required('Name is required')
       .matches(/^[A-Z]+/, 'First letter must be in UPPERCASE'),
     description: Yup.string().required('Description is required'),
-    ecomCategoryId: Yup.number().moreThan(1, 'At least one catgeory is required')
-    // proImages: Yup.array().min(1, 'Images is required'),
-    // price: Yup.number().required('Price is required')
+    ecomCategoryId: Yup.number().moreThan(1, 'At least one catgeory is required'),
+    proImages: Yup.array().min(1, 'Images is required'),
+    compareAtPrice: Yup.number().required('Price is required'),
+    price: Yup.number().required('Selling Price is required'),
+    costPrice: Yup.number().required('Cost Price is required'),
+    barcode: Yup.string().required('Barcode is required'),
+    sku: Yup.string().required('Sku is required'),
+    quantity: Yup.number().required('Quantity is required')
   });
 
   const formik = useFormik({
@@ -128,10 +133,12 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       proImages: currentProduct?.proImages || [],
       productStatus: currentProduct?.productStatus || PRODUCT_STATUS[0],
       ecomCategoryId: currentProduct?.ecomCategoryId || 0,
-      code: currentProduct?.code || '',
+      barcode: currentProduct?.barcode || '',
       sku: currentProduct?.sku || '',
+      quantity: currentProduct?.quantity || '',
+      compareAtPrice: currentProduct?.compareAtPrice || '',
       price: currentProduct?.price || '',
-      priceSale: currentProduct?.priceSale || '',
+      costPrice: currentProduct?.costPrice || '',
       tags: currentProduct?.tags || [TAGS_OPTION[0]],
       inStock: Boolean(currentProduct?.inventoryType !== 'out_of_stock'),
       taxes: true,
@@ -147,6 +154,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
           .then(() => {
             resetForm();
             setSubmitting(false);
+            setValues({ categoryA: null, categoryB: null, categoryC: null, categoryD: null });
             enqueueSnackbar(!isEdit ? 'Create success' : 'Update success', { variant: 'success' });
           })
           .catch(() => {
@@ -278,7 +286,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       ...categoryIds,
       categoryA: category.id
     };
-    setValues({ categoryB: null, categoryC: null, categoryD: null });
+    setValues({ categoryA: category, categoryB: null, categoryC: null, categoryD: null });
     setCategoryIds(newCategoryId);
   };
 
@@ -287,7 +295,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       ...categoryIds,
       categoryB: category.id
     };
-    setValues({ categoryB: category, categoryC: null, categoryD: null });
+    setValues({ ...Values, categoryB: category, categoryC: null, categoryD: null });
     setCategoryIds(newCategoryId);
   };
 
@@ -477,9 +485,29 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     </Select>
                   </FormControl>
 
-                  <TextField fullWidth label="Product Barcode" {...getFieldProps('code')} />
-                  <TextField fullWidth label="Product SKU" {...getFieldProps('sku')} />
-                  <TextField fullWidth label="Quantity" type="number" InputLabelProps={{ shrink: true }} />
+                  <TextField
+                    fullWidth
+                    label="Product Barcode"
+                    {...getFieldProps('barcode')}
+                    error={Boolean(touched.barcode && errors.barcode)}
+                    helperText={touched.barcode && errors.barcode}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Product SKU"
+                    {...getFieldProps('sku')}
+                    error={Boolean(touched.sku && errors.sku)}
+                    helperText={touched.sku && errors.sku}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Quantity"
+                    type="number"
+                    {...getFieldProps('quantity')}
+                    InputLabelProps={{ shrink: true }}
+                    error={Boolean(touched.quantity && errors.quantity)}
+                    helperText={touched.quantity && errors.quantity}
+                  />
 
                   <Autocomplete
                     multiple
@@ -508,6 +536,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                   <Stack spacing={2}>
                     <Autocomplete
                       fullWidth
+                      value={Values.categoryA}
                       onChange={(event, newValue) => {
                         setFieldValue('ecomCategoryId', newValue.id);
                         handleCatAChange(newValue);
@@ -560,39 +589,41 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     fullWidth
                     placeholder="0.00"
                     label="Regular Price"
-                    {...getFieldProps('price')}
+                    {...getFieldProps('compareAtPrice')}
                     InputProps={{
                       startAdornment: <InputAdornment position="start">$</InputAdornment>,
                       type: 'number',
                       shrink: true
                     }}
-                    error={Boolean(touched.price && errors.price)}
-                    helperText={touched.price && errors.price}
+                    error={Boolean(touched.compareAtPrice && errors.compareAtPrice)}
+                    helperText={touched.compareAtPrice && errors.compareAtPrice}
                   />
 
                   <TextField
                     fullWidth
                     placeholder="0.00"
                     label="Sale Price"
-                    {...getFieldProps('priceSale')}
+                    {...getFieldProps('price')}
                     InputProps={{
                       startAdornment: <InputAdornment position="start">$</InputAdornment>,
                       type: 'number'
                     }}
+                    error={Boolean(touched.price && errors.price)}
+                    helperText={touched.price && errors.price}
                   />
 
                   <TextField
                     fullWidth
                     placeholder="0.00"
                     label="Cost Price"
-                    {...getFieldProps('price')}
+                    {...getFieldProps('costPrice')}
                     InputProps={{
                       startAdornment: <InputAdornment position="start">$</InputAdornment>,
                       type: 'number',
                       shrink: true
                     }}
-                    error={Boolean(touched.price && errors.price)}
-                    helperText={touched.price && errors.price}
+                    error={Boolean(touched.costPrice && errors.costPrice)}
+                    helperText={touched.costPrice && errors.costPrice}
                   />
                 </Stack>
 

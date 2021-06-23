@@ -260,6 +260,15 @@ export function addNewProduct(product) {
     product.proImages.forEach((file) => {
       formData.append('proImages', file);
     });
+
+    const proSingle = JSON.stringify({
+      sku: product.sku,
+      barcode: product.barcode,
+      compareAtPrice: product.compareAtPrice,
+      price: product.price,
+      costPrice: product.price
+    });
+    formData.append('proSingle', proSingle);
     try {
       const { data } = await API.POST(formData);
     } catch (error) {
