@@ -266,7 +266,8 @@ export function addNewProduct(product) {
       barcode: product.barcode,
       compareAtPrice: product.compareAtPrice,
       price: product.price,
-      costPrice: product.price
+      costPrice: product.price,
+      quantity: product.quantity
     });
     formData.append('proSingle', proSingle);
     try {

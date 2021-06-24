@@ -21,6 +21,7 @@ import {
   InputLabel,
   Typography,
   RadioGroup,
+  Checkbox,
   FormControl,
   Autocomplete,
   InputAdornment,
@@ -99,6 +100,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
+  const [hasVariant, setHasVariant] = useState(false);
   const [optionRow, setOptionRow] = useState([defaultVariantOption]);
   // remove first element to get rest available options
   const REST_OPTIONS = VARIANTS.slice();
@@ -115,14 +117,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       .required('Name is required')
       .matches(/^[A-Z]+/, 'First letter must be in UPPERCASE'),
     description: Yup.string().required('Description is required'),
-    ecomCategoryId: Yup.number().moreThan(1, 'At least one catgeory is required'),
-    proImages: Yup.array().min(1, 'Images is required'),
-    compareAtPrice: Yup.number().required('Price is required'),
-    price: Yup.number().required('Selling Price is required'),
-    costPrice: Yup.number().required('Cost Price is required'),
-    barcode: Yup.string().required('Barcode is required'),
-    sku: Yup.string().required('Sku is required'),
-    quantity: Yup.number().required('Quantity is required')
+    compareAtPrice: Yup.number().required('Price is required')
   });
 
   const formik = useFormik({
@@ -132,14 +127,15 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       description: currentProduct?.description || '',
       proImages: currentProduct?.proImages || [],
       productStatus: currentProduct?.productStatus || PRODUCT_STATUS[0],
-      ecomCategoryId: currentProduct?.ecomCategoryId || 0,
+      ecomCategoryId: currentProduct?.ecomCategoryId || null,
       barcode: currentProduct?.barcode || '',
       sku: currentProduct?.sku || '',
-      quantity: currentProduct?.quantity || '',
+      quantity: currentProduct?.quantity || 1,
       compareAtPrice: currentProduct?.compareAtPrice || '',
       price: currentProduct?.price || '',
       costPrice: currentProduct?.costPrice || '',
       tags: currentProduct?.tags || [TAGS_OPTION[0]],
+      hasVariant: false,
       inStock: Boolean(currentProduct?.inventoryType !== 'out_of_stock'),
       taxes: true,
       // gender: currentProduct?.gender || GENDER_OPTION[2],
@@ -308,6 +304,11 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     setCategoryIds(newCategoryId);
   };
 
+  const handleHasVariantCheckbox = ({ target: { checked } }) => {
+    setFieldValue('hasVariant', checked);
+    setHasVariant(checked);
+  };
+
   const variants = [];
   optionRow.forEach((opt) => {
     if (opt.optValues.length) variants.push(opt.optValues);
@@ -371,71 +372,86 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     </FormHelperText>
                   )}
                 </div>
-
-                <div>
-                  <LabelStyle>Variants</LabelStyle>
-                  {optionRow.map(({ id, optName, optValues }, index) => (
-                    <Stack key={index} direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }} mb={1}>
-                      <FormControl fullWidth>
-                        <InputLabel id="opt-name" shrink>
-                          Option {index + 1}
-                        </InputLabel>
-                        <Select
-                          labelId="opt-name"
-                          label="Option"
-                          native
-                          value={optName}
-                          onChange={(e) => handleOptNameChange(e, id)}
-                        >
-                          <option key={id} value={optName}>
-                            {optName}
-                          </option>
-                          {restOptions
-                            .filter((a) => a.name !== optName)
-                            .map(({ id, name }) => (
-                              <option key={id} value={name}>
-                                {name}
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      {...getFieldProps('hasVariant')}
+                      checked={values.hasVariant}
+                      onChange={handleHasVariantCheckbox}
+                    />
+                  }
+                  label="Has variants"
+                />
+                {hasVariant ? (
+                  <>
+                    <div>
+                      <LabelStyle>Variants</LabelStyle>
+                      {optionRow.map(({ id, optName, optValues }, index) => (
+                        <Stack key={index} direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }} mb={1}>
+                          <FormControl fullWidth>
+                            <InputLabel id="opt-name" shrink>
+                              Option {index + 1}
+                            </InputLabel>
+                            <Select
+                              labelId="opt-name"
+                              label="Option"
+                              native
+                              value={optName}
+                              onChange={(e) => handleOptNameChange(e, id)}
+                            >
+                              <option key={id} value={optName}>
+                                {optName}
                               </option>
-                            ))}
-                        </Select>
-                      </FormControl>
-                      <Autocomplete
-                        fullWidth
-                        multiple
-                        freeSolo
-                        value={optValues}
-                        onChange={(event, newValue) => {
-                          handleOptValueChange(id, newValue);
-                        }}
-                        options={TAGS_OPTION.map((option) => option)}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip key={option} size="small" label={option} {...getTagProps({ index })} />
-                          ))
-                        }
-                        renderInput={(params) => <TextField label="Values" {...params} />}
-                      />
-                      <Button size="small" color="secondary" variant="text" onClick={() => removeOption(index)}>
-                        Remove
-                      </Button>
-                    </Stack>
-                  ))}
-                  <Stack direction="row" mt={1}>
-                    {restOptions.length === 0 ? (
-                      ''
-                    ) : (
-                      <LoadingButton variant="outlined" size="medium" onClick={handleAddOption}>
-                        Add Option
-                      </LoadingButton>
-                    )}
-                  </Stack>
-                </div>
-                {cartesianVariants.length ? (
-                  <div>
-                    <LabelStyle>Preview</LabelStyle>
-                    <PreviewVariant variants={cartesianVariants} />
-                  </div>
-                ) : null}
+                              {restOptions
+                                .filter((a) => a.name !== optName)
+                                .map(({ id, name }) => (
+                                  <option key={id} value={name}>
+                                    {name}
+                                  </option>
+                                ))}
+                            </Select>
+                          </FormControl>
+                          <Autocomplete
+                            fullWidth
+                            multiple
+                            freeSolo
+                            value={optValues}
+                            onChange={(event, newValue) => {
+                              handleOptValueChange(id, newValue);
+                            }}
+                            options={TAGS_OPTION.map((option) => option)}
+                            renderTags={(value, getTagProps) =>
+                              value.map((option, index) => (
+                                <Chip key={option} size="small" label={option} {...getTagProps({ index })} />
+                              ))
+                            }
+                            renderInput={(params) => <TextField label="Values" {...params} />}
+                          />
+                          <Button size="small" color="secondary" variant="text" onClick={() => removeOption(index)}>
+                            Remove
+                          </Button>
+                        </Stack>
+                      ))}
+                      <Stack direction="row" mt={1}>
+                        {restOptions.length === 0 ? (
+                          ''
+                        ) : (
+                          <LoadingButton variant="outlined" size="medium" onClick={handleAddOption}>
+                            Add Option
+                          </LoadingButton>
+                        )}
+                      </Stack>
+                    </div>
+                    {cartesianVariants.length ? (
+                      <div>
+                        <LabelStyle>Preview</LabelStyle>
+                        <PreviewVariant variants={cartesianVariants} />
+                      </div>
+                    ) : null}
+                  </>
+                ) : (
+                  ''
+                )}
               </Stack>
             </Card>
           </Grid>
@@ -491,6 +507,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     {...getFieldProps('barcode')}
                     error={Boolean(touched.barcode && errors.barcode)}
                     helperText={touched.barcode && errors.barcode}
+                    disabled={hasVariant}
                   />
                   <TextField
                     fullWidth
@@ -498,6 +515,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     {...getFieldProps('sku')}
                     error={Boolean(touched.sku && errors.sku)}
                     helperText={touched.sku && errors.sku}
+                    disabled={hasVariant}
                   />
                   <TextField
                     fullWidth
