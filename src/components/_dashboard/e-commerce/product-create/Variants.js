@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   TextField,
   FormControl,
@@ -14,24 +15,29 @@ import {
   Paper
 } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
+import { setProductVariantList } from '../../../../redux/slices/productVariant';
 
 PreviewVariant.propTypes = {
   variants: PropTypes.array
 };
 
 function PreviewVariant({ variants }) {
+  const dispatch = useDispatch();
   const [labels, setLabels] = useState([]);
-  const [productVariants, setProductVariants] = useState([]);
+
+  const { productVariantList } = useSelector((state) => state.productVariant);
 
   const onChangeHandler = ({ target: { name, value } }, label) => {
-    const newProductVariants = productVariants.slice();
-    newProductVariants.forEach((v) => {
+    const newProductVariants = [];
+    productVariantList.forEach((v) => {
+      const variant = { ...v };
       if (v.label === label) {
-        v[name] = value;
+        variant[name] = value;
       }
+      newProductVariants.push(variant);
     });
 
-    setProductVariants(newProductVariants);
+    dispatch(setProductVariantList(newProductVariants));
   };
 
   useEffect(() => {
@@ -56,20 +62,24 @@ function PreviewVariant({ variants }) {
     const newProductVariants = [];
     optionRows.forEach((o) => {
       /* eslint-disable-next-line no-plusplus */
-      for (let i = 0; i < productVariants.length; i++) {
-        if (o.label.match(productVariants[i].label)) {
-          o.price = productVariants[i].price;
-          o.quantity = productVariants[i].quantity;
-          o.sku = productVariants[i].sku;
-          o.barcode = productVariants[i].barcode;
+      for (let i = 0; i < productVariantList.length; i++) {
+        if (o.label.match(productVariantList[i].label)) {
+          o.price = productVariantList[i].price;
+          o.quantity = productVariantList[i].quantity;
+          o.sku = productVariantList[i].sku;
+          o.barcode = productVariantList[i].barcode;
           break;
         }
       }
       newProductVariants.push(o);
     });
-    setProductVariants(newProductVariants);
+    dispatch(setProductVariantList(newProductVariants));
     setLabels(labels);
   }, [variants]);
+
+  // useEffect(() => {
+  //   dispatch(setProductVariantList(productVariants));
+  // }, [productVariants]);
 
   return (
     <TableContainer component={Paper}>
@@ -93,8 +103,8 @@ function PreviewVariant({ variants }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {productVariants.map((variant) => (
-            <VarRow onChangeHandler={onChangeHandler} variant={variant} />
+          {productVariantList.map((variant, index) => (
+            <VarRow key={index} onChangeHandler={onChangeHandler} variant={variant} />
           ))}
         </TableBody>
       </Table>

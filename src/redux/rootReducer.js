@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage';
 import productReducer from './slices/product';
 import vendorReducer from './slices/vendor';
 import ecomCategoryReducer from './slices/ecomCategory';
+import productVariantReducer from './slices/productVariant';
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +26,8 @@ const productPersistConfig = {
 const rootReducer = combineReducers({
   product: persistReducer(productPersistConfig, productReducer),
   vendor: vendorReducer,
-  ecomCategory: ecomCategoryReducer
+  ecomCategory: ecomCategoryReducer,
+  productVariant: productVariantReducer
 });
 
 export { rootPersistConfig, rootReducer };
