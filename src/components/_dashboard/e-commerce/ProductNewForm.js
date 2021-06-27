@@ -37,6 +37,7 @@ import { PreviewVariant } from './product-create';
 import { addNewProduct } from '../../../redux/slices/product';
 import { getVendors } from '../../../redux/slices/vendor';
 import { getEcomCategories } from '../../../redux/slices/ecomCategory';
+import { setProductVariantList } from '../../../redux/slices/productVariant';
 
 // ----------------------------------------------------------------------
 
@@ -111,6 +112,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   const { ecomCategories } = useSelector((state) => state.ecomCategory);
   const [categoryIds, setCategoryIds] = useState({ categoryA: 0, categoryB: 0, categoryC: 0 });
   const [Values, setValues] = useState({ categoryA: null, categoryB: null, categoryC: null, categoryD: null });
+  const { productVariantList } = useSelector((state) => state.productVariant);
 
   const NewProductSchema = Yup.object().shape({
     productTitle: Yup.string()
@@ -307,6 +309,26 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   const handleHasVariantCheckbox = ({ target: { checked } }) => {
     setFieldValue('hasVariant', checked);
     setHasVariant(checked);
+  };
+
+  const handlePriceChange = (value) => {
+    const newProductVariants = [];
+    productVariantList.forEach((v) => {
+      const variant = { ...v, price: value };
+      newProductVariants.push(variant);
+    });
+
+    dispatch(setProductVariantList(newProductVariants));
+  };
+
+  const handleQtyChange = (value) => {
+    const newProductVariants = [];
+    productVariantList.forEach((v) => {
+      const variant = { ...v, quantity: value };
+      newProductVariants.push(variant);
+    });
+
+    dispatch(setProductVariantList(newProductVariants));
   };
 
   const variants = [];
@@ -522,6 +544,11 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     label="Quantity"
                     type="number"
                     {...getFieldProps('quantity')}
+                    value={values.quantity}
+                    onChange={({ target: { value } }) => {
+                      handleQtyChange(value);
+                      setFieldValue('quantity', value);
+                    }}
                     InputLabelProps={{ shrink: true }}
                     error={Boolean(touched.quantity && errors.quantity)}
                     helperText={touched.quantity && errors.quantity}
@@ -608,6 +635,11 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     placeholder="0.00"
                     label="Regular Price"
                     {...getFieldProps('compareAtPrice')}
+                    value={values.compareAtPrice}
+                    onChange={({ target: { value } }) => {
+                      handlePriceChange(value);
+                      setFieldValue('compareAtPrice', value);
+                    }}
                     InputProps={{
                       startAdornment: <InputAdornment position="start">$</InputAdornment>,
                       type: 'number',
