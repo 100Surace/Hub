@@ -1,1 +1,1 @@
-export { default as PreviewVariant } from './Variants';
+export { default as PreviewVariant } from './PreviewVariant';

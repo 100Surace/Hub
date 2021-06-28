@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -15,15 +15,21 @@ import {
   Paper
 } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
+import DeepEqual from 'fast-deep-equal/react';
 import { setProductVariantList } from '../../../../redux/slices/productVariant';
 
 PreviewVariant.propTypes = {
-  variants: PropTypes.array
+  variants: PropTypes.array,
+  defaultValues: PropTypes.object
 };
 
-function PreviewVariant({ variants }) {
+function PreviewVariant({ variants, defaultValues }) {
   const dispatch = useDispatch();
-  const [labels, setLabels] = useState([]);
+  const variantArrRef = useRef(variants);
+
+  if (!DeepEqual(variantArrRef.current, variants)) {
+    variantArrRef.current = variants;
+  }
 
   const { productVariantList } = useSelector((state) => state.productVariant);
 
@@ -41,7 +47,7 @@ function PreviewVariant({ variants }) {
   };
 
   useEffect(() => {
-    const labels = [];
+    console.log(variants);
     const optionRows = [];
     variants.forEach((opts) => {
       let variant = '';
@@ -55,8 +61,7 @@ function PreviewVariant({ variants }) {
       } else {
         label = opts;
       }
-      labels.push(label);
-      optionRows.push({ label, price: '0.00', quantity: '1', sku: '', barcode: '' });
+      optionRows.push({ label, price: defaultValues.price, quantity: defaultValues.qunatity, sku: '', barcode: '' });
     });
 
     const newProductVariants = [];
@@ -74,12 +79,7 @@ function PreviewVariant({ variants }) {
       newProductVariants.push(o);
     });
     dispatch(setProductVariantList(newProductVariants));
-    setLabels(labels);
-  }, [variants]);
-
-  // useEffect(() => {
-  //   dispatch(setProductVariantList(productVariants));
-  // }, [productVariants]);
+  }, [variantArrRef.current]);
 
   return (
     <TableContainer component={Paper}>
@@ -129,6 +129,7 @@ function VarRow({ onChangeHandler, variant }) {
             value={variant.price}
             onChange={(e) => onChangeHandler(e, variant.label)}
             startAdornment={<InputAdornment position="start">$</InputAdornment>}
+            placeholder="0.00"
           />
         </FormControl>
       </TableCell>
@@ -149,6 +150,7 @@ function VarRow({ onChangeHandler, variant }) {
           onChange={(e) => onChangeHandler(e, variant.label)}
           variant="outlined"
           size="small"
+          placeholder="SKU"
         />
       </TableCell>
       <TableCell>
@@ -158,6 +160,7 @@ function VarRow({ onChangeHandler, variant }) {
           onChange={(e) => onChangeHandler(e, variant.label)}
           variant="outlined"
           size="small"
+          placeholder="Barcode"
         />
       </TableCell>
       <TableCell>

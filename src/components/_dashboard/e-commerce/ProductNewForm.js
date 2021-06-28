@@ -441,7 +441,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                             onChange={(event, newValue) => {
                               handleOptValueChange(id, newValue);
                             }}
-                            options={TAGS_OPTION.map((option) => option)}
+                            options={[].map((option) => option)}
                             renderTags={(value, getTagProps) =>
                               value.map((option, index) => (
                                 <Chip key={option} size="small" label={option} {...getTagProps({ index })} />
@@ -467,7 +467,10 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     {cartesianVariants.length ? (
                       <div>
                         <LabelStyle>Preview</LabelStyle>
-                        <PreviewVariant variants={cartesianVariants} />
+                        <PreviewVariant
+                          variants={cartesianVariants}
+                          defaultValues={{ qunatity: values.quantity, price: values.compareAtPrice }}
+                        />
                       </div>
                     ) : null}
                   </>
