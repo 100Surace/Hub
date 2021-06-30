@@ -47,7 +47,6 @@ function PreviewVariant({ variants, defaultValues }) {
   };
 
   useEffect(() => {
-    console.log(variants);
     const optionRows = [];
     variants.forEach((opts) => {
       let variant = '';

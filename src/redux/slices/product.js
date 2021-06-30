@@ -244,7 +244,7 @@ export function getProduct(name) {
   };
 }
 
-export function addNewProduct(product) {
+export function addNewProduct(product, variants) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     product.userId = '85f92f31-4b6f-4eaf-b71f-f6023ae9a395';
@@ -261,15 +261,34 @@ export function addNewProduct(product) {
       formData.append('proImages', file);
     });
 
-    const proSingle = JSON.stringify({
-      sku: product.sku,
-      barcode: product.barcode,
-      compareAtPrice: product.compareAtPrice,
-      price: product.price,
-      costPrice: product.price,
-      quantity: product.quantity
-    });
-    formData.append('proSingle', proSingle);
+    // if product has variants
+    // send variants
+    // else send single product
+    if (product.hasVariant) {
+      variants.forEach((v) => {
+        const proVariants = JSON.stringify({
+          option: v.label,
+          sku: v.sku,
+          barcode: v.barcode,
+          compareAtPrice: v.price,
+          price: product.price || '0.00',
+          costPrice: product.costPrice || '0.00',
+          quantity: v.quantity
+        });
+        formData.append('proVariants', proVariants);
+      });
+    } else {
+      const proSingle = JSON.stringify({
+        option: '',
+        sku: product.sku,
+        barcode: product.barcode,
+        compareAtPrice: product.compareAtPrice,
+        price: product.price,
+        costPrice: product.costPrice,
+        quantity: product.quantity
+      });
+      formData.append('proSingle', proSingle);
+    }
     try {
       const { data } = await API.POST(formData);
     } catch (error) {

@@ -148,7 +148,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     validationSchema: NewProductSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        dispatch(addNewProduct(values))
+        dispatch(addNewProduct(values, productVariantList))
           .then(() => {
             resetForm();
             setSubmitting(false);
