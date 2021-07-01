@@ -153,6 +153,9 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
             resetForm();
             setSubmitting(false);
             setValues({ categoryA: null, categoryB: null, categoryC: null, categoryD: null });
+            setProductVariantList([]);
+            setHasVariant(false);
+            setOptionRow([defaultVariantOption]);
             enqueueSnackbar(!isEdit ? 'Create success' : 'Update success', { variant: 'success' });
           })
           .catch(() => {
