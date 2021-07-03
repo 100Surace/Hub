@@ -22,6 +22,8 @@ import { SettingsProvider } from './contexts/SettingsContext';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import reportWebVitals from './reportWebVitals';
+// Auth
+import { AuthProvider } from './contexts/FirebaseContext';
 
 // ----------------------------------------------------------------------
 
@@ -32,7 +34,9 @@ ReactDOM.render(
         <PersistGate loading={<LoadingScreen />} persistor={persistor}>
           <SettingsProvider>
             <BrowserRouter>
-              <App />
+              <AuthProvider>
+                <App />
+              </AuthProvider>
             </BrowserRouter>
           </SettingsProvider>
         </PersistGate>
