@@ -57,6 +57,18 @@ const sidebarConfig = [
           { title: 'checkout', path: PATH_DASHBOARD.eCommerce.checkout },
           { title: 'invoice', path: PATH_DASHBOARD.eCommerce.invoice }
         ]
+      },
+      {
+        title: 'Product Collection',
+        path: PATH_DASHBOARD.productCollection.root,
+        icon: ICONS.user,
+        children: [{ title: 'New', path: PATH_DASHBOARD.productCollection.new }]
+      },
+      {
+        title: 'Real State',
+        path: PATH_DASHBOARD.realState.root,
+        icon: ICONS.user,
+        children: [{ title: 'New', path: PATH_DASHBOARD.realState.new }]
       }
     ]
   }

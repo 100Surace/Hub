@@ -95,6 +95,20 @@ export default function Router() {
           ]
         },
         {
+          path: 'productCollection',
+          children: [
+            { path: '/', element: <Navigate to="/dashboard/productCollection/new" replace /> },
+            { path: '/new', element: <h1>Add New Product Collection</h1> }
+          ]
+        },
+        {
+          path: 'realState',
+          children: [
+            { path: '/', element: <Navigate to="/dashboard/realState/new" replace /> },
+            { path: '/new', element: <h1>Add New Real State</h1> }
+          ]
+        },
+        {
           path: 'app',
           children: [
             {
