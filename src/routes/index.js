@@ -10,6 +10,7 @@ import AuthGuard from '../guards/AuthGuard';
 // import RoleBasedGuard from '../guards/RoleBasedGuard';
 // components
 import LoadingScreen from '../components/LoadingScreen';
+import { element } from 'prop-types';
 
 // ----------------------------------------------------------------------
 
@@ -98,7 +99,7 @@ export default function Router() {
           path: 'productCollection',
           children: [
             { path: '/', element: <Navigate to="/dashboard/productCollection/new" replace /> },
-            { path: '/new', element: <h1>Add New Product Collection</h1> }
+            { path: '/new', element: <ProductCollectionForm /> }
           ]
         },
         {
@@ -164,3 +165,6 @@ const EcommerceCheckout = Loadable(lazy(() => import('../pages/dashboard/Ecommer
 const EcommerceInvoice = Loadable(lazy(() => import('../pages/dashboard/EcommerceInvoice')));
 // Main
 const LandingPage = Loadable(lazy(() => import('../pages/LandingPage')));
+
+//product Collection
+const ProductCollectionForm = Loadable(lazy(() => import('../pages/dashboard/ProductCollectionCreate')));
