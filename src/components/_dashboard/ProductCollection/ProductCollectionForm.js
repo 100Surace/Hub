@@ -2,10 +2,12 @@ import clsx from 'clsx';
 import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Form, FormikProvider, useFormik } from 'formik';
+import { useDispatch } from 'react-redux';
 import { LoadingButton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, TextField, FormControlLabel, Switch, LabelStyle } from '@material-ui/core';
 import { UploadSingleFile } from '../../upload';
+import { addProductCollection } from '../../../redux/slices/productCollection';
 
 // ----------------------------------------------------------------------
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +29,7 @@ ProductCollectionForm.propTypes = {
 
 function ProductCollectionForm() {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -38,7 +41,7 @@ function ProductCollectionForm() {
       status: false
     },
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
-      console.log(values);
+      dispatch(addProductCollection(values));
     }
   });
 

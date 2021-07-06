@@ -19,6 +19,7 @@ import {
   FormControlLabel
 } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
+import { reactLocalStorage } from 'reactjs-localstorage';
 // routes
 import { PATH_AUTH } from '../../../routes/paths';
 // hooks
@@ -50,7 +51,8 @@ export default function LoginForm() {
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       try {
         const res = await login(values.email, values.password);
-        console.log(res.user.za);
+        const accessToken = res.user.za;
+        reactLocalStorage.set('accessToken', accessToken);
         enqueueSnackbar('Login success', {
           variant: 'success',
           action: (key) => (

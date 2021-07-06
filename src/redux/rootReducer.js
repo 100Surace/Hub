@@ -6,6 +6,7 @@ import productReducer from './slices/product';
 import vendorReducer from './slices/vendor';
 import ecomCategoryReducer from './slices/ecomCategory';
 import productVariantReducer from './slices/productVariant';
+import productCollectionReducer from './slices/productCollection';
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +28,8 @@ const rootReducer = combineReducers({
   product: persistReducer(productPersistConfig, productReducer),
   vendor: vendorReducer,
   ecomCategory: ecomCategoryReducer,
-  productVariant: productVariantReducer
+  productVariant: productVariantReducer,
+  productCollection: productCollectionReducer
 });
 
 export { rootPersistConfig, rootReducer };
