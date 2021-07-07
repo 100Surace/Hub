@@ -85,6 +85,20 @@ function AuthProvider({ children }) {
 
   const login = (email, password) => firebase.auth().signInWithEmailAndPassword(email, password);
 
+  const getJwtToken = () => {
+    return new Promise((resolve, reject) => {
+      if (firebase.auth().currentUser) {
+        firebase
+          .auth()
+          .currentUser.getIdToken(false)
+          .then((idToken) => resolve(idToken))
+          .catch((err) => reject(err));
+      } else {
+        reject('Cannot find current user');
+      }
+    });
+  };
+
   const loginWithGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     return firebase.auth().signInWithPopup(provider);
@@ -147,6 +161,7 @@ function AuthProvider({ children }) {
           isPublic: profile?.isPublic || false
         },
         login,
+        getJwtToken,
         register,
         loginWithGoogle,
         loginWithFaceBook,

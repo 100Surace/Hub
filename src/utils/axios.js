@@ -14,8 +14,7 @@ function getAccessToken() {
 }
 
 axiosInstance.interceptors.request.use((req) => {
-  const accessToken = getAccessToken();
-  req.headers.Authorization = accessToken;
+  req.headers.Authorization = 'Bearer ' + getAccessToken();
   return req;
 });
 axiosInstance.interceptors.response.use(

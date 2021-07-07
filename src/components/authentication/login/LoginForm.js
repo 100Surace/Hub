@@ -31,7 +31,7 @@ import { MIconButton } from '../../@material-extend';
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
-  const { login } = useAuth();
+  const { login, getJwtToken } = useAuth();
   const isMountedRef = useIsMountedRef();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [showPassword, setShowPassword] = useState(false);
@@ -50,8 +50,8 @@ export default function LoginForm() {
     validationSchema: LoginSchema,
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       try {
-        const res = await login(values.email, values.password);
-        const accessToken = res.user.za;
+        await login(values.email, values.password);
+        const accessToken = await getJwtToken();
         reactLocalStorage.set('accessToken', accessToken);
         enqueueSnackbar('Login success', {
           variant: 'success',
