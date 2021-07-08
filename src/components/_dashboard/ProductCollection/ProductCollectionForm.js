@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { LoadingButton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, TextField, FormControlLabel, Switch, LabelStyle } from '@material-ui/core';
+import { reactLocalStorage } from 'reactjs-localstorage';
 import { UploadSingleFile } from '../../upload';
 import { addProductCollection } from '../../../redux/slices/productCollection';
 
@@ -38,7 +39,8 @@ function ProductCollectionForm() {
       aviliablefrom: '',
       aviliableTill: '',
       collectionImage: '',
-      status: false
+      status: false,
+      userId: reactLocalStorage.get('uid')
     },
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       dispatch(addProductCollection(values));

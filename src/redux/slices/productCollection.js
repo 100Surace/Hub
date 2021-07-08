@@ -51,6 +51,7 @@ export function addProductCollection(form) {
   return async (dispatch) => {
     dispatch(startLoading());
     const formData = convertToFormData(form);
+
     try {
       const { data } = await API.POST(formData);
       //   dispatch(getSuccess(productCollection));
