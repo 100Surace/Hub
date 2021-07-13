@@ -99,7 +99,8 @@ export default function Router() {
           path: 'productCollection',
           children: [
             { path: '/', element: <Navigate to="/dashboard/productCollection/new" replace /> },
-            { path: '/new', element: <ProductCollectionForm /> }
+            { path: '/new', element: <ProductCollectionForm /> },
+            { path: '/list', element: <ProductCollectionList /> }
           ]
         },
         {
@@ -168,3 +169,4 @@ const LandingPage = Loadable(lazy(() => import('../pages/LandingPage')));
 
 //product Collection
 const ProductCollectionForm = Loadable(lazy(() => import('../pages/dashboard/ProductCollectionCreate')));
+const ProductCollectionList = Loadable(lazy(() => import('../pages/dashboard/ProductCollectionList')));

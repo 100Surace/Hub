@@ -7,7 +7,7 @@ import { convertToFormData } from '../../utils/formatFormData';
 const initialState = {
   isLoading: false,
   error: false,
-  productCollection: [],
+  productCollections: [],
   sortBy: null
 };
 
@@ -46,6 +46,20 @@ export default slice.reducer;
 export const { hasError, startLoading, getSuccess } = slice.actions;
 
 // ----------------------------------------------------------------------
+
+export function getProductCollections() {
+  return async (dispatch) => {
+    dispatch(startLoading());
+
+    try {
+      const { data } = await API.GET();
+      dispatch(getSuccess(data));
+    } catch (error) {
+      dispatch(hasError(error));
+      return Promise.reject(error);
+    }
+  };
+}
 
 export function addProductCollection(form) {
   return async (dispatch) => {

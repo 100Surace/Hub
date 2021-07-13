@@ -62,7 +62,10 @@ const sidebarConfig = [
         title: 'Product Collection',
         path: PATH_DASHBOARD.productCollection.root,
         icon: ICONS.user,
-        children: [{ title: 'New', path: PATH_DASHBOARD.productCollection.new }]
+        children: [
+          { title: 'New', path: PATH_DASHBOARD.productCollection.new },
+          { title: 'List', path: PATH_DASHBOARD.productCollection.list }
+        ]
       },
       {
         title: 'Real State',

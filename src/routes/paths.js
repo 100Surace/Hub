@@ -45,7 +45,8 @@ export const PATH_DASHBOARD = {
   },
   productCollection: {
     root: path(ROOTS_DASHBOARD, '/productCollection'),
-    new: path(ROOTS_DASHBOARD, '/productCollection/new')
+    new: path(ROOTS_DASHBOARD, '/productCollection/new'),
+    list: path(ROOTS_DASHBOARD, '/productCollection/list')
   },
   realState: {
     root: path(ROOTS_DASHBOARD, '/realState'),
