@@ -38,7 +38,7 @@ function ProductCollectionForm() {
       collectionName: '',
       aviliablefrom: '',
       aviliableTill: '',
-      collectionImage: '',
+      cImage: '',
       status: false,
       userId: reactLocalStorage.get('uid')
     },
@@ -52,7 +52,7 @@ function ProductCollectionForm() {
   const handleDrop = useCallback(
     (selectedFile) => {
       setFieldValue(
-        'collectionImage',
+        'cImage',
         Object.assign(selectedFile[0], {
           preview: URL.createObjectURL(selectedFile[0])
         })
@@ -62,7 +62,7 @@ function ProductCollectionForm() {
   );
 
   const handleRemove = (file) => {
-    setFieldValue('collectionImage', '');
+    setFieldValue('cImage', '');
   };
 
   return (
@@ -95,7 +95,7 @@ function ProductCollectionForm() {
             showPreview
             maxSize={3145728}
             accept="image/*"
-            file={values.collectionImage}
+            file={values.cImage}
             onDrop={handleDrop}
             onRemove={handleRemove}
           />
