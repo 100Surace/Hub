@@ -2,6 +2,8 @@ import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -25,7 +27,7 @@ import {
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { deleteProduct } from '../../redux/slices/product';
-import { getProductCollections } from '../../redux/slices/productCollection';
+import { getProductCollections, updateCollectionStatus, deleteCollection } from '../../redux/slices/productCollection';
 // utils
 import { fDate } from '../../utils/formatTime';
 import { fCurrency } from '../../utils/formatNumber';
@@ -42,10 +44,12 @@ import { ProductListHead, ProductListToolbar } from '../../components/_dashboard
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
+  { id: 'actions', label: 'Actions', alignRight: false },
+  { id: 'photo', label: 'Image', alignRight: false },
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'aviliablefrom', label: 'Aviliable From', alignRight: false },
   { id: 'aviliableTill', label: 'Aviliable Till', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: true },
+  { id: 'status', label: 'Status', alignRight: false },
   { id: '' }
 ];
 
@@ -101,12 +105,11 @@ export default function ProductCollectionList() {
   const [selected, setSelected] = useState([]);
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [orderBy, setOrderBy] = useState('createdAt');
+  const [orderBy, setOrderBy] = useState('id');
 
   useEffect(() => {
     dispatch(getProductCollections());
   }, [dispatch]);
-  console.log(productCollections);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -116,7 +119,7 @@ export default function ProductCollectionList() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = productCollections.map((n) => n.name);
+      const newSelecteds = productCollections.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
@@ -155,11 +158,20 @@ export default function ProductCollectionList() {
     dispatch(deleteProduct(productId));
   };
 
+  const toggleStatus = ({ target: { checked } }, id) => {
+    const status = { value: checked };
+    dispatch(updateCollectionStatus(id, status));
+  };
+
+  const handleDeleteSingle = (id) => {
+    dispatch(deleteCollection(id));
+  };
+
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productCollections.length) : 0;
 
-  const filteredProducts = applySortFilter(productCollections, getComparator(order, orderBy), filterName);
+  const filteredCollections = applySortFilter(productCollections, getComparator(order, orderBy), filterName);
 
-  const isProductNotFound = filteredProducts.length === 0;
+  const isProductNotFound = filteredCollections.length === 0;
 
   return (
     <Page title="Ecommerce: Product Collection List | Minimal-UI">
@@ -202,10 +214,10 @@ export default function ProductCollectionList() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredProducts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                  {filteredCollections.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     const { id, collectionName, aviliablefrom, aviliableTill, status, collectionImage } = row;
 
-                    const isItemSelected = selected.indexOf(name) !== -1;
+                    const isItemSelected = selected.indexOf(id) !== -1;
 
                     return (
                       <TableRow
@@ -217,16 +229,18 @@ export default function ProductCollectionList() {
                         aria-checked={isItemSelected}
                       >
                         <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
+                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, id)} />
                         </TableCell>
 
-                        <TableCell align="left">{collectionName}</TableCell>
-                        <TableCell style={{ minWidth: 160 }}>{aviliablefrom}</TableCell>
-                        <TableCell style={{ minWidth: 160 }}>{aviliableTill}</TableCell>
-                        <TableCell align="right">
-                          <FormControlLabel control={<Switch checked={status} />} label="Status" sx={{ mb: 2 }} />
+                        <TableCell>
+                          <Button variant="contained" color="primary">
+                            <EditIcon />
+                          </Button>
+                          <Button variant="contained" color="secondary" onClick={() => handleDeleteSingle(id)}>
+                            <DeleteIcon />
+                          </Button>
                         </TableCell>
-                        {/* <TableCell component="th" scope="row" padding="none">
+                        <TableCell component="th" scope="row" padding="none">
                           <Box
                             sx={{
                               py: 2,
@@ -234,12 +248,18 @@ export default function ProductCollectionList() {
                               alignItems: 'center'
                             }}
                           >
-                            <ThumbImgStyle alt={name} src={cover} />
-                            <Typography variant="subtitle2" noWrap>
-                              {name}
-                            </Typography>
+                            <ThumbImgStyle
+                              alt={collectionName}
+                              src={process.env.REACT_APP_API_URL + '/' + collectionImage}
+                            />
                           </Box>
-                        </TableCell> */}
+                        </TableCell>
+                        <TableCell align="left">{collectionName}</TableCell>
+                        <TableCell style={{ minWidth: 160 }}>{aviliablefrom}</TableCell>
+                        <TableCell style={{ minWidth: 160 }}>{aviliableTill}</TableCell>
+                        <TableCell align="left">
+                          <Switch checked={status} onChange={(e) => toggleStatus(e, id)} />
+                        </TableCell>
                       </TableRow>
                     );
                   })}

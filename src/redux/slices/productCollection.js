@@ -26,10 +26,22 @@ const slice = createSlice({
       state.error = action.payload;
     },
 
-    // GET productCollectionS
+    // GET productCollections
     getSuccess(state, action) {
       state.isLoading = false;
       state.productCollections = action.payload;
+    },
+
+    // PUT productCollection
+    updateSuccess(state, action) {
+      state.isLoading = false;
+      const filteredColls = state.productCollections.filter((c) => c.id !== action.payload.id);
+      state.productCollections = [...filteredColls, action.payload];
+    },
+
+    deleteSuccess(state, action) {
+      state.isLoading = false;
+      state.productCollections = state.productCollections.filter((c) => c.id !== action.payload);
     },
 
     //  SORT & FILTER PRODUCTS
@@ -43,7 +55,7 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { hasError, startLoading, getSuccess } = slice.actions;
+export const { hasError, startLoading, getSuccess, updateSuccess, deleteSuccess } = slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -69,6 +81,34 @@ export function addProductCollection(form) {
     try {
       const { data } = await API.POST(formData);
       //   dispatch(getSuccess(productCollection));
+    } catch (error) {
+      dispatch(hasError(error));
+      return Promise.reject(error);
+    }
+  };
+}
+
+export function updateCollectionStatus(id, status) {
+  return async (dispatch) => {
+    dispatch(startLoading());
+
+    try {
+      const { data } = await API.UPDATE_STATUS(id, status);
+      dispatch(updateSuccess(data[0]));
+    } catch (error) {
+      dispatch(hasError(error));
+      return Promise.reject(error);
+    }
+  };
+}
+
+export function deleteCollection(id) {
+  return async (dispatch) => {
+    dispatch(startLoading());
+
+    try {
+      await API.DELETE(id);
+      dispatch(deleteSuccess(id));
     } catch (error) {
       dispatch(hasError(error));
       return Promise.reject(error);
