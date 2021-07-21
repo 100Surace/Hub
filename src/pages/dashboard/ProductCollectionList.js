@@ -39,6 +39,7 @@ import Label from '../../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import ConfirmDeleteModal from '../../components/ConformDeleteform';
 import { ProductListHead, ProductListToolbar } from '../../components/_dashboard/e-commerce/product-collection';
 
 // ----------------------------------------------------------------------
@@ -106,6 +107,7 @@ export default function ProductCollectionList() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [orderBy, setOrderBy] = useState('id');
+  const [deleteItems, setDeleteItems] = useState([]);
 
   useEffect(() => {
     dispatch(getProductCollections());
@@ -163,8 +165,15 @@ export default function ProductCollectionList() {
     dispatch(updateCollectionStatus(id, status));
   };
 
-  const handleDeleteSingle = (id) => {
-    dispatch(deleteCollection(id));
+  const handleDelete = (name, id) => {
+    setDeleteItems([{ name, id }]);
+  };
+
+  const deleteCollections = () => {
+    deleteItems.forEach((item) => {
+      dispatch(deleteCollection(item.id));
+    });
+    setDeleteItems([]);
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productCollections.length) : 0;
@@ -176,6 +185,13 @@ export default function ProductCollectionList() {
   return (
     <Page title="Ecommerce: Product Collection List | Minimal-UI">
       <Container>
+        {deleteItems.length ? (
+          <ConfirmDeleteModal
+            cancelDelete={() => setDeleteItems([])}
+            confirmDelete={() => deleteCollections()}
+            items={deleteItems}
+          />
+        ) : null}
         <HeaderBreadcrumbs
           heading="Product Collection List"
           links={[
@@ -233,10 +249,10 @@ export default function ProductCollectionList() {
                         </TableCell>
 
                         <TableCell>
-                          <Button variant="contained" color="primary">
+                          <Button variant="contained" color="info">
                             <EditIcon />
                           </Button>
-                          <Button variant="contained" color="secondary" onClick={() => handleDeleteSingle(id)}>
+                          <Button variant="contained" color="error" onClick={() => handleDelete(collectionName, id)}>
                             <DeleteIcon />
                           </Button>
                         </TableCell>
