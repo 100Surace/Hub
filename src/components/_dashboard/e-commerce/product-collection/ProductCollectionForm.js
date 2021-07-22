@@ -1,5 +1,4 @@
-import clsx from 'clsx';
-import { useState, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
@@ -7,8 +6,10 @@ import { LoadingButton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, TextField, FormControlLabel, Switch, LabelStyle } from '@material-ui/core';
 import { reactLocalStorage } from 'reactjs-localstorage';
+import { useNavigate } from 'react-router-dom';
 import { UploadSingleFile } from '../../../upload';
-import { addProductCollection } from '../../../../redux/slices/productCollection';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
+import { addProductCollection, updateProductCollection } from '../../../../redux/slices/productCollection';
 
 // ----------------------------------------------------------------------
 const useStyles = makeStyles((theme) => ({
@@ -23,27 +24,33 @@ const useStyles = makeStyles((theme) => ({
 
 // ----------------------------------------------------------------------
 ProductCollectionForm.propTypes = {
-  formik: PropTypes.object,
-  className: PropTypes.string,
-  editModule: PropTypes.object
+  isEdit: PropTypes.bool,
+  currentCollection: PropTypes.object
 };
 
-function ProductCollectionForm() {
-  const classes = useStyles();
+function ProductCollectionForm({ isEdit, currentCollection }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      collectionName: '',
-      aviliablefrom: '',
-      aviliableTill: '',
+      collectionName: currentCollection?.collectionName || '',
+      aviliablefrom: currentCollection.aviliablefrom?.split('T')[0] || '',
+      aviliableTill: currentCollection.aviliableTill?.split('T')[0] || '',
       cImage: '',
-      status: false,
-      userId: reactLocalStorage.get('uid')
+      status: currentCollection?.status || false,
+      userId: currentCollection?.userId || reactLocalStorage.get('uid'),
+      collectionImage: currentCollection?.collectionImage || null
     },
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
-      dispatch(addProductCollection(values));
+      if (isEdit) {
+        dispatch(updateProductCollection(currentCollection.id, values)).then(() => {
+          navigate(PATH_DASHBOARD.productCollection.list);
+        });
+      } else {
+        dispatch(addProductCollection(values));
+      }
     }
   });
 
@@ -78,6 +85,7 @@ function ProductCollectionForm() {
             shrink: true
           }}
           {...getFieldProps('aviliablefrom')}
+          value={values.aviliablefrom}
         />
         <TextField
           id="date"
@@ -88,23 +96,36 @@ function ProductCollectionForm() {
             shrink: true
           }}
           {...getFieldProps('aviliableTill')}
+          value={values.aviliableTill}
         />
         <div>
-          Add Images
-          <UploadSingleFile
-            showPreview
-            maxSize={3145728}
-            accept="image/*"
-            file={values.cImage}
-            onDrop={handleDrop}
-            onRemove={handleRemove}
-          />
+          Add Image
+          {typeof values.collectionImage === 'string' ? (
+            <img
+              src={process.env.REACT_APP_API_URL + '/' + values.collectionImage}
+              alt="collection image"
+              width="50%"
+            />
+          ) : (
+            <UploadSingleFile
+              showPreview
+              maxSize={3145728}
+              accept="image/*"
+              file={values.cImage}
+              onDrop={handleDrop}
+              onRemove={handleRemove}
+            />
+          )}
         </div>
-        <FormControlLabel control={<Switch {...getFieldProps('status')} />} label="Status" sx={{ mb: 2 }} />
+        <FormControlLabel
+          control={<Switch {...getFieldProps('status')} checked={values.status} />}
+          label="Status"
+          sx={{ mb: 2 }}
+        />
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <LoadingButton type="submit" variant="contained">
-            Add Product Collection
+            {!isEdit ? 'Add Product Collection' : 'Save Changes'}
           </LoadingButton>
         </Box>
       </Form>

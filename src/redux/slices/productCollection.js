@@ -8,6 +8,7 @@ const initialState = {
   isLoading: false,
   error: false,
   productCollections: [],
+  productCollection: {},
   sortBy: null
 };
 
@@ -30,6 +31,11 @@ const slice = createSlice({
     getSuccess(state, action) {
       state.isLoading = false;
       state.productCollections = action.payload;
+    },
+
+    getByIdSuccess(state, action) {
+      state.isLoading = false;
+      state.productCollection = { ...action.payload };
     },
 
     // PUT productCollection
@@ -55,7 +61,7 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { hasError, startLoading, getSuccess, updateSuccess, deleteSuccess } = slice.actions;
+export const { hasError, startLoading, getSuccess, getByIdSuccess, updateSuccess, deleteSuccess } = slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -73,14 +79,40 @@ export function getProductCollections() {
   };
 }
 
+export function getProductCollectionById(id) {
+  return async (dispatch) => {
+    dispatch(startLoading());
+
+    try {
+      const { data } = await API.GETBYID(id);
+      dispatch(getByIdSuccess(data));
+    } catch (error) {
+      dispatch(hasError(error));
+      return Promise.reject(error);
+    }
+  };
+}
+
 export function addProductCollection(form) {
   return async (dispatch) => {
     dispatch(startLoading());
     const formData = convertToFormData(form);
 
     try {
-      const { data } = await API.POST(formData);
-      //   dispatch(getSuccess(productCollection));
+      await API.POST(formData);
+    } catch (error) {
+      dispatch(hasError(error));
+      return Promise.reject(error);
+    }
+  };
+}
+
+export function updateProductCollection(id, form) {
+  return async (dispatch) => {
+    dispatch(startLoading());
+    const formData = convertToFormData(form);
+    try {
+      await API.PUT(id, formData);
     } catch (error) {
       dispatch(hasError(error));
       return Promise.reject(error);

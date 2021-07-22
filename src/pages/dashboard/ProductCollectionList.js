@@ -24,6 +24,7 @@ import {
   FormControlLabel,
   Switch
 } from '@material-ui/core';
+import { useNavigate } from 'react-router-dom';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { deleteProduct } from '../../redux/slices/product';
@@ -100,6 +101,7 @@ function applySortFilter(array, comparator, query) {
 export default function ProductCollectionList() {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { productCollections } = useSelector((state) => state.productCollection);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -176,6 +178,10 @@ export default function ProductCollectionList() {
     setDeleteItems([]);
   };
 
+  const handleEdit = (id) => {
+    navigate(PATH_DASHBOARD.productCollection.new + '?edit=' + id);
+  };
+
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productCollections.length) : 0;
 
   const filteredCollections = applySortFilter(productCollections, getComparator(order, orderBy), filterName);
@@ -249,7 +255,7 @@ export default function ProductCollectionList() {
                         </TableCell>
 
                         <TableCell>
-                          <Button variant="contained" color="info">
+                          <Button variant="contained" color="info" onClick={() => handleEdit(id)}>
                             <EditIcon />
                           </Button>
                           <Button variant="contained" color="error" onClick={() => handleDelete(collectionName, id)}>

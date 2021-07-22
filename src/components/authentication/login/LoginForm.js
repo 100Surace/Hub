@@ -54,7 +54,6 @@ export default function LoginForm() {
         const userid = res.user.uid;
         const accessToken = await getJwtToken();
         reactLocalStorage.set('accessToken', accessToken);
-        console.log(userid);
         reactLocalStorage.set('uid', userid);
         enqueueSnackbar('Login success', {
           variant: 'success',
