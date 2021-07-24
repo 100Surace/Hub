@@ -50,6 +50,11 @@ const slice = createSlice({
       state.productCollections = state.productCollections.filter((c) => c.id !== action.payload);
     },
 
+    deleteImgSuccess(state, action) {
+      state.isLoading = false;
+      state.productCollection = { ...state.productCollection, collectionImage: action.payload.collectionImage };
+    },
+
     //  SORT & FILTER PRODUCTS
     sortByProducts(state, action) {
       state.sortBy = action.payload;
@@ -61,7 +66,8 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { hasError, startLoading, getSuccess, getByIdSuccess, updateSuccess, deleteSuccess } = slice.actions;
+export const { hasError, startLoading, getSuccess, getByIdSuccess, updateSuccess, deleteSuccess, deleteImgSuccess } =
+  slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -141,6 +147,20 @@ export function deleteCollection(id) {
     try {
       await API.DELETE(id);
       dispatch(deleteSuccess(id));
+    } catch (error) {
+      dispatch(hasError(error));
+      return Promise.reject(error);
+    }
+  };
+}
+
+export function deleteColImage(id) {
+  return async (dispatch) => {
+    dispatch(startLoading());
+
+    try {
+      const { data } = await API.DELETE_COL_IMG(id);
+      dispatch(deleteImgSuccess(data[0]));
     } catch (error) {
       dispatch(hasError(error));
       return Promise.reject(error);

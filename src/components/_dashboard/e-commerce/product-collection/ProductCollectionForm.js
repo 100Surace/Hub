@@ -4,12 +4,16 @@ import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { LoadingButton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, TextField, FormControlLabel, Switch, LabelStyle } from '@material-ui/core';
+import { Box, Button, TextField, FormControlLabel, Switch, LabelStyle } from '@material-ui/core';
 import { reactLocalStorage } from 'reactjs-localstorage';
 import { useNavigate } from 'react-router-dom';
 import { UploadSingleFile } from '../../../upload';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-import { addProductCollection, updateProductCollection } from '../../../../redux/slices/productCollection';
+import {
+  addProductCollection,
+  updateProductCollection,
+  deleteColImage
+} from '../../../../redux/slices/productCollection';
 
 // ----------------------------------------------------------------------
 const useStyles = makeStyles((theme) => ({
@@ -72,6 +76,10 @@ function ProductCollectionForm({ isEdit, currentCollection }) {
     setFieldValue('cImage', '');
   };
 
+  const deleteImage = () => {
+    dispatch(deleteColImage(currentCollection.id));
+  };
+
   return (
     <FormikProvider value={formik}>
       <Form noValidate autoComplete="off">
@@ -101,11 +109,16 @@ function ProductCollectionForm({ isEdit, currentCollection }) {
         <div>
           Add Image
           {typeof values.collectionImage === 'string' ? (
-            <img
-              src={process.env.REACT_APP_API_URL + '/' + values.collectionImage}
-              alt="collection image"
-              width="50%"
-            />
+            <div>
+              <img
+                src={process.env.REACT_APP_API_URL + '/' + values.collectionImage}
+                alt="collection image"
+                width="50%"
+              />
+              <Button variant="contained" color="error" onClick={deleteImage}>
+                Remove
+              </Button>
+            </div>
           ) : (
             <UploadSingleFile
               showPreview
