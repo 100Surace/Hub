@@ -51,9 +51,12 @@ function ProductCollectionForm({ isEdit, currentCollection }) {
       if (isEdit) {
         dispatch(updateProductCollection(currentCollection.id, values)).then(() => {
           navigate(PATH_DASHBOARD.productCollection.list);
+          resetForm();
         });
       } else {
-        dispatch(addProductCollection(values));
+        dispatch(addProductCollection(values)).then(() => {
+          resetForm();
+        });
       }
     }
   });

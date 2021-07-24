@@ -39,10 +39,14 @@ const slice = createSlice({
     },
 
     // PUT productCollection
-    updateSuccess(state, action) {
-      state.isLoading = false;
+    updateStatusSuccess(state, action) {
       const filteredColls = state.productCollections.filter((c) => c.id !== action.payload.id);
       state.productCollections = [...filteredColls, action.payload];
+    },
+
+    updateSuccess(state) {
+      state.isLoading = false;
+      state.productCollection = {};
     },
 
     deleteSuccess(state, action) {
@@ -66,8 +70,16 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { hasError, startLoading, getSuccess, getByIdSuccess, updateSuccess, deleteSuccess, deleteImgSuccess } =
-  slice.actions;
+export const {
+  hasError,
+  startLoading,
+  getSuccess,
+  getByIdSuccess,
+  updateStatusSuccess,
+  deleteSuccess,
+  deleteImgSuccess,
+  updateSuccess
+} = slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -119,6 +131,7 @@ export function updateProductCollection(id, form) {
     const formData = convertToFormData(form);
     try {
       await API.PUT(id, formData);
+      dispatch(updateSuccess());
     } catch (error) {
       dispatch(hasError(error));
       return Promise.reject(error);
@@ -132,7 +145,7 @@ export function updateCollectionStatus(id, status) {
 
     try {
       const { data } = await API.UPDATE_STATUS(id, status);
-      dispatch(updateSuccess(data[0]));
+      dispatch(updateStatusSuccess(data[0]));
     } catch (error) {
       dispatch(hasError(error));
       return Promise.reject(error);
