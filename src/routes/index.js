@@ -85,22 +85,28 @@ export default function Router() {
         {
           path: 'e-commerce',
           children: [
-            { path: '/', element: <Navigate to="/dashboard/e-commerce/shop" replace /> },
-            { path: 'shop', element: <EcommerceShop /> },
-            { path: 'product/:name', element: <EcommerceProductDetails /> },
-            { path: 'list', element: <EcommerceProductList /> },
-            { path: 'product/new', element: <EcommerceProductCreate /> },
-            { path: 'product/:name/edit', element: <EcommerceProductCreate /> },
-            { path: 'checkout', element: <EcommerceCheckout /> },
-            { path: 'invoice', element: <EcommerceInvoice /> }
-          ]
-        },
-        {
-          path: 'productCollection',
-          children: [
-            { path: '/', element: <Navigate to="/dashboard/productCollection/new" replace /> },
-            { path: '/new', element: <ProductCollectionForm /> },
-            { path: '/list', element: <ProductCollectionList /> }
+            {
+              path: 'product',
+              children: [
+                { path: '/', element: <Navigate to="/dashboard/e-commerce/shop" replace /> },
+                { path: 'shop', element: <EcommerceShop /> },
+                { path: 'product/:name', element: <EcommerceProductDetails /> },
+                { path: 'list', element: <EcommerceProductList /> },
+                { path: 'product/new', element: <EcommerceProductCreate /> },
+                { path: 'product/:name/edit', element: <EcommerceProductCreate /> },
+                { path: 'checkout', element: <EcommerceCheckout /> },
+                { path: 'invoice', element: <EcommerceInvoice /> }
+              ]
+            },
+            {
+              path: 'product-collection',
+              children: [
+                { path: '/', element: <Navigate to="/dashboard/e-commerce/product-collection/list" replace /> },
+                { path: '/new', element: <ProductCollectionForm /> },
+                { path: '/list', element: <ProductCollectionList /> },
+                { path: '/:id/edit', element: <ProductCollectionForm /> }
+              ]
+            }
           ]
         },
         {

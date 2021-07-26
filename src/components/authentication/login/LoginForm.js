@@ -51,10 +51,10 @@ export default function LoginForm() {
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       try {
         const res = await login(values.email, values.password);
-        const userid = res.user.uid;
+        const uid = res.user.uid;
         const accessToken = await getJwtToken();
         reactLocalStorage.set('accessToken', accessToken);
-        reactLocalStorage.set('uid', userid);
+        reactLocalStorage.set('uid', uid);
         enqueueSnackbar('Login success', {
           variant: 'success',
           action: (key) => (

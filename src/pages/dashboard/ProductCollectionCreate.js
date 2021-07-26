@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 // material
 import { Container } from '@material-ui/core';
 // redux
@@ -10,21 +10,23 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import { ProductCollectionForm } from '../../components/_dashboard/e-commerce/product-collection';
-import { getProductCollectionById } from '../../redux/slices/productCollection';
+import { resetProductCollectionState, getProductCollectionById } from '../../redux/slices/productCollection';
 
 // ----------------------------------------------------------------------
 
 export default function EcommerceProductCreate() {
   const dispatch = useDispatch();
-  const { edit } = useParams();
+  const { id } = useParams();
   const { productCollection } = useSelector((state) => state.productCollection);
-  const { search } = useLocation();
-  const editId = search.split('=')[1];
-  const isEdit = Boolean(editId);
+  const isEdit = Boolean(id);
 
   useEffect(() => {
-    dispatch(getProductCollectionById(editId));
-  }, []);
+    if (id) {
+      dispatch(getProductCollectionById(id));
+    } else {
+      dispatch(resetProductCollectionState());
+    }
+  }, [id]);
 
   return (
     <Page title="Create a new product collection">
@@ -35,7 +37,7 @@ export default function EcommerceProductCreate() {
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
               name: 'Product Collection',
-              href: PATH_DASHBOARD.productCollection.root
+              href: PATH_DASHBOARD.eCommerce.productCollection.root
             },
             { name: !isEdit ? 'New product collection' : productCollection.collectionName }
           ]}

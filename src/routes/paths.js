@@ -35,18 +35,21 @@ export const PATH_DASHBOARD = {
   eCommerce: {
     root: path(ROOTS_DASHBOARD, '/e-commerce'),
     shop: path(ROOTS_DASHBOARD, '/e-commerce/shop'),
+    // product
     product: path(ROOTS_DASHBOARD, '/e-commerce/product/:name'),
     productById: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-air-force-1-ndestrukt'),
     list: path(ROOTS_DASHBOARD, '/e-commerce/list'),
     newProduct: path(ROOTS_DASHBOARD, '/e-commerce/product/new'),
     editById: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-blazer-low-77-vintage/edit'),
     checkout: path(ROOTS_DASHBOARD, '/e-commerce/checkout'),
-    invoice: path(ROOTS_DASHBOARD, '/e-commerce/invoice')
-  },
-  productCollection: {
-    root: path(ROOTS_DASHBOARD, '/productCollection'),
-    new: path(ROOTS_DASHBOARD, '/productCollection/new'),
-    list: path(ROOTS_DASHBOARD, '/productCollection/list')
+    invoice: path(ROOTS_DASHBOARD, '/e-commerce/invoice'),
+    // product collection
+    productCollection: {
+      root: path(ROOTS_DASHBOARD, '/e-commerce/product-collection'),
+      new: path(ROOTS_DASHBOARD, '/e-commerce/product-collection/new'),
+      list: path(ROOTS_DASHBOARD, '/e-commerce/product-collection/list'),
+      editById: path(ROOTS_DASHBOARD, '/e-commerce/product-collection/1/edit')
+    }
   },
   realState: {
     root: path(ROOTS_DASHBOARD, '/realState'),

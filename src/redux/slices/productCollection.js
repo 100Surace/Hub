@@ -111,6 +111,12 @@ export function getProductCollectionById(id) {
   };
 }
 
+export function resetProductCollectionState() {
+  return async (dispatch) => {
+    dispatch(updateSuccess());
+  };
+}
+
 export function addProductCollection(form) {
   return async (dispatch) => {
     dispatch(startLoading());

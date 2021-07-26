@@ -1,9 +1,6 @@
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -18,35 +15,31 @@ import {
   TableBody,
   TableCell,
   Container,
-  Typography,
   TableContainer,
   TablePagination,
-  FormControlLabel,
   Switch
 } from '@material-ui/core';
-import { useNavigate } from 'react-router-dom';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { deleteProduct } from '../../redux/slices/product';
 import { getProductCollections, updateCollectionStatus, deleteCollection } from '../../redux/slices/productCollection';
-// utils
-import { fDate } from '../../utils/formatTime';
-import { fCurrency } from '../../utils/formatNumber';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // components
 import Page from '../../components/Page';
-import Label from '../../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import ConfirmDeleteModal from '../../components/ConformDeleteform';
-import { ProductListHead, ProductListToolbar } from '../../components/_dashboard/e-commerce/product-collection';
+import {
+  MoreMenu,
+  ProductListHead,
+  ProductListToolbar
+} from '../../components/_dashboard/e-commerce/product-collection';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'actions', label: 'Actions', alignRight: false },
   { id: 'photo', label: 'Image', alignRight: false },
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'aviliablefrom', label: 'Aviliable From', alignRight: false },
@@ -101,7 +94,6 @@ function applySortFilter(array, comparator, query) {
 export default function ProductCollectionList() {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { productCollections } = useSelector((state) => state.productCollection);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -178,10 +170,6 @@ export default function ProductCollectionList() {
     setDeleteItems([]);
   };
 
-  const handleEdit = (id) => {
-    navigate(PATH_DASHBOARD.productCollection.new + '?edit=' + id);
-  };
-
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productCollections.length) : 0;
 
   const filteredCollections = applySortFilter(productCollections, getComparator(order, orderBy), filterName);
@@ -253,15 +241,6 @@ export default function ProductCollectionList() {
                         <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, id)} />
                         </TableCell>
-
-                        <TableCell>
-                          <Button variant="contained" color="info" onClick={() => handleEdit(id)}>
-                            <EditIcon />
-                          </Button>
-                          <Button variant="contained" color="error" onClick={() => handleDelete(collectionName, id)}>
-                            <DeleteIcon />
-                          </Button>
-                        </TableCell>
                         <TableCell component="th" scope="row" padding="none">
                           <Box
                             sx={{
@@ -281,6 +260,9 @@ export default function ProductCollectionList() {
                         <TableCell style={{ minWidth: 160 }}>{aviliableTill}</TableCell>
                         <TableCell align="left">
                           <Switch checked={status} onChange={(e) => toggleStatus(e, id)} />
+                        </TableCell>
+                        <TableCell align="right">
+                          <MoreMenu onDelete={() => handleDelete(collectionName, id)} id={id} />
                         </TableCell>
                       </TableRow>
                     );

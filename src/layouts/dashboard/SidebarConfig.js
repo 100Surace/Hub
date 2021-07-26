@@ -47,7 +47,7 @@ const sidebarConfig = [
       {
         title: 'e-commerce',
         path: PATH_DASHBOARD.eCommerce.root,
-        icon: ICONS.cart,
+        icon: ICONS.ecommerce,
         children: [
           { title: 'shop', path: PATH_DASHBOARD.eCommerce.shop },
           { title: 'product', path: PATH_DASHBOARD.eCommerce.productById },
@@ -60,11 +60,11 @@ const sidebarConfig = [
       },
       {
         title: 'Product Collection',
-        path: PATH_DASHBOARD.productCollection.root,
+        path: PATH_DASHBOARD.eCommerce.productCollection.list,
         icon: ICONS.user,
         children: [
-          { title: 'New', path: PATH_DASHBOARD.productCollection.new },
-          { title: 'List', path: PATH_DASHBOARD.productCollection.list }
+          { title: 'New', path: PATH_DASHBOARD.eCommerce.productCollection.new },
+          { title: 'List', path: PATH_DASHBOARD.eCommerce.productCollection.list }
         ]
       },
       {

@@ -15,10 +15,10 @@ import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 ProductMoreMenu.propTypes = {
   onDelete: PropTypes.func,
-  productName: PropTypes.string
+  id: PropTypes.number
 };
 
-export default function ProductMoreMenu({ onDelete, productName }) {
+export default function ProductMoreMenu({ onDelete, id }) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -47,7 +47,7 @@ export default function ProductMoreMenu({ onDelete, productName }) {
 
         <MenuItem
           component={RouterLink}
-          to={`${PATH_DASHBOARD.eCommerce.root}/product/${paramCase(productName)}/edit`}
+          to={`${PATH_DASHBOARD.eCommerce.productCollection.root}/${id}/edit`}
           sx={{ color: 'text.secondary' }}
         >
           <ListItemIcon>
