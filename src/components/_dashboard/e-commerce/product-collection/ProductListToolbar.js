@@ -34,10 +34,11 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 ProductListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
-  onFilterName: PropTypes.func
+  onFilterName: PropTypes.func,
+  handleDelete: PropTypes.func
 };
 
-export default function ProductListToolbar({ numSelected, filterName, onFilterName }) {
+export default function ProductListToolbar({ numSelected, filterName, onFilterName, handleDelete }) {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
 
@@ -69,7 +70,7 @@ export default function ProductListToolbar({ numSelected, filterName, onFilterNa
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={handleDelete}>
             <Icon icon={trash2Fill} />
           </IconButton>
         </Tooltip>

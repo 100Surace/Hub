@@ -90,10 +90,10 @@ export default function Router() {
               children: [
                 { path: '/', element: <Navigate to="/dashboard/e-commerce/shop" replace /> },
                 { path: 'shop', element: <EcommerceShop /> },
-                { path: 'product/:name', element: <EcommerceProductDetails /> },
+                { path: ':name', element: <EcommerceProductDetails /> },
                 { path: 'list', element: <EcommerceProductList /> },
-                { path: 'product/new', element: <EcommerceProductCreate /> },
-                { path: 'product/:name/edit', element: <EcommerceProductCreate /> },
+                { path: 'new', element: <EcommerceProductCreate /> },
+                { path: ':name/edit', element: <EcommerceProductCreate /> },
                 { path: 'checkout', element: <EcommerceCheckout /> },
                 { path: 'invoice', element: <EcommerceInvoice /> }
               ]

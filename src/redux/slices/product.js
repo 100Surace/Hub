@@ -219,10 +219,11 @@ export function getProducts() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/products');
-      dispatch(slice.actions.getProductsSuccess(response.data.products));
+      const { data } = await API.GET();
+      dispatch(slice.actions.getProductsSuccess(data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
+      Promise.reject(error);
     }
   };
 }

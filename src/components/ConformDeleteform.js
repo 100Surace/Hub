@@ -18,7 +18,7 @@ export default function AlertDialog({ cancelDelete, confirmDelete, items = [] })
         <DialogTitle id="alert-dialog-title">{'Confirm Delete'}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Do you want to delete {items.lenght > 1 ? '' : '"' + items[0].name + '"'}?
+            Do you want to delete {items[0].name ? '"' + items[0].name + '"' : ''}?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

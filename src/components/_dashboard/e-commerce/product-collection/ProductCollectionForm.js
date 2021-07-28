@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Form, FormikProvider, useFormik } from 'formik';
+import { useSnackbar } from 'notistack';
 import { useDispatch } from 'react-redux';
 import { LoadingButton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
@@ -35,6 +36,7 @@ ProductCollectionForm.propTypes = {
 function ProductCollectionForm({ isEdit, currentCollection }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -49,14 +51,24 @@ function ProductCollectionForm({ isEdit, currentCollection }) {
     },
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       if (isEdit) {
-        dispatch(updateProductCollection(currentCollection.id, values)).then(() => {
-          navigate(PATH_DASHBOARD.productCollection.list);
-          resetForm();
-        });
+        dispatch(updateProductCollection(currentCollection.id, values))
+          .then(() => {
+            enqueueSnackbar('Update successful', { variant: 'success' });
+            navigate(PATH_DASHBOARD.eCommerce.productCollection.list);
+            resetForm();
+          })
+          .catch(() => {
+            enqueueSnackbar('Update failed', { variant: 'error' });
+          });
       } else {
-        dispatch(addProductCollection(values)).then(() => {
-          resetForm();
-        });
+        dispatch(addProductCollection(values))
+          .then(() => {
+            enqueueSnackbar('Product added', { variant: 'success' });
+            resetForm();
+          })
+          .catch(() => {
+            enqueueSnackbar('Cannot add', { variant: 'error' });
+          });
       }
     }
   });

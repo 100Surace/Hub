@@ -1,6 +1,7 @@
-import { filter } from 'lodash';
+import { eq, filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import { useState, useEffect } from 'react';
+import { useSnackbar } from 'notistack';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -21,7 +22,6 @@ import {
 } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { deleteProduct } from '../../redux/slices/product';
 import { getProductCollections, updateCollectionStatus, deleteCollection } from '../../redux/slices/productCollection';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
@@ -83,7 +83,7 @@ function applySortFilter(array, comparator, query) {
   });
 
   if (query) {
-    return filter(array, (_product) => _product.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_product) => _product.collectionName.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
 
   return stabilizedThis.map((el) => el[0]);
@@ -94,6 +94,7 @@ function applySortFilter(array, comparator, query) {
 export default function ProductCollectionList() {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const { productCollections } = useSelector((state) => state.productCollection);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -150,10 +151,6 @@ export default function ProductCollectionList() {
     setFilterName(event.target.value);
   };
 
-  const handleDeleteProduct = (productId) => {
-    dispatch(deleteProduct(productId));
-  };
-
   const toggleStatus = ({ target: { checked } }, id) => {
     const status = { value: checked };
     dispatch(updateCollectionStatus(id, status));
@@ -163,10 +160,25 @@ export default function ProductCollectionList() {
     setDeleteItems([{ name, id }]);
   };
 
+  const handleDeleteSelected = () => {
+    const items = [];
+    selected.forEach((id) => {
+      items.push({ id });
+    });
+    setDeleteItems(items);
+  };
+
   const deleteCollections = () => {
     deleteItems.forEach((item) => {
-      dispatch(deleteCollection(item.id));
+      dispatch(deleteCollection(item.id))
+        .then(() => {
+          enqueueSnackbar('Delete successful', { variant: 'success' });
+        })
+        .catch(() => {
+          enqueueSnackbar('Delete failed', { variant: 'error' });
+        });
     });
+    setSelected([]);
     setDeleteItems([]);
   };
 
@@ -200,7 +212,7 @@ export default function ProductCollectionList() {
             <Button
               variant="contained"
               component={RouterLink}
-              to={PATH_DASHBOARD.eCommerce.newProduct}
+              to={PATH_DASHBOARD.eCommerce.productCollection.new}
               startIcon={<Icon icon={plusFill} />}
             >
               New Product
@@ -209,7 +221,12 @@ export default function ProductCollectionList() {
         />
 
         <Card>
-          <ProductListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <ProductListToolbar
+            numSelected={selected.length}
+            handleDelete={handleDeleteSelected}
+            filterName={filterName}
+            onFilterName={handleFilterByName}
+          />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
